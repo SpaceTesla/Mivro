@@ -1,34 +1,23 @@
-import requests
-import datetime 
+import openfoodfacts
 import json
+from datetime import datetime
 
-code = input("Enter the Barcode:")
+api = openfoodfacts.API(user_agent='Green-Elixir/0.2')
 
-fields="""code,product_name,keywords,additives_tags,allergens,brands,brands_tags,allergens_from_ingredients,
-allergens_hierarchy,allergens_tags,
-additives_n,additives_tags,allergens_from_ingredients,categories,
-categories_tags,countries,
-image_front_small_url,image_front_thumb_url,image_front_url,
-image_nutrition_small_url,image_nutrition_thumb_url,
-image_nutrition_url,
-image_url,image_small_url,image_thumb_url,
-ingredients, ingredients_tags,
-nutrient_levels,nutrition_grades,
-nutrient_levels_tags,nutriments,nutriscore_data,nutriscore_score
-quantity,status_verbose
-"""
+barcode = '8901719104046'
+required_data = json.load(open('product_schema.json'))
+product_data = api.product.get(barcode, fields=required_data)
 
-url = "https://world.openfoodfacts.net/api/v2/product/"+code+"?"+'fields='+fields
-response = requests.get(url)
-data=response.json()
+missing_fields = set(required_data) - set(product_data.keys())
+for field in missing_fields:
+    print(f'Warning: Data for "{field}" is missing.')
 
-#Adding the date for search history
-search_datetime = datetime.datetime.now()
-search_date = search_datetime.strftime('%Y-%m-%d') # search  date
-search_time = search_datetime.strftime('%H:%M:%S') # search  time
+product_data.update(
+    {
+        'search_date': datetime.now().strftime('%d-%B-%Y'),
+        'search_time': datetime.now().strftime('%I:%M %p')
+    }
+)
 
-data['search_date'] = search_date
-data['search_time'] = search_time
-
-formatted_json = json.dumps(data, indent=4, sort_keys=True, ensure_ascii=False) # Used by me to store data in clean format 
-print(formatted_json)
+formatted_data = json.dumps(product_data, indent=4)
+print(formatted_data)
