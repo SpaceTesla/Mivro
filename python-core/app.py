@@ -28,7 +28,7 @@ def barcode(barcode='8901719104046'):
         'calcium', 'carbohydrates', 'cholesterol', 'copper', 'energy-kcal', 'fat', 'fiber', 'iodine', 'iron', 'magnesium',
         'manganese', 'phosphorus', 'potassium', 'proteins', 'saturated-fat', 'selenium', 'sodium', 'sugars', 'zinc'
     ]
-    nutriments_info = [
+    nutriment_info = [
         {
             'name': key.title(),
             'value': f"{float(product_data['nutriments'].get(f'{key}_100g', 0)):.2f} {'kcal' if key == 'energy-kcal' else 'g'}"
@@ -48,7 +48,7 @@ def barcode(barcode='8901719104046'):
     product_data.update(
         {
             'ingredients': ingredient_info,
-            'nutriments': nutriments_info,
+            'nutriments': nutriment_info,
             'selected_images': image_link,
             'search_date': datetime.now().strftime('%d-%B-%Y'),
             'search_time': datetime.now().strftime('%I:%M %p')
