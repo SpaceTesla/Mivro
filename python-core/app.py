@@ -34,7 +34,7 @@ def barcode(barcode='8901719104046'):
             'value': f"{float(product_data['nutriments'].get(f'{key}_100g', 0)):.2f} {'kcal' if key == 'energy-kcal' else 'g'}"
         }
         for key in sorted(essential_nutrients)
-        if product_data['nutriments'].get(f"{key}_100g") is not None and product_data['nutriments'].get(f"{key}_100g") != 0
+        if product_data['nutriments'].get(f'{key}_100g') is not None and product_data['nutriments'].get(f'{key}_100g') != 0
     ]
 
     image_link = next(
