@@ -59,7 +59,8 @@ def barcode(barcode='8901719104046'):
     )
 
     formatted_data = json.dumps(product_data, indent=4)
-    print(formatted_data)
+    #print(formatted_data), uncomment it later when you integrate both the codes
+    return product_data
 
 if __name__ == '__main__':
     barcode()
