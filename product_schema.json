@@ -15,5 +15,6 @@
     "nutriscore_score",
     "nutriscore_grade",
     "product_name",
+    "quantity",
     "selected_images"
 ]

@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 
 def barcode(barcode='8901719104046'):
-    api = openfoodfacts.API(user_agent='Green-Elixir/0.3')
+    api = openfoodfacts.API(user_agent='Green-Elixir/0.4')
     required_data = json.load(open('product_schema.json'))
     product_data = api.product.get(barcode, fields=required_data)
 
@@ -24,23 +24,26 @@ def barcode(barcode='8901719104046'):
         if ingredient.get('text') and ingredient.get('percent_estimate', 0) != 0
     ]
 
-    essential_nutrients = [
-        'calcium', 'carbohydrates', 'cholesterol', 'copper', 'energy-kcal', 'fat', 'fiber', 'iodine', 'iron', 'magnesium',
-        'manganese', 'phosphorus', 'potassium', 'proteins', 'saturated-fat', 'selenium', 'sodium', 'sugars', 'zinc'
-    ]
+    nutrient_units = {
+        'g': ['carbohydrates', 'fat', 'fiber', 'proteins', 'saturated-fat', 'sugars'],
+        'mg': ['calcium', 'cholesterol', 'copper', 'iron', 'magnesium', 'manganese', 'phosphorus', 'potassium', 'sodium', 'zinc'],
+        'µg': ['iodine', 'selenium'],
+        'ml': ['water'],
+        'kcal': ['energy-kcal']
+    }
     nutriment_info = [
         {
-            'name': key.title(),
-            'value': f"{float(product_data['nutriments'].get(f'{key}_100g', 0)):.2f} {'kcal' if key == 'energy-kcal' else 'g'}"
+            'name': nutrient.title(),
+            'quantity': f"{float(product_data['nutriments'].get(f'{nutrient}_100g', 0)):.2f} {unit}"
         }
-        for key in sorted(essential_nutrients)
-        if product_data['nutriments'].get(f'{key}_100g') is not None and product_data['nutriments'].get(f'{key}_100g') != 0
+        for unit, nutrients in nutrient_units.items()
+        for nutrient in nutrients
+        if product_data['nutriments'].get(f'{nutrient}_100g', 0) != 0
     ]
 
     image_link = next(
         iter(
-            next(iter(image_data.values()))
-            for image_data in product_data.get('selected_images', {}).values()
+            list(product_data.get('selected_images', {}).values())[0].values()
         ),
         None
     )
