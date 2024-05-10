@@ -2,18 +2,28 @@ import openfoodfacts
 import json
 import re
 from datetime import datetime
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 from mapping import group_name, grade_color, score_color
 from utils import filter_ingredient, analyse_nutrient, filter_image
 
-def scan(barcode='8901719104046'):
-    api = openfoodfacts.API(user_agent='Green-Elixir/0.6')
+app = Flask(__name__)
+CORS(app, resources = {
+        r'/api/*': {"origins": ["*"]}
+    }
+)
+
+@app.route('/api/barcode', methods=['POST'])
+def barcode():
+    api = openfoodfacts.API(user_agent='Green-Elixir/1.0')
     required_data = json.load(open('product_schema.json'))
+
+    barcode = request.json.get('barcode')
     product_data = api.product.get(barcode, fields=required_data)
 
     if not product_data:
-        print('Error: Product not found.')
-        return
+        return jsonify({'error': 'Product not found'}), 404
 
     product_data = {
         key: [
@@ -42,8 +52,7 @@ def scan(barcode='8901719104046'):
         }
     )
 
-    formatted_data = json.dumps(product_data, indent=4)
-    print(formatted_data)
+    return jsonify(product_data)
 
 if __name__ == '__main__':
-    scan()
+    app.run(debug=True)
