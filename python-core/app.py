@@ -1,9 +1,13 @@
 import openfoodfacts
 import json
+import re
 from datetime import datetime
 
-def barcode(barcode='8901719104046'):
-    api = openfoodfacts.API(user_agent='Green-Elixir/0.4')
+from mapping import group_name, grade_color, score_color
+from utils import filter_ingredient, analyse_nutrient, filter_image
+
+def scan(barcode='8901719104046'):
+    api = openfoodfacts.API(user_agent='Green-Elixir/0.6')
     required_data = json.load(open('product_schema.json'))
     product_data = api.product.get(barcode, fields=required_data)
 
@@ -11,56 +15,35 @@ def barcode(barcode='8901719104046'):
         print('Error: Product not found.')
         return
 
+    product_data = {
+        key: [
+            re.sub(r'^en:', '', item) if isinstance(item, str) else item
+            for item in value
+        ]
+        if isinstance(value, list)
+        else re.sub(r'^en:', '', value) if isinstance(value, str) else value
+        for key, value in product_data.items()
+    }
+
     missing_fields = set(required_data) - set(product_data.keys())
     for field in missing_fields:
         print(f'Warning: Data for "{field}" is missing.')
 
-    ingredient_info = [
-        {
-            'name': ingredient.get('text', '').title(),
-            'percentage': f"{abs(float(ingredient.get('percent_estimate', 0))):.2f} %"
-        }
-        for ingredient in product_data.get('ingredients', [])
-        if ingredient.get('text') and ingredient.get('percent_estimate', 0) != 0
-    ]
-
-    nutrient_units = {
-        'g': ['carbohydrates', 'fat', 'fiber', 'proteins', 'saturated-fat', 'sugars'],
-        'mg': ['calcium', 'cholesterol', 'copper', 'iron', 'magnesium', 'manganese', 'phosphorus', 'potassium', 'sodium', 'zinc'],
-        'µg': ['iodine', 'selenium'],
-        'ml': ['water'],
-        'kcal': ['energy-kcal']
-    }
-    nutriment_info = [
-        {
-            'name': nutrient.title(),
-            'quantity': f"{float(product_data['nutriments'].get(f'{nutrient}_100g', 0)):.2f} {unit}"
-        }
-        for unit, nutrients in nutrient_units.items()
-        for nutrient in nutrients
-        if product_data['nutriments'].get(f'{nutrient}_100g', 0) != 0
-    ]
-
-    image_link = next(
-        iter(
-            list(product_data.get('selected_images', {}).values())[0].values()
-        ),
-        None
-    )
-
     product_data.update(
         {
-            'ingredients': ingredient_info,
-            'nutriments': nutriment_info,
-            'selected_images': image_link,
+            'ingredients': filter_ingredient(product_data['ingredients']),
+            'nova_group_name': group_name(product_data['nova_group']),
+            'nutriments': analyse_nutrient(product_data['nutriments'], json.load(open('nutrient_limits.json'))),
+            'nutriscore_grade_color': grade_color(product_data['nutriscore_grade']),
+            'nutriscore_score_color': score_color(product_data['nutriscore_score']),
+            'selected_images': filter_image(product_data['selected_images']),
             'search_date': datetime.now().strftime('%d-%B-%Y'),
             'search_time': datetime.now().strftime('%I:%M %p')
         }
     )
 
     formatted_data = json.dumps(product_data, indent=4)
-    #print(formatted_data), uncomment it later when you integrate both the codes
-    return product_data
+    print(formatted_data)
 
 if __name__ == '__main__':
-    barcode()
+    scan()
