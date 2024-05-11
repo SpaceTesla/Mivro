@@ -7,21 +7,20 @@ from datetime import datetime
 
 from mapping import group_name, grade_color, score_color
 from utils import filter_ingredient, analyse_nutrient, filter_image
-from database import api_history
+from database import database_history, search_database
 
 app = Flask(__name__)
 CORS(app, resources={r'/api/*': {'origins': ['*']}})
+api = openfoodfacts.API(user_agent='Green-Elixir/1.2')
 
 @app.route('/api/v1/barcode', methods=['POST'])
-def barcode():
-    api = openfoodfacts.API(user_agent='Green-Elixir/1.1')
-
-    barcode = request.json.get('barcode')
+def barcode_search():
+    product_barcode = request.json.get('product_barcode')
     required_data = json.load(open('product_schema.json'))
-    product_data = api.product.get(barcode, fields=required_data)
+    product_data = api.product.get(product_barcode, fields=required_data)
 
     if not product_data:
-        return jsonify({'error': 'product not found'}), 404
+        return jsonify({'error': 'Product not found'}), 404
 
     product_data = {
         key: [
@@ -50,7 +49,28 @@ def barcode():
         }
     )
 
-    api_history(barcode, product_data)
+    database_history(product_barcode, product_data)
+
+    return jsonify(product_data)
+
+# @app.route('/api/v1/search', methods=['POST'])
+# def text_search():
+#     product_name = request.form.get('product_name')
+#     product_data = api.product.text_search(product_name)
+
+#     if not product_data:
+#         return jsonify({'error': 'Product not found'}), 404
+
+#     return jsonify(product_data)
+
+@app.route('/api/v1/database', methods=['POST'])
+def database_search():
+    search_keyword = request.json.get('search_keyword')
+    search_keys = ['_keywords', 'brands', 'categories', 'countries', 'product_name']
+    product_data = search_database(search_keyword, search_keys)
+
+    if not product_data:
+        return jsonify({'error': 'Product not found'}), 404
 
     return jsonify(product_data)
 
