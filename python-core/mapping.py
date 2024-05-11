@@ -1,3 +1,9 @@
+def additive_name(additives_tag, additives_data):
+    return [
+        additives_data.get(additive, 'Unknown')
+        for additive in additives_tag
+    ]
+
 def group_name(nova_group):
     group_names = {
         1: 'Unprocessed or minimally processed foods',
@@ -15,6 +21,7 @@ def grade_color(nutriscore_grade):
         'd': 'orange',
         'e': 'red'
     }
+    # akash was here w=mwahahwhahhwhahwh
     return grade_colors.get(nutriscore_grade.lower(), 'gray')
 
 def score_color(nutriscore_score):

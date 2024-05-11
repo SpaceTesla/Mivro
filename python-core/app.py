@@ -5,13 +5,13 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from datetime import datetime
 
-from mapping import group_name, grade_color, score_color
+from mapping import additive_name, group_name, grade_color, score_color
 from utils import filter_ingredient, analyse_nutrient, filter_image
 from database import database_history, search_database
 
 app = Flask(__name__)
 CORS(app, resources={r'/api/*': {'origins': ['*']}})
-api = openfoodfacts.API(user_agent='Green-Elixir/1.2')
+api = openfoodfacts.API(user_agent='Green-Elixir/1.3')
 
 @app.route('/api/v1/barcode', methods=['POST'])
 def barcode_search():
@@ -19,8 +19,9 @@ def barcode_search():
     required_data = json.load(open('product_schema.json'))
     product_data = api.product.get(product_barcode, fields=required_data)
 
+# bewAREEEEEEEE AAKASH SINGH WAS HERE AHAHHAHAHHAHAH
     if not product_data:
-        return jsonify({'error': 'Product not found'}), 404
+        return jsonify({'error': 'Product not found.'}), 404
 
     product_data = {
         key: [
@@ -38,6 +39,7 @@ def barcode_search():
 
     product_data.update(
         {
+            'additives_names': additive_name(product_data['additives_tags'], json.load(open('additive_names.json'))),
             'ingredients': filter_ingredient(product_data['ingredients']),
             'nova_group_name': group_name(product_data['nova_group']),
             'nutriments': analyse_nutrient(product_data['nutriments'], json.load(open('nutrient_limits.json'))),
@@ -59,7 +61,7 @@ def barcode_search():
 #     product_data = api.product.text_search(product_name)
 
 #     if not product_data:
-#         return jsonify({'error': 'Product not found'}), 404
+#         return jsonify({'error': 'Product not found.'}), 404
 
 #     return jsonify(product_data)
 
@@ -70,7 +72,7 @@ def database_search():
     product_data = search_database(search_keyword, search_keys)
 
     if not product_data:
-        return jsonify({'error': 'Product not found'}), 404
+        return jsonify({'error': 'Product not found.'}), 404
 
     return jsonify(product_data)
 
