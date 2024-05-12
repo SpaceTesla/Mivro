@@ -19,7 +19,6 @@ def barcode_search():
     required_data = json.load(open('product_schema.json'))
     product_data = api.product.get(product_barcode, fields=required_data)
 
-# bewAREEEEEEEE AAKASH SINGH WAS HERE AHAHHAHAHHAHAH
     if not product_data:
         return jsonify({'error': 'Product not found.'}), 404
 
