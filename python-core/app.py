@@ -11,7 +11,7 @@ from database import database_history, search_database
 
 app = Flask(__name__)
 CORS(app, resources={r'/api/*': {'origins': ['*']}})
-api = openfoodfacts.API(user_agent='Green-Elixir/1.3')
+api = openfoodfacts.API(user_agent='Green-Elixir/1.4')
 
 @app.route('/api/v1/barcode', methods=['POST'])
 def barcode_search():
@@ -22,6 +22,16 @@ def barcode_search():
     if not product_data:
         return jsonify({'error': 'Product not found.'}), 404
 
+    missing_fields = set(required_data) - set(product_data.keys())
+    for field in missing_fields:
+        print(f'Warning: Data for "{field}" is missing.')
+
+    product_data['additives_tags'] = [
+        tag
+        for tag in product_data['additives_tags']
+        if not tag.endswith('i')
+    ]
+
     product_data = {
         key: [
             re.sub(r'^en:', '', item) if isinstance(item, str) else item
@@ -31,10 +41,6 @@ def barcode_search():
         else re.sub(r'^en:', '', value) if isinstance(value, str) else value
         for key, value in product_data.items()
     }
-
-    missing_fields = set(required_data) - set(product_data.keys())
-    for field in missing_fields:
-        print(f'Warning: Data for "{field}" is missing.')
 
     product_data.update(
         {
@@ -67,7 +73,7 @@ def barcode_search():
 @app.route('/api/v1/database', methods=['POST'])
 def database_search():
     search_keyword = request.json.get('search_keyword')
-    search_keys = ['_keywords', 'brands', 'categories', 'countries', 'product_name']
+    search_keys = ['_keywords', 'brands', 'categories', 'product_name']
     product_data = search_database(search_keyword, search_keys)
 
     if not product_data:

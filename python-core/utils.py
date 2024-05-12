@@ -9,7 +9,7 @@ def filter_ingredient(ingredient_data):
     ]
     return ingredient_info
 
-def analyse_nutrient(nutrient_data, nutrient_limit):
+def analyse_nutrient(nutrient_data, nutrient_limits):
     positive_nutrients = {}
     negative_nutrients = {}
 
@@ -18,13 +18,13 @@ def analyse_nutrient(nutrient_data, nutrient_limit):
             'name': nutrient.title(),
             'quantity': f"{abs(float(nutrient_data.get(f'{nutrient}_100g', 0))):.2f} {value['unit']}"
         }
-        for nutrient, value in nutrient_limit.items()
+        for nutrient, value in nutrient_limits.items()
         if nutrient_data.get(f'{nutrient}_100g', 0) != 0
     }
 
     for nutrient, value in nutrient_items.items():
-        lower_limit = nutrient_limit[nutrient]['lower_limit']
-        upper_limit = nutrient_limit[nutrient]['upper_limit']
+        lower_limit = nutrient_limits[nutrient]['lower_limit']
+        upper_limit = nutrient_limits[nutrient]['upper_limit']
 
         if float(value['quantity'].split()[0]) < lower_limit or float(value['quantity'].split()[0]) > upper_limit:
             negative_nutrients[nutrient] = value
