@@ -20,7 +20,7 @@ def database_history(product_barcode, product_data):
 def search_database(search_keyword, search_keys):
     api_history_ref = db.collection('api_history')
 
-    queries = [
+    search_queries = [
         api_history_ref.where(filter=FieldFilter(key, '>=', search_keyword))
         .where(filter=FieldFilter(key, '<=', search_keyword + '\uf8ff'))
         for key in search_keys
@@ -28,7 +28,7 @@ def search_database(search_keyword, search_keys):
 
     found_documents = [
         doc.to_dict()
-        for query in queries
+        for query in search_queries
         for doc in query.stream()
     ]
 
