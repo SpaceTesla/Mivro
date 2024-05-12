@@ -1,7 +1,7 @@
-def additive_name(additives_tag, additives_data):
+def additive_name(additives_tags, additives_data):
     return [
         additives_data.get(additive, 'Unknown')
-        for additive in additives_tag
+        for additive in additives_tags
     ]
 
 def group_name(nova_group):
@@ -21,7 +21,6 @@ def grade_color(nutriscore_grade):
         'd': 'orange',
         'e': 'red'
     }
-    # akash was here w=mwahahwhahhwhahwh
     return grade_colors.get(nutriscore_grade.lower(), 'gray')
 
 def score_color(nutriscore_score):
