@@ -21,14 +21,14 @@ safety_settings = [
 with open('bot_instructions.md', 'r') as file:
     system_instructions = file.read()
 
-model = GenerativeModel(
+llm = GenerativeModel(
     model_name='gemini-1.5-flash-latest',
     generation_config=generation_config,
     safety_settings=safety_settings,
     system_instruction=system_instructions
 )
 
-chat_session = model.start_chat(history=[])
+chat_session = llm.start_chat(history=[])
 
 while True:
     user_message = input('Savora: ')
