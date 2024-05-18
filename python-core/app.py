@@ -12,7 +12,7 @@ from database import database_history, database_search
 
 app = Flask(__name__)
 CORS(app, resources={r'/api/*': {'origins': ['*']}})
-api = openfoodfacts.API(user_agent='ScanEasy/1.4')
+api = openfoodfacts.API(user_agent='ScanEasy/2.0')
 
 @app.route('/api/v1/barcode', methods=['POST'])
 def barcode_search():
@@ -40,8 +40,8 @@ def barcode_search():
             re.sub(r'^en:', '', item) if isinstance(item, str) else item
             for item in value
         ]
-        if isinstance(value, list)
-        else re.sub(r'^en:', '', value) if isinstance(value, str) else value
+        if isinstance(value, list) else re.sub(r'^en:', '', value)
+        if isinstance(value, str) else value
         for key, value in product_data.items()
     }
 
@@ -100,7 +100,7 @@ def database_search():
 
     product_data.append(
         {
-            'search_type': 'Google Firebase Database',
+            'search_type': 'Google Firestore Database',
             'search_response': '200 OK',
             'response_time': f'{response_time:.2f} seconds',
             'response_size': f'{response_size:.2f} KB',
