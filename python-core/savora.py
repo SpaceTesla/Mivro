@@ -31,7 +31,7 @@ llm = GenerativeModel(
 chat_session = llm.start_chat(history=[])
 
 while True:
-    user_message = input('Savora: ')
+    user_message = input('User: ')
     bot_response = chat_session.send_message(user_message)
 
-    print(bot_response.text)
+    print(f'Savora: {bot_response.text}')
