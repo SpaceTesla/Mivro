@@ -10,9 +10,10 @@ from mapping import additive_name, group_name, grade_color, score_color
 from utils import filter_ingredient, analyse_nutrient, filter_image
 from database import database_history, database_search
 from authentication import auth_blueprint
+from config import FLASK_SECRET_KEY
 
 app = Flask(__name__)
-app.secret_key = '1234567890'
+app.secret_key = FLASK_SECRET_KEY
 app.register_blueprint(auth_blueprint)
 
 CORS(app, resources={r'/api/*': {'origins': ['*']}})
