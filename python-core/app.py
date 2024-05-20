@@ -85,9 +85,8 @@ def barcode_search():
 
 #     return jsonify(product_data)
 
-
 @app.route('/api/v1/search/database', methods=['POST'])
-def database_search():
+def database_search_route():
     start_time = datetime.now()
 
     product_keyword = request.json.get('product_keyword')
