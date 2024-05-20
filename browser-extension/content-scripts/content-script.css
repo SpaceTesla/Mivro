@@ -86,3 +86,9 @@
   flex-direction: column;
   gap: 8px;
 }
+
+#product-image-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
