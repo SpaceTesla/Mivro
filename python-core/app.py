@@ -19,7 +19,7 @@ CORS(app, resources={r'/api/*': {'origins': ['*']}})
 api = openfoodfacts.API(user_agent='ScanEasy/1.6')
 
 @app.route('/api/v1/search/barcode', methods=['POST'])
-def barcode_search():
+def barcode():
     start_time = datetime.now()
 
     product_barcode = request.json.get('product_barcode')
@@ -76,7 +76,7 @@ def barcode_search():
     return jsonify(product_data)
 
 # @app.route('/api/v1/search/text', methods=['POST'])
-# def text_search():
+# def text():
 #     product_name = request.form.get('product_name')
 #     product_data = api.product.text_search(product_name)
 
@@ -86,7 +86,7 @@ def barcode_search():
 #     return jsonify(product_data)
 
 @app.route('/api/v1/search/database', methods=['POST'])
-def database_search_route():
+def database():
     start_time = datetime.now()
 
     product_keyword = request.json.get('product_keyword')
