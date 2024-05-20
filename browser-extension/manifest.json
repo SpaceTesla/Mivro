@@ -1,6 +1,6 @@
 {
-  "name": "EasyScan",
-  "description": "Web Extension for Personalized Product Profiling",
+  "name": "ScanEasy",
+  "description": "Scan Easy Chrome Extension",
   "version": "1.0.0",
   "manifest_version": 3,
   "background": {
@@ -11,14 +11,7 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "https://www.bigbasket.com/pd/*",
-        "https://www.swiggy.com/instamart/item/*",
-        "https://www.flipkart.com/*",
-        "https://www.amazon.in/*",
-        "https://www.zeptonow.com/pn/*",
-        "https://www.jiomart.com/p/groceries/*"
-      ],
+      "matches": ["<all_urls>"],
       "css": ["content-scripts/content-script.css"],
       "js": ["content-scripts/content-script.js"]
     }
