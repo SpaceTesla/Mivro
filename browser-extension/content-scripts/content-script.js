@@ -13,7 +13,7 @@ document.body.appendChild(esButton);
 // Adding productInfo div
 let productNameString =
   document.querySelector("h1")?.innerText.split(",")[0].trim() ||
-  "No Name found";
+  "Product name not found.";
 
 let productInfoContainer = document.createElement("div");
 productInfoContainer.id = "product-info";
@@ -46,9 +46,8 @@ esButton.addEventListener("click", () => {
 
   chrome.runtime.sendMessage({ text: "get_product_info" }, (response) => {
     if (response) {
-      console.log("Product Info received in response:", response);
+      console.log("Product info received successfully:", response);
       let productInfo = response.productInfo;
-      let productInfoKeys = Object.keys(productInfo);
 
       // Clear previous product info
       productInfoContent.innerHTML = "";
@@ -120,7 +119,7 @@ esButton.addEventListener("click", () => {
         );
       }
     } else {
-      console.error("No product info received in response:", response);
+      console.error("Failed to receive product info: No response received.");
     }
   });
 });
