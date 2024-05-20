@@ -11,15 +11,17 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
-      "css": [
-        "content-scripts/content-script.css"
-      ],
-      "js": [
-        "content-scripts/content-script.js"
-      ]
+      "matches": ["<all_urls>"],
+      "css": ["content-scripts/content-script.css"],
+      "js": ["content-scripts/content-script.js"]
+    }
+  ],
+  "permissions": ["activeTab"],
+  "host_permissions": ["http://127.0.0.1:5000/"],
+  "web_accessible_resources": [
+    {
+      "resources": ["*.js"],
+      "matches": ["<all_urls>"]
     }
   ]
 }

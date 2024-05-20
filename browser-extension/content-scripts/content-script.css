@@ -1,5 +1,5 @@
 /* Clickable Div */
-#elxr-btn {
+#es-btn {
   position: fixed;
   top: 25vh;
   right: 20px;
@@ -11,7 +11,7 @@
 }
 
 /* Inner icon */
-#elxr-btn-icon {
+#es-btn-icon {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -35,6 +35,42 @@
   border: 1px solid black;
   z-index: 9999;
   font-family: Arial, Helvetica, sans-serif !important;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  padding: 16px;
+  overflow: auto;
+}
+
+#product-info::-webkit-scrollbar {
+  /* For Chrome, Safari and Edge */
+  width: 12px;
+}
+
+#product-info::-webkit-scrollbar-thumb {
+  /* For Chrome, Safari and Edge */
+  background-color: transparent;
+}
+
+#product-info:hover {
+  scrollbar-color: auto; /* For Firefox */
+}
+
+#product-info:hover::-webkit-scrollbar-thumb {
+  /* For Chrome, Safari and Edge */
+  background-color: darkgrey;
+}
+
+#product-info h1 {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 !important;
+  margin-bottom: 8px !important;
+}
+
+#product-info img {
+  max-width: 100%;
+  max-height: 200px;
+  text-align: center;
 }
 
 /* Close button */
@@ -45,8 +81,8 @@
   cursor: pointer;
 }
 
-#product-name {
-  font-size: 24px !important;
-  font-weight: bold !important;
-  margin: 10px !important;
+#product-info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
