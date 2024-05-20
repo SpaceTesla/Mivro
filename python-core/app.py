@@ -9,12 +9,16 @@ from datetime import datetime
 from mapping import additive_name, group_name, grade_color, score_color
 from utils import filter_ingredient, analyse_nutrient, filter_image
 from database import database_history, database_search
+from authentication import auth_blueprint
 
 app = Flask(__name__)
-CORS(app, resources={r'/api/*': {'origins': ['*']}})
-api = openfoodfacts.API(user_agent='ScanEasy/2.0')
+app.secret_key = '1234567890'
+app.register_blueprint(auth_blueprint)
 
-@app.route('/api/v1/barcode', methods=['POST'])
+CORS(app, resources={r'/api/*': {'origins': ['*']}})
+api = openfoodfacts.API(user_agent='ScanEasy/1.6')
+
+@app.route('/api/v1/search/barcode', methods=['POST'])
 def barcode_search():
     start_time = datetime.now()
 
@@ -23,7 +27,7 @@ def barcode_search():
     product_data = api.product.get(product_barcode, fields=required_data)
 
     if not product_data:
-        return jsonify({'error': 'Product not found.'}), 404
+        return jsonify({'error': 'Product not found.'})
 
     missing_fields = set(required_data) - set(product_data.keys())
     for field in missing_fields:
@@ -71,20 +75,18 @@ def barcode_search():
 
     return jsonify(product_data)
 
-
-# @app.route('/api/v1/search', methods=['POST'])
+# @app.route('/api/v1/search/text', methods=['POST'])
 # def text_search():
 #     product_name = request.form.get('product_name')
 #     product_data = api.product.text_search(product_name)
 
 #     if not product_data:
-#         return jsonify({'error': 'Product not found.'}), 404
+#         return jsonify({'error': 'Product not found.'})
 
 #     return jsonify(product_data)
 
-
-@app.route('/api/v1/database', methods=['POST'])
-def database_search():
+@app.route('/api/v1/search/database', methods=['POST'])
+def database_search_route():
     start_time = datetime.now()
 
     product_keyword = request.json.get('product_keyword')
@@ -92,7 +94,7 @@ def database_search():
     product_data = database_search(product_keyword, search_keys)
 
     if not product_data:
-        return jsonify({'error': 'Product not found.'}), 404
+        return jsonify({'error': 'Product not found.'})
 
     end_time = datetime.now()
     response_time = (end_time - start_time).total_seconds()
