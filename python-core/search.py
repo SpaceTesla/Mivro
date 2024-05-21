@@ -10,7 +10,7 @@ from utils import filter_ingredient, analyse_nutrient, filter_image
 from database import database_history, database_search
 
 search_blueprint = Blueprint('search', __name__, url_prefix='/api/v1/search')
-api = openfoodfacts.API(user_agent='ScanEasy/2.1')
+api = openfoodfacts.API(user_agent='ScanEasy/2.2')
 
 @search_blueprint.route('/barcode', methods=['POST'])
 def barcode():
@@ -46,26 +46,23 @@ def barcode():
     response_time = (end_time - start_time).total_seconds()
     response_size = sys.getsizeof(product_data) / 1024
 
-    product_data.update(
-        {
-            'search_type': 'Open Food Facts API',
-            'search_response': '200 OK',
-            'response_time': f'{response_time:.2f} seconds',
-            'response_size': f'{response_size:.2f} KB',
-            'search_date': datetime.now().strftime('%d-%B-%Y'),
-            'search_time': datetime.now().strftime('%I:%M %p'),
-            'additives_names': additive_name(product_data['additives_tags'], json.load(open('additive_names.json'))),
-            'ingredients': filter_ingredient(product_data['ingredients']),
-            'nova_group_name': group_name(product_data['nova_group']),
-            'nutriments': analyse_nutrient(product_data['nutriments'], json.load(open('nutrient_limits.json'))),
-            'nutriscore_grade_color': grade_color(product_data['nutriscore_grade']),
-            'nutriscore_score_color': score_color(product_data['nutriscore_score']),
-            'selected_images': filter_image(product_data['selected_images'])
-        }
-    )
+    product_data.update({
+        'search_type': 'Open Food Facts API',
+        'search_response': '200 OK',
+        'response_time': f'{response_time:.2f} seconds',
+        'response_size': f'{response_size:.2f} KB',
+        'search_date': datetime.now().strftime('%d-%B-%Y'),
+        'search_time': datetime.now().strftime('%I:%M %p'),
+        'additives_names': additive_name(product_data['additives_tags'], json.load(open('additive_names.json'))),
+        'ingredients': filter_ingredient(product_data['ingredients']),
+        'nova_group_name': group_name(product_data['nova_group']),
+        'nutriments': analyse_nutrient(product_data['nutriments'], json.load(open('nutrient_limits.json'))),
+        'nutriscore_grade_color': grade_color(product_data['nutriscore_grade']),
+        'nutriscore_score_color': score_color(product_data['nutriscore_score']),
+        'selected_images': filter_image(product_data['selected_images'])
+    })
 
     database_history(product_barcode, product_data)
-
     return jsonify(product_data)
 
 # @search_blueprint.route('/text', methods=['POST'])
@@ -92,15 +89,13 @@ def database():
     response_time = (end_time - start_time).total_seconds()
     response_size = sys.getsizeof(product_data) / 1024
 
-    product_data.append(
-        {
-            'search_type': 'Google Firestore Database',
-            'search_response': '200 OK',
-            'response_time': f'{response_time:.2f} seconds',
-            'response_size': f'{response_size:.2f} KB',
-            'search_date': datetime.now().strftime('%d-%B-%Y'),
-            'search_time': datetime.now().strftime('%I:%M %p')
-        }
-    )
+    product_data.append({
+        'search_type': 'Google Firestore Database',
+        'search_response': '200 OK',
+        'response_time': f'{response_time:.2f} seconds',
+        'response_size': f'{response_size:.2f} KB',
+        'search_date': datetime.now().strftime('%d-%B-%Y'),
+        'search_time': datetime.now().strftime('%I:%M %p')
+    })
 
     return jsonify(product_data)
