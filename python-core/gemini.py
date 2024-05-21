@@ -1,7 +1,9 @@
 import google.generativeai as genai
 from google.generativeai import GenerativeModel
+from flask import Blueprint, request, jsonify
 from config import GEMINI_API_KEY
 
+ai_blueprint = Blueprint('ai', __name__, url_prefix='/api/v1/ai')
 genai.configure(api_key=GEMINI_API_KEY)
 
 generation_config = {
@@ -31,8 +33,8 @@ llm = GenerativeModel(
 
 chat_session = llm.start_chat(history=[])
 
-while True:
-    user_message = input('User: ')
+@ai_blueprint.route('/savora', methods=['POST'])
+def savora():
+    user_message = request.json.get('message')
     bot_response = chat_session.send_message(user_message)
-
-    print(f'Savora: {bot_response.text}')
+    return jsonify({'response': bot_response.text})

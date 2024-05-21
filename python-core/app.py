@@ -3,12 +3,14 @@ from flask_cors import CORS
 
 from config import FLASK_SECRET_KEY
 from search import search_blueprint
-from authentication import authentication_blueprint
+from authentication import auth_blueprint
+from gemini import ai_blueprint
 
 app = Flask(__name__)  # Create a Flask application instance
 app.secret_key = FLASK_SECRET_KEY  # Set the Flask secret key for session management
 app.register_blueprint(search_blueprint)  # Register the search blueprint
-app.register_blueprint(authentication_blueprint)  # Register the authentication blueprint
+app.register_blueprint(auth_blueprint)  # Register the auth blueprint
+app.register_blueprint(ai_blueprint)  # Register the AI blueprint
 
 # Enable CORS for all routes under /api/*, allowing all origins
 CORS(app, resources={

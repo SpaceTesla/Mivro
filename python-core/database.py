@@ -44,17 +44,14 @@ def database_search(product_keyword, search_keys):
 def register_user(email, password):
     try:
         user_doc = user_ref.document(email)
-        if user_doc.get().exists:
-            return {'error': 'User already exists.'}
+        # if user_doc.get().exists:
+        #     return {'error': 'User already exists.'}
 
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256', salt_length=8)
-        user_doc.set(
-            {
-                'email': email,
-                'password': hashed_password
-            }
-        )
-        return {'message': 'User registered successfully.'}
+        user_doc.set({
+            'email': email,
+            'password': hashed_password
+        })
     except Exception as exc:
         return {'error': str(exc)}
 
