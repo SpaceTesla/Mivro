@@ -10,7 +10,7 @@ from utils import filter_ingredient, analyse_nutrient, filter_image
 from database import database_history, database_search
 
 search_blueprint = Blueprint('search', __name__, url_prefix='/api/v1/search')
-api = openfoodfacts.API(user_agent='ScanEasy/2.2')
+api = openfoodfacts.API(user_agent='Mivro/2.2')
 
 @search_blueprint.route('/barcode', methods=['POST'])
 def barcode():

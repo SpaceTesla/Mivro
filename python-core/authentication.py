@@ -69,3 +69,21 @@ def logout():
         return jsonify({'message': 'Logged out successfully.'})
     else:
         return jsonify({'error': 'User not logged in.'})
+
+@auth_blueprint.route('/delete-account', methods=['POST'])
+def delete():
+    email = request.json.get('email')
+    password = request.json.get('password')
+    if not email or not password:
+        return jsonify({'error': 'Email and password are required.'})
+
+    try:
+        user = auth.get_user_by_email(email)
+        auth.delete_user(user.uid)
+
+        if 'email' in session:
+            session.pop('email')
+
+        return jsonify({'message': 'Account deleted successfully.'})
+    except Exception as exc:
+        return jsonify({'error': str(exc)})
