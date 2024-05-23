@@ -10,6 +10,15 @@ esButtonIcon.id = "es-btn-icon";
 esButton.appendChild(esButtonIcon);
 document.body.appendChild(esButton);
 
+let navDiv = document.createElement("div");
+navDiv.id = "nav-div";
+document.body.appendChild(navDiv);
+
+let closeBtn = document.createElement("div");
+closeBtn.id = "close-btn";
+closeBtn.textContent = " \u2715";
+navDiv.appendChild(closeBtn);
+
 // Adding productInfo div
 let productNameString =
   document.querySelector("h1")?.innerText.split(",")[0].trim() ||
@@ -23,15 +32,10 @@ let productName = document.createElement("h1");
 productName.id = "product-name";
 productName.textContent = productNameString;
 
-let closeBtn = document.createElement("div");
-closeBtn.id = "close-btn";
-closeBtn.textContent = " \u2715";
-
 let productInfoContent = document.createElement("div");
 productInfoContent.id = "product-info-content";
 
 productInfoContainer.appendChild(productName);
-productInfoContainer.appendChild(closeBtn);
 productInfoContainer.appendChild(productInfoContent);
 
 // Event listener for close button
