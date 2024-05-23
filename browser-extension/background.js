@@ -23,7 +23,9 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         if (sendResponse && typeof sendResponse === "function") {
           sendResponse({ productInfo: data });
         } else {
-          console.error("Failed to send response: 'sendResponse' function not found.");
+          console.error(
+            "Failed to send response: 'sendResponse' function not found."
+          );
         }
       })
       .catch((error) => {
@@ -31,7 +33,9 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         if (sendResponse && typeof sendResponse === "function") {
           sendResponse({ error: error.toString() });
         } else {
-          console.error("Failed to send response: 'sendResponse' function not found.");
+          console.error(
+            "Failed to send response: 'sendResponse' function not found."
+          );
         }
       });
     return true; // indicates that the response will be sent asynchronously
