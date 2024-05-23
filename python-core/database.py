@@ -7,13 +7,12 @@ credential = credentials.Certificate('firebase-key.json')
 firebase_admin.initialize_app(credential)
 db = firestore.client()
 
-users_ref = db.collection('users')
+user_ref = db.collection('users')
+scan_history_ref = db.collection('scan_history')
 
 def database_history(product_barcode, product_data):
     try:
-        api_history_ref = db.collection('api_history')
-        barcode_doc = api_history_ref.document(product_barcode)
-
+        barcode_doc = scan_history_ref.document(product_barcode)
         if barcode_doc.get().exists:
             print(f'[Database] Product history for "{product_barcode}" exists.')
             return
@@ -25,10 +24,8 @@ def database_history(product_barcode, product_data):
 
 def database_search(product_keyword, search_keys):
     try:
-        api_history_ref = db.collection('api_history')
-
         search_queries = [
-            api_history_ref.where(filter=FieldFilter(key, '>=', product_keyword))
+            scan_history_ref.where(filter=FieldFilter(key, '>=', product_keyword))
             .where(filter=FieldFilter(key, '<=', product_keyword + '\uf8ff'))
             for key in search_keys
         ]
@@ -46,7 +43,7 @@ def database_search(product_keyword, search_keys):
 
 def register_user(email, password):
     try:
-        user_doc = users_ref.document(email)
+        user_doc = user_ref.document(email)
         if user_doc.get().exists:
             return {'error': 'User already exists.'}
 
@@ -63,7 +60,7 @@ def register_user(email, password):
 
 def validate_user(email, password):
     try:
-        user_doc = users_ref.document(email)
+        user_doc = user_ref.document(email)
         if not user_doc.get().exists:
             return {'error': 'User does not exist.'}
 

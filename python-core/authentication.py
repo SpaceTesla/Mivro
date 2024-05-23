@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify, session
 from database import register_user, validate_user
 
-auth_blueprint = Blueprint('auth', __name__, url_prefix='/api/v1/auth')
+authentication_blueprint = Blueprint('auth', __name__, url_prefix='/api/v1/auth')
 
-@auth_blueprint.route('/signup', methods=['POST'])
+@authentication_blueprint.route('/signup', methods=['POST'])
 def signup():
     email = request.json.get('email')
     password = request.json.get('password')
@@ -14,7 +14,7 @@ def signup():
     result = register_user(email, password)
     return jsonify(result)
 
-@auth_blueprint.route('/signin', methods=['POST'])
+@authentication_blueprint.route('/signin', methods=['POST'])
 def signin():
     email = request.json.get('email')
     password = request.json.get('password')
@@ -28,7 +28,7 @@ def signin():
 
     return jsonify(result)
 
-@auth_blueprint.route('/logout', methods=['POST'])
+@authentication_blueprint.route('/logout', methods=['POST'])
 def logout():
     if 'email' in session:
         session.pop('email')
