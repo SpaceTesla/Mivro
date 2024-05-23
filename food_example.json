@@ -1,0 +1,22 @@
+{
+    "categories": "Chocolate icecream, Icecream",
+    "nova_group": 4,
+    "nova_group_name": "Ultra-processed food and drink products",
+    "nutrient_levels": {
+      "fat": "moderate",
+      "salt": "low",
+      "saturated-fat": "high",
+      "sugars": "high"
+    },
+    "nutriments": {
+      "carbohydrates": "26.30 g",
+      "energy_kcal": "232.00 kcal",
+      "fat": "12.50 g",
+      "proteins": "4.40 g",
+      "cholesterol": "0.04 mg",
+      "saturated-fat": "7.60 g",
+      "sodium": "0.05 mg",
+      "sugars": "22.30 g"
+    }
+  }
+  
