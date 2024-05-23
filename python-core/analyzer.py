@@ -1,10 +1,10 @@
 import os
 import google.generativeai as genai
 
+# Configure the API key for Google Generative AI
+genai.configure(api_key="")
 
-genai.configure(api_key="AIzaSyDG5y9jM6EGG6NsZlRGGhrawYyF3Lc29IU")
-
-
+# Define the generation configuration
 generation_config = {
     "temperature": 1,
     "top_p": 0.95,
@@ -13,7 +13,7 @@ generation_config = {
     "response_mime_type": "text/plain",
 }
 
-
+# Define the safety settings
 safety_settings = [
     {
         "category": "HARM_CATEGORY_HARASSMENT",
@@ -60,11 +60,12 @@ dietary_preferences = input("Enter your dietary preferences: ")
 medical_conditions = input("Enter your medical conditions: ")
 allergies = input("Enter your allergies: ")
 
+# Start a chat session
 chat_session = model.start_chat(
     history=[]
 )
 
-
+# Prepare the input string
 input_string = f"""Food Product: Amul Chocolate Brownie
 Age: {age}
 Gender: {gender}
@@ -81,7 +82,8 @@ with open ("sample.txt",'r') as file:
 
 input_string+=data    
 
+# Send the input to the model
 response = chat_session.send_message(input_string)
 
-
+# Print the response from the model
 print(response.text)

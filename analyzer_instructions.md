@@ -71,8 +71,32 @@ Choose any allergens:
 14. Tree Nuts
 15. Wheat
 
-Analyze the nutrients, categorizing them into positive and negative based on the personalized data provided and the standard guidelines worldwide. Additionally, provide warnings for allergens. Return this information as a dictionary with three keys: `positive_nutrients`, `negative_nutrients`, and `warnings`.
+### Nutrients to be analyzed into positive and negative
+1. calcium
+2. carbohydrates
+3. cholesterol
+4. copper
+5. energy-kcal (represents energy in kilocalories)
+6. fat
+7. fiber
+8. iodine
+9. iron
+10. magnesium
+11. manganese
+12. phosphorus
+13. potassium
+14. proteins
+15. saturated-fat
+16.  selenium
+17. sodium
+18.  sugars
+19. water
+20.  zinc
 
-The `positive_nutrients` and `negative_nutrients` should also include the quantity.
 
-Provide the output in the form of a Python dictionary.No further explanation is needed, just return the dictonary.
+### Instructions for Analysis
+1. Analyze the nutrients, categorizing them into positive and negative based on the personalized data provided and the standard guidelines worldwide. Just Return this information as a dictionary with two keys: `positive_nutrients`, `negative_nutrients`.
+
+2. The `positive_nutrients` and `negative_nutrients` should also include the quantity.DO NOT MISS ANY INFORMATIONS FROM THE GIVEN JSON STRING.
+
+3. Provide the output in the form of a Python dictionary.No Explanation is needed.
