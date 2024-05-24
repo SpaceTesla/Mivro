@@ -1,3 +1,11 @@
+def filter_additive(additive_data):
+    additive_info = [
+        tag
+        for tag in additive_data
+        if not tag.endswith('i')
+    ]
+    return additive_info
+
 def filter_ingredient(ingredient_data):
     ingredient_info = [
         {

@@ -8,6 +8,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        email: "admin@mivro.org",
         product_barcode: "8901595862962",
       }),
       timeout: 15000,
