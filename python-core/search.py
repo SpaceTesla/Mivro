@@ -6,15 +6,16 @@ from flask import Blueprint, request, jsonify
 from datetime import datetime
 
 from mapping import additive_name, group_name, grade_color, score_color
-from utils import filter_ingredient, analyse_nutrient, filter_image
+from utils import filter_additive, filter_ingredient, analyse_nutrient, filter_image
 from database import database_history, database_search
 
 search_blueprint = Blueprint('search', __name__, url_prefix='/api/v1/search')
-api = openfoodfacts.API(user_agent='Mivro/2.2')
+api = openfoodfacts.API(user_agent='Mivro/2.4')
 
 @search_blueprint.route('/barcode', methods=['POST'])
 def barcode():
     start_time = datetime.now()
+    email = request.json.get('email')
     product_barcode = request.json.get('product_barcode')
     required_data = json.load(open('product_schema.json'))
 
@@ -26,12 +27,7 @@ def barcode():
     for field in missing_fields:
         print(f'Warning: Data for "{field}" is missing.')
 
-    product_data['additives_tags'] = [
-        tag
-        for tag in product_data['additives_tags']
-        if not tag.endswith('i')
-    ]
-
+    product_data['additives_tags'] = filter_additive(product_data['additives_tags'])
     product_data = {
         key: [
             re.sub(r'^en:', '', item) if isinstance(item, str) else item
@@ -62,7 +58,7 @@ def barcode():
         'selected_images': filter_image(product_data['selected_images'])
     })
 
-    database_history(product_barcode, product_data)
+    database_history(email, product_barcode, product_data)
     return jsonify(product_data)
 
 # @search_blueprint.route('/text', methods=['POST'])
@@ -89,7 +85,7 @@ def database():
     response_time = (end_time - start_time).total_seconds()
     response_size = sys.getsizeof(product_data) / 1024
 
-    product_data.append({
+    product_data.update({
         'search_type': 'Google Firestore Database',
         'search_response': '200 OK',
         'response_time': f'{response_time:.2f} seconds',
