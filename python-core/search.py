@@ -1,16 +1,15 @@
 import openfoodfacts
 import json
-import re
 import sys
 from flask import Blueprint, request, jsonify
 from datetime import datetime
 
 from mapping import additive_name, group_name, grade_color, score_color
-from utils import filter_additive, filter_ingredient, analyse_nutrient, filter_image
+from utils import filter_additive, filter_ingredient, analyse_nutrient, filter_image, filter_data
 from database import database_history, database_search
 
 search_blueprint = Blueprint('search', __name__, url_prefix='/api/v1/search')
-api = openfoodfacts.API(user_agent='Mivro/2.4')
+api = openfoodfacts.API(user_agent='Mivro/2.5')
 
 @search_blueprint.route('/barcode', methods=['POST'])
 def barcode():
@@ -28,38 +27,30 @@ def barcode():
         print(f'Warning: Data for "{field}" is missing.')
 
     product_data['additives_tags'] = filter_additive(product_data['additives_tags'])
-    product_data = {
-        key: [
-            re.sub(r'^en:', '', item) if isinstance(item, str) else item
-            for item in value
-        ]
-        if isinstance(value, list) else re.sub(r'^en:', '', value)
-        if isinstance(value, str) else value
-        for key, value in product_data.items()
-    }
+    filtered_product_data = filter_data(product_data)
 
     end_time = datetime.now()
     response_time = (end_time - start_time).total_seconds()
-    response_size = sys.getsizeof(product_data) / 1024
+    response_size = sys.getsizeof(filtered_product_data) / 1024
 
-    product_data.update({
+    filtered_product_data.update({
         'search_type': 'Open Food Facts API',
         'search_response': '200 OK',
         'response_time': f'{response_time:.2f} seconds',
         'response_size': f'{response_size:.2f} KB',
         'search_date': datetime.now().strftime('%d-%B-%Y'),
         'search_time': datetime.now().strftime('%I:%M %p'),
-        'additives_names': additive_name(product_data['additives_tags'], json.load(open('additive_names.json'))),
-        'ingredients': filter_ingredient(product_data['ingredients']),
-        'nova_group_name': group_name(product_data['nova_group']),
-        'nutriments': analyse_nutrient(product_data['nutriments'], json.load(open('nutrient_limits.json'))),
-        'nutriscore_grade_color': grade_color(product_data['nutriscore_grade']),
-        'nutriscore_score_color': score_color(product_data['nutriscore_score']),
-        'selected_images': filter_image(product_data['selected_images'])
+        'additives_names': additive_name(filtered_product_data['additives_tags'], json.load(open('additive_names.json'))),
+        'ingredients': filter_ingredient(filtered_product_data['ingredients']),
+        'nova_group_name': group_name(filtered_product_data['nova_group']),
+        'nutriments': analyse_nutrient(filtered_product_data['nutriments'], json.load(open('nutrient_limits.json'))),
+        'nutriscore_grade_color': grade_color(filtered_product_data['nutriscore_grade']),
+        'nutriscore_score_color': score_color(filtered_product_data['nutriscore_score']),
+        'selected_images': filter_image(filtered_product_data['selected_images'])
     })
 
-    database_history(email, product_barcode, product_data)
-    return jsonify(product_data)
+    database_history(email, product_barcode, filtered_product_data)
+    return jsonify(filtered_product_data)
 
 # @search_blueprint.route('/text', methods=['POST'])
 # def text():

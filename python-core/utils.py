@@ -1,3 +1,5 @@
+import re
+
 def filter_additive(additive_data):
     additive_info = [
         tag
@@ -53,3 +55,15 @@ def filter_image(image_data):
         None
     )
     return image_link
+
+def filter_data(product_data):
+    product_info = {
+        key: [
+            re.sub(r'^en:', '', item) if isinstance(item, str) else item
+            for item in value
+        ]
+        if isinstance(value, list) else re.sub(r'^en:', '', value)
+        if isinstance(value, str) else value
+        for key, value in product_data.items()
+    }
+    return product_info
