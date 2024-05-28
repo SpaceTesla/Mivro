@@ -1,6 +1,6 @@
 from firebase_admin import auth
 from flask import Blueprint, request, jsonify, redirect, url_for, session
-from database import register_user, validate_user
+from database import register_user, validate_user, delete_user
 
 auth_blueprint = Blueprint('auth', __name__, url_prefix='/api/v1/auth')
 
@@ -80,6 +80,9 @@ def delete():
     try:
         user = auth.get_user_by_email(email)
         auth.delete_user(user.uid)
+        result = delete_user(email)
+        if 'error' in result:
+            return jsonify(result)
 
         if 'email' in session:
             session.pop('email')
