@@ -79,3 +79,14 @@ def validate_user(email, password):
         return {'message': 'Login successful.'}
     except Exception as exc:
         return {'error': str(exc)}
+
+def delete_user(email):
+    try:
+        user_document = user_reference.document(email)
+        if user_document.get().exists:
+            user_document.delete()
+            return {'message': 'User document deleted successfully.'}
+        else:
+            return {'error': 'User document does not exist.'}
+    except Exception as exc:
+        return {'error': str(exc)}
