@@ -1,7 +1,10 @@
 import google.generativeai as genai
 from google.generativeai import GenerativeModel
 from flask import Blueprint, request, jsonify
+
 from config import GEMINI_API_KEY
+from models import ChatHistory
+from database import user_reference
 
 ai_blueprint = Blueprint('ai', __name__, url_prefix='/api/v1/ai')
 genai.configure(api_key=GEMINI_API_KEY)
@@ -35,6 +38,23 @@ chat_session = llm.start_chat(history=[])
 
 @ai_blueprint.route('/savora', methods=['POST'])
 def savora():
+    email = request.json.get('email')
     user_message = request.json.get('message')
     bot_response = chat_session.send_message(user_message)
+
+    chat_entry = ChatHistory(user_message=user_message, bot_response=bot_response.text)
+    chat_history(email, chat_entry)
+
     return jsonify({'response': bot_response.text})
+
+def chat_history(email, chat_entry):
+    try:
+        user_document = user_reference.document(email)
+        chat_history = user_document.get().to_dict().get('chat_history', [])
+
+        chat_history.append(chat_entry.to_dict())
+        user_document.set({
+            'chat_history': chat_history
+        }, merge=True)
+    except Exception as exc:
+        print(f'Firestore storage error:\n {exc}')
