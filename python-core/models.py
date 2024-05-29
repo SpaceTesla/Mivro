@@ -1,7 +1,9 @@
 from config import DEFAULT_NAME, DEFAULT_PHOTO
 
 class AccountInfo:
-    def __init__(self, display_name=DEFAULT_NAME, photo_url=DEFAULT_PHOTO, email=None, password=None, phone_number=None, email_verified=False, created_date=None, created_time=None):
+    def __init__(self, display_name=DEFAULT_NAME, photo_url=DEFAULT_PHOTO, email=None,
+                 password=None, phone_number=None, email_verified=False,
+                 created_date=None, created_time=None):
         self.display_name = display_name
         self.photo_url = photo_url
         self.email = email
@@ -24,7 +26,8 @@ class AccountInfo:
         }
 
 class HealthProfile:
-    def __init__(self, age=None, gender=None, height=None, weight=None, body_mass_index=None, dietary_preferences=None, medical_conditions=None, allergies=None):
+    def __init__(self, age=None, gender=None, height=None, weight=None, body_mass_index=None,
+                 dietary_preferences=None, medical_conditions=None, allergies=None):
         self.age = age
         self.gender = gender
         self.height = height

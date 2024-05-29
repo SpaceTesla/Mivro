@@ -37,21 +37,17 @@ def database_search(email, product_keyword, search_keys):
             user_data = user_document.to_dict()
             scan_history = user_data.get('scan_history', {})
 
-            user_scans = [
-                scan_data
-                for scan_data in scan_history.values()
-                if any(product_keyword.lower() in str(value).lower() for value in scan_data.values())
-            ]
-            scan_results.extend(user_scans)
+            for scan_data in scan_history:
+                if any(product_keyword.lower() in str(scan_history[scan_data].get(key, '')).lower() for key in search_keys):
+                    scan_results.append(scan_history[scan_data])
 
         search_history = SearchHistory(user_searches=product_keyword)
         user_reference.document(email).set({
             'search_history': search_history.to_dict()
         }, merge=True)
 
-        product_document = scan_results[0] if scan_results else None
         print(f'[Database] Found {len(scan_results)} document(s) for "{product_keyword}".')
-        return product_document
+        return scan_results[0] if scan_results else None
     except Exception as exc:
         print(f'Database search error:\n {exc}')
 

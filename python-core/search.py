@@ -9,7 +9,7 @@ from utils import filter_additive, filter_ingredient, analyse_nutrient, filter_i
 from database import database_history, database_search
 
 search_blueprint = Blueprint('search', __name__, url_prefix='/api/v1/search')
-api = openfoodfacts.API(user_agent='Mivro/2.6')
+api = openfoodfacts.API(user_agent='Mivro/2.7')
 
 @search_blueprint.route('/barcode', methods=['POST'])
 def barcode():
@@ -69,21 +69,23 @@ def database():
     product_keyword = request.json.get('product_keyword')
     search_keys = ['_keywords', 'brands', 'categories', 'product_name']
 
-    product_data = database_search(email, product_keyword, search_keys)
-    if not product_data:
-        return jsonify({'error': 'Product not found.'})
+    tokenized_keywords = product_keyword.split()
+    for keyword in tokenized_keywords:
+        product_data = database_search(email, keyword, search_keys)
+        if product_data:
+            end_time = datetime.now()
+            response_time = (end_time - start_time).total_seconds()
+            response_size = sys.getsizeof(product_data) / 1024
 
-    end_time = datetime.now()
-    response_time = (end_time - start_time).total_seconds()
-    response_size = sys.getsizeof(product_data) / 1024
+            product_data.update({
+                'search_type': 'Google Firestore Database',
+                'search_response': '200 OK',
+                'response_time': f'{response_time:.2f} seconds',
+                'response_size': f'{response_size:.2f} KB',
+                'search_date': datetime.now().strftime('%d-%B-%Y'),
+                'search_time': datetime.now().strftime('%I:%M %p')
+            })
 
-    product_data.update({
-        'search_type': 'Google Firestore Database',
-        'search_response': '200 OK',
-        'response_time': f'{response_time:.2f} seconds',
-        'response_size': f'{response_size:.2f} KB',
-        'search_date': datetime.now().strftime('%d-%B-%Y'),
-        'search_time': datetime.now().strftime('%I:%M %p')
-    })
+            return jsonify(product_data)
 
-    return jsonify(product_data)
+    return jsonify({'error': 'Product not found.'})
