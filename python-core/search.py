@@ -4,20 +4,21 @@ import sys
 from flask import Blueprint, request, jsonify
 from datetime import datetime
 
-from mapping import additive_name, group_name, grade_color, score_color
-from utils import filter_additive, filter_ingredient, analyse_nutrient, filter_image, filter_data
+from mapping import additive_name, nova_name, grade_color, score_color
+from utils import filter_additive, filter_ingredient, filter_image, filter_data
 from database import database_history, database_search
+from gemini import lumi, swapr
 
 search_blueprint = Blueprint('search', __name__, url_prefix='/api/v1/search')
-api = openfoodfacts.API(user_agent='Mivro/2.7')
+api = openfoodfacts.API(user_agent='Mivro/2.8')
 
 @search_blueprint.route('/barcode', methods=['POST'])
 def barcode():
     start_time = datetime.now()
     email = request.json.get('email')
     product_barcode = request.json.get('product_barcode')
-    required_data = json.load(open('product_schema.json'))
 
+    required_data = json.load(open('product_schema.json'))
     product_data = api.product.get(product_barcode, fields=required_data)
     if not product_data:
         return jsonify({'error': 'Product not found.'})
@@ -42,11 +43,12 @@ def barcode():
         'search_time': datetime.now().strftime('%I:%M %p'),
         'additives_names': additive_name(filtered_product_data['additives_tags'], json.load(open('additive_names.json'))),
         'ingredients': filter_ingredient(filtered_product_data['ingredients']),
-        'nova_group_name': group_name(filtered_product_data['nova_group']),
-        'nutriments': analyse_nutrient(filtered_product_data['nutriments'], json.load(open('nutrient_limits.json'))),
+        'nova_group_name': nova_name(filtered_product_data['nova_group']),
+        'nutriments': lumi(filtered_product_data['nutriments']),
         'nutriscore_grade_color': grade_color(filtered_product_data['nutriscore_grade']),
         'nutriscore_score_color': score_color(filtered_product_data['nutriscore_score']),
-        'selected_images': filter_image(filtered_product_data['selected_images'])
+        'selected_images': filter_image(filtered_product_data['selected_images']),
+        'recommeded_product': swapr(email, filtered_product_data)
     })
 
     database_history(email, product_barcode, filtered_product_data)

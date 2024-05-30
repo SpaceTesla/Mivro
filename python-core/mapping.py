@@ -4,7 +4,7 @@ def additive_name(additives_tags, additives_data):
         for additive in additives_tags
     ]
 
-def group_name(nova_group):
+def nova_name(nova_group):
     group_names = {
         1: 'Unprocessed or minimally processed foods',
         2: 'Processed culinary ingredients',
