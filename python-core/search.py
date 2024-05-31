@@ -10,7 +10,7 @@ from database import database_history, database_search
 from gemini import lumi, swapr
 
 search_blueprint = Blueprint('search', __name__, url_prefix='/api/v1/search')
-api = openfoodfacts.API(user_agent='Mivro/2.8')
+api = openfoodfacts.API(user_agent='Mivro/2.9')
 
 @search_blueprint.route('/barcode', methods=['POST'])
 def barcode():
