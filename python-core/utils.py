@@ -1,4 +1,5 @@
 import re
+from database import user_reference
 
 def filter_additive(additive_data):
     additive_info = [
@@ -51,8 +52,7 @@ def filter_image(image_data):
     image_link = next(
         iter(
             list(image_data.values())[0].values()
-        ),
-        None
+        ), None
     )
     return image_link
 
@@ -67,3 +67,20 @@ def filter_data(product_data):
         for key, value in product_data.items()
     }
     return product_info
+
+def user_profile(email):
+    user_document = user_reference.document(email)
+    health_profile = user_document.get().to_dict().get('health_profile', {})
+    return health_profile
+
+def chat_history(email, chat_entry):
+    user_document = user_reference.document(email)
+    chat_history = user_document.get().to_dict().get('chat_history', [])
+
+    chat_history.append(chat_entry.to_dict())
+    user_document.set({
+        'chat_history': chat_history
+    }, merge=True)
+
+def calculate_bmi(weight_kg, height_m):
+    return round(weight_kg / (height_m ** 2), 2)

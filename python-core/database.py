@@ -32,6 +32,7 @@ def database_search(email, product_keyword, search_keys):
     try:
         user_stream = user_reference.stream()
         scan_results = []
+        # found_keys = []
 
         for user_document in user_stream:
             user_data = user_document.to_dict()
@@ -40,6 +41,7 @@ def database_search(email, product_keyword, search_keys):
             for scan_data in scan_history:
                 if any(product_keyword.lower() in str(scan_history[scan_data].get(key, '')).lower() for key in search_keys):
                     scan_results.append(scan_history[scan_data])
+                    # found_keys.append(key)
 
         search_history = SearchHistory(user_searches=product_keyword)
         user_reference.document(email).set({
