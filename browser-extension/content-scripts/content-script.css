@@ -1,84 +1,43 @@
-/* Clickable Div */
-#es-btn {
+#product-btn {
   position: fixed;
   top: 25vh;
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  background-color: #4aac05;
+  right: 1px;
+  width: 60px;
+  height: 60px;
   border-radius: 10px;
   cursor: pointer;
 }
 
-/* Inner icon */
-#es-btn-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 32px;
-  height: 32px;
-  background-color: white;
-  border: 4px solid beige;
-  border-radius: 50%;
-  box-shadow: 0 0 5px rgba(128, 128, 128, 0.5);
-}
-
-#product-info {
-  display: none;
+#product-body {
   position: fixed;
   bottom: 1vh;
   right: 1vw;
   width: 320px;
   height: 640px;
   background-color: white;
-  border: 1px solid black;
+  border: 1px solid #d5d5d5;
+  border-radius: 4px;
   z-index: 9999;
   font-family: Arial, Helvetica, sans-serif !important;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  padding: 16px;
-  overflow: auto;
+  overflow-y: auto;
 }
 
-#product-info::-webkit-scrollbar {
-  /* For Chrome, Safari and Edge */
-  width: 12px;
+#product-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px;
+  border-bottom: 1px solid #d5d5d5;
 }
 
-#product-info::-webkit-scrollbar-thumb {
-  /* For Chrome, Safari and Edge */
-  background-color: transparent;
+#mivro-svg {
+  height: 25px;
+  float: left;
 }
 
-#product-info:hover {
-  scrollbar-color: auto; /* For Firefox */
-}
-
-#product-info:hover::-webkit-scrollbar-thumb {
-  /* For Chrome, Safari and Edge */
-  background-color: darkgrey;
-}
-
-#product-info h1 {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0 !important;
-  margin-bottom: 8px !important;
-}
-
-#product-info img {
-  max-width: 100%;
-  max-height: 200px;
-  text-align: center;
-}
-
-/* Close button */
-#close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  cursor: pointer;
+#function-icon-div {
+  display: flex;
+  gap: 12px;
 }
 
 #product-info-content {
