@@ -199,18 +199,22 @@ productBody.appendChild(productNav);
   });
 })();
 
+// Product info container setup
 let productInfoContainer = document.createElement("div");
 productInfoContainer.id = "product-info-container";
 productBody.appendChild(productInfoContainer);
 
+// Main product info container
 let productInfoContainerMain = document.createElement("div");
 productInfoContainerMain.id = "product-info-container-main";
 productInfoContainer.appendChild(productInfoContainerMain);
 
+// Product image container
 let productImageContainer = document.createElement("div");
 productImageContainer.id = "product-image-container";
 productInfoContainerMain.appendChild(productImageContainer);
 
+// Product image
 let productImage = document.createElement("img");
 productImage.id = "product-image";
 const selectedImages = productInfo.selected_images;
@@ -225,45 +229,51 @@ for (const key in selectedImages) {
     break;
   }
 }
-console.log("Image URL:", imageUrl);
+
 productImage.src = imageUrl;
 productImageContainer.appendChild(productImage);
 
+// Product main info container
 let productMainInfo = document.createElement("div");
 productMainInfo.id = "product-main-info";
 productInfoContainerMain.appendChild(productMainInfo);
 
+// Product name
 let productName = document.createElement("div");
 productName.id = "product-name";
 productName.textContent = productInfo.product_name;
 productMainInfo.appendChild(productName);
 
+// Brand name
 let brandName = document.createElement("div");
 brandName.id = "brand-name";
 brandName.textContent = productInfo.brands;
 productMainInfo.appendChild(brandName);
 
+// Score container
 let scoreContainer = document.createElement("div");
 scoreContainer.id = "score-container";
 productMainInfo.appendChild(scoreContainer);
 
+// Nutriscore color indicator
 let nutriscoreColor = document.createElement("div");
 nutriscoreColor.id = "nutriscore-color";
-let nutriscoreColorText = productInfo.nutriscore_score_color;
-console.log("Nutriscore color:", nutriscoreColorText);
-nutriscoreColor.style.backgroundColor = nutriscoreColorText;
+nutriscoreColor.style.backgroundColor = nutriscoreScoreColor;
 scoreContainer.appendChild(nutriscoreColor);
 
-let nutriscoreScoreContrianer = document.createElement("div");
-nutriscoreScoreContrianer.id = "nutriscore-score-container";
-scoreContainer.appendChild(nutriscoreScoreContrianer);
+// Nutriscore score container
+let nutriscoreScoreContainer = document.createElement("div");
+nutriscoreScoreContainer.id = "nutriscore-score-container";
+scoreContainer.appendChild(nutriscoreScoreContainer);
 
+// Nutriscore score
 let nutriscoreScore = document.createElement("div");
 nutriscoreScore.id = "nutriscore-score";
 nutriscoreScore.textContent = `${productInfo.nutriscore_score}/100`;
-nutriscoreScoreContrianer.appendChild(nutriscoreScore);
+nutriscoreScoreContainer.appendChild(nutriscoreScore);
 
+// Nutriscore comment
 let nutriscoreComment = document.createElement("div");
 nutriscoreComment.id = "nutriscore-comment";
-nutriscoreComment.textContent = `bad`;
-nutriscoreScoreContrianer.appendChild(nutriscoreComment);
+nutriscoreComment.textContent = "Bad"; // You might want to update this dynamically based on the score
+nutriscoreScoreContainer.appendChild(nutriscoreComment);
