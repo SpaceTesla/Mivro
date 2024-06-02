@@ -90,3 +90,14 @@ class PaymentHistory:
             'payment_gateway': self.payment_gateway,
             self.product_barcode: self.product_data
         }
+
+class Favorite:
+    def __init__(self, product_name=None, product_barcode=None):
+        self.product_name = product_name
+        self.product_barcode = product_barcode
+
+    def to_dict(self):
+        return {
+            'product_name': self.product_name,
+            'product_barcode': self.product_barcode
+        }
