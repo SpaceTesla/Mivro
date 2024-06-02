@@ -29,8 +29,10 @@ function createAndAppendSvg(
       child.setAttribute("fill", fill);
     }
   }
-
-  parentElement.appendChild(svgElement);
+  let iconDiv = document.createElement("div");
+  iconDiv.id = "icon-div";
+  iconDiv.appendChild(svgElement);
+  parentElement.appendChild(iconDiv);
 
   if (clickHandler) {
     svgElement.addEventListener("click", clickHandler);
@@ -63,8 +65,9 @@ function getAndAppendIcon(iconName, parentId, id, callback) {
             null,
             callback
           );
-          element.style.height = "25px";
+          element.style.height = "20px";
           element.style.cursor = "pointer";
+          element.classList.add("icon-svg");
           resolve();
         } else {
           console.error(`${capitalize(iconName)} Icon not received`);
@@ -84,6 +87,31 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+let productInfo = localStorage.getItem("productInfo");
+
+if (productInfo) {
+  // Parse and use the cached product info
+  productInfo = JSON.parse(productInfo);
+  console.log("Product info retrieved from cache:", productInfo);
+} else {
+  // Fetch product info if not cached
+  chrome.runtime.sendMessage({ text: "fetchProductInfo" }, (response) => {
+    if (chrome.runtime.lastError) {
+      console.error("Error:", chrome.runtime.lastError.message);
+    } else if (response && response.productInfo) {
+      console.log("Product info received successfully:", response);
+      let productInfo = response.productInfo;
+
+      // Store the product info in localStorage
+      localStorage.setItem("productInfo", JSON.stringify(productInfo));
+    } else {
+      console.error("Failed to receive product info: No response received.");
+    }
+  });
+}
+
+let nutriscoreScoreColor = productInfo.nutriscore_score_color;
+
 // Icon button setup
 let iconBtn = document.createElement("div");
 iconBtn.id = "product-btn";
@@ -93,9 +121,15 @@ chrome.runtime.sendMessage({ text: "fetchIconM" }, (response) => {
   if (chrome.runtime.lastError) {
     console.error("Error:", chrome.runtime.lastError.message);
   } else if (response && response.svg) {
-    createAndAppendSvg(response.svg, "product-btn", "icon-svg", "green", () => {
-      productBody.style.display = "block";
-    });
+    createAndAppendSvg(
+      response.svg,
+      "product-btn",
+      "icon-svg",
+      nutriscoreScoreColor,
+      () => {
+        productBody.style.display = "block";
+      }
+    );
   } else {
     console.error("Failed to receive icon: No response received.");
   }
@@ -117,8 +151,8 @@ productBody.appendChild(productNav);
   functionIconDiv.id = "function-icon-div";
   productNav.appendChild(functionIconDiv);
 
-  getAndAppendIcon("info", "function-icon-div", "info-svg");
-  getAndAppendIcon("share", "function-icon-div", "share-svg");
+  await getAndAppendIcon("info", "function-icon-div", "info-svg");
+  await getAndAppendIcon("share", "function-icon-div", "share-svg");
 
   // Heart icon with toggle click handling
   let isHeartFilled = false;
@@ -136,7 +170,7 @@ productBody.appendChild(productNav);
           response.svg,
           "image/svg+xml"
         ).documentElement;
-        newSvgNode.style.height = "25px";
+        newSvgNode.style.height = "20px";
         newSvgNode.style.cursor = "pointer";
         newSvgNode.id = "heart-svg"; // Ensure the new SVG has the correct ID
 
@@ -154,100 +188,82 @@ productBody.appendChild(productNav);
     });
   }
 
-  getAndAppendIcon("heart", "function-icon-div", "heart-svg", toggleHeartIcon);
-
-  getAndAppendIcon("close", "function-icon-div", "close-svg", () => {
+  await getAndAppendIcon(
+    "heart",
+    "function-icon-div",
+    "heart-svg",
+    toggleHeartIcon
+  );
+  await getAndAppendIcon("close", "function-icon-div", "close-svg", () => {
     productBody.style.display = "none";
   });
 })();
 
-let productInfoContent = document.createElement("div");
-productInfoContent.id = "product-info-content";
-productBody.appendChild(productInfoContent);
+let productInfoContainer = document.createElement("div");
+productInfoContainer.id = "product-info-container";
+productBody.appendChild(productInfoContainer);
 
-// Product Info Container ----------------------------------------------------
-let productNameString =
-  document.querySelector("h1")?.innerText.split(",")[0].trim() ||
-  "Product name not found.";
+let productInfoContainerMain = document.createElement("div");
+productInfoContainerMain.id = "product-info-container-main";
+productInfoContainer.appendChild(productInfoContainerMain);
 
-// Old code ----------------------------------
-chrome.runtime.sendMessage({ text: "fetchProductInfo" }, (response) => {
-  if (chrome.runtime.lastError) {
-    console.error("Error:", chrome.runtime.lastError.message);
-  } else if (response && response.productInfo) {
-    console.log("Product info received successfully:", response);
-    let productInfo = response.productInfo;
+let productImageContainer = document.createElement("div");
+productImageContainer.id = "product-image-container";
+productInfoContainerMain.appendChild(productImageContainer);
 
-    // Clear previous product info
-    productInfoContent.innerHTML = "";
+let productImage = document.createElement("img");
+productImage.id = "product-image";
+const selectedImages = productInfo.selected_images;
+let imageUrl;
 
-    const keysToExtract = [
-      "product_name",
-      "nova_group_name",
-      "nutriscore_score",
-      "nutriscore_score_color",
-    ];
-
-    // Function to create and append a <p> element to a container
-    function appendParagraph(container, text) {
-      let paragraph = document.createElement("p");
-      paragraph.textContent = text;
-      container.appendChild(paragraph);
-    }
-
-    // Function to create and append an <img> element to a container
-    let imgDiv = document.createElement("div");
-    imgDiv.id = "product-image-div";
-    function appendImage(container, src) {
-      let image = document.createElement("img");
-      image.src = src;
-      image.classList.add("product-image");
-      imgDiv.appendChild(image);
-      container.appendChild(imgDiv);
-    }
-
-    // Display selected images
-    for (let key in productInfo["selected_images"]) {
-      appendImage(productInfoContent, productInfo["selected_images"][key]);
-    }
-
-    // Display extracted keys
-    keysToExtract.forEach((key) => {
-      appendParagraph(productInfoContent, `${key}: ${productInfo[key]}`);
-    });
-
-    // Display nutrient levels
-    for (let key in productInfo["nutrient_levels"]) {
-      appendParagraph(
-        productInfoContent,
-        `${key}: ${productInfo["nutrient_levels"][key]}`
-      );
-    }
-
-    // Display positive nutrients
-    let positiveHeader = document.createElement("h3");
-    positiveHeader.textContent = "Positive Nutrients";
-    productInfoContent.appendChild(positiveHeader);
-
-    for (let nutrient of productInfo["nutriments"]["positive_nutrient"]) {
-      appendParagraph(
-        productInfoContent,
-        `${nutrient.name}: ${nutrient.quantity}`
-      );
-    }
-
-    // Display negative nutrients
-    let negativeHeader = document.createElement("h3");
-    negativeHeader.textContent = "Negative Nutrients";
-    productInfoContent.appendChild(negativeHeader);
-
-    for (let nutrient of productInfo["nutriments"]["negative_nutrient"]) {
-      appendParagraph(
-        productInfoContent,
-        `${nutrient.name}: ${nutrient.quantity}`
-      );
-    }
-  } else {
-    console.error("Failed to receive product info: No response received.");
+// Iterate through the keys of selected_images object
+for (const key in selectedImages) {
+  if (selectedImages.hasOwnProperty(key)) {
+    // Get the image URL
+    imageUrl = selectedImages[key];
+    // Break the loop as we only need the first image URL
+    break;
   }
-});
+}
+console.log("Image URL:", imageUrl);
+productImage.src = imageUrl;
+productImageContainer.appendChild(productImage);
+
+let productMainInfo = document.createElement("div");
+productMainInfo.id = "product-main-info";
+productInfoContainerMain.appendChild(productMainInfo);
+
+let productName = document.createElement("div");
+productName.id = "product-name";
+productName.textContent = productInfo.product_name;
+productMainInfo.appendChild(productName);
+
+let brandName = document.createElement("div");
+brandName.id = "brand-name";
+brandName.textContent = productInfo.brands;
+productMainInfo.appendChild(brandName);
+
+let scoreContainer = document.createElement("div");
+scoreContainer.id = "score-container";
+productMainInfo.appendChild(scoreContainer);
+
+let nutriscoreColor = document.createElement("div");
+nutriscoreColor.id = "nutriscore-color";
+let nutriscoreColorText = productInfo.nutriscore_score_color;
+console.log("Nutriscore color:", nutriscoreColorText);
+nutriscoreColor.style.backgroundColor = nutriscoreColorText;
+scoreContainer.appendChild(nutriscoreColor);
+
+let nutriscoreScoreContrianer = document.createElement("div");
+nutriscoreScoreContrianer.id = "nutriscore-score-container";
+scoreContainer.appendChild(nutriscoreScoreContrianer);
+
+let nutriscoreScore = document.createElement("div");
+nutriscoreScore.id = "nutriscore-score";
+nutriscoreScore.textContent = `${productInfo.nutriscore_score}/100`;
+nutriscoreScoreContrianer.appendChild(nutriscoreScore);
+
+let nutriscoreComment = document.createElement("div");
+nutriscoreComment.id = "nutriscore-comment";
+nutriscoreComment.textContent = `bad`;
+nutriscoreScoreContrianer.appendChild(nutriscoreComment);

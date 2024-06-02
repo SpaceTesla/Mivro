@@ -9,6 +9,8 @@
 }
 
 #product-body {
+  display: flex;
+  flex-direction: column;
   position: fixed;
   bottom: 1vh;
   right: 1vw;
@@ -26,28 +28,98 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4px;
   border-bottom: 1px solid #d5d5d5;
 }
 
-#mivro-svg {
-  height: 25px;
-  float: left;
+#icon-div {
+  padding: 8px;
 }
 
 #function-icon-div {
   display: flex;
-  gap: 12px;
+  /* gap: 4px; */
 }
 
-#product-info-content {
+#product-info-container {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
-#product-image-div {
+#product-info-container-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+  padding: 8px;
+  gap: 4px;
+  height: 30%;
+}
+
+#product-image-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 40%;
+  max-width: 150px;
+  max-height: 150px;
+}
+
+#product-image {
+  max-width: 150px;
+  max-height: 150px;
+}
+
+#product-main-info {
+  flex-grow: 1;
+  display: flex;
+  width: 60%;
+  flex-direction: column;
+  justify-content: right;
+  align-items: top;
+}
+
+#product-name {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 1px;
+}
+
+#brand-name {
+  font-size: 16px;
+  color: #666666;
+  padding: 1px;
+  padding-left: 2px;
+}
+
+#score-container {
+  display: flex;
+  align-items: center;
+  padding: 20px 0;
+}
+
+#nutriscore-color {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+#nutriscore-score-container {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 4px;
+  padding-left: 8px;
+}
+
+#nutriscore-score {
+  font-size: 16px;
+  padding: 1px;
+  font-weight: bold;
+}
+
+#nutriscore-comment {
+  font-size: 14px;
+  padding: 1px;
+  color: #666666;
+  padding-left: 4px;
 }
