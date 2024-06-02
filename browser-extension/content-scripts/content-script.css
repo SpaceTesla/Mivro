@@ -93,6 +93,7 @@
 
 #score-container {
   display: flex;
+  flex-grow: 1;
   align-items: center;
   padding: 20px 0;
 }
@@ -122,4 +123,22 @@
   padding: 1px;
   color: #666666;
   padding-left: 4px;
+}
+
+#nutriscore-grade {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  flex-grow: 1;
+  font-size: 48px;
+  align-self: self-end;
+  padding-right: 16px;
+}
+
+#end-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-top: 1px solid #d5d5d5;
 }

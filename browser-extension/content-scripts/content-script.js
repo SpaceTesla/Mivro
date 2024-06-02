@@ -273,7 +273,64 @@ nutriscoreScore.textContent = `${productInfo.nutriscore_score}/100`;
 nutriscoreScoreContainer.appendChild(nutriscoreScore);
 
 // Nutriscore comment
+
 let nutriscoreComment = document.createElement("div");
 nutriscoreComment.id = "nutriscore-comment";
-nutriscoreComment.textContent = "Bad"; // You might want to update this dynamically based on the score
+switch (productInfo.nutriscore_grade) {
+  case "a":
+    nutriscoreComment.textContent = "Excellent";
+    break;
+  case "b":
+    nutriscoreComment.textContent = "Good";
+    break;
+  case "c":
+    nutriscoreComment.textContent = "Fair";
+    break;
+  case "d":
+    nutriscoreComment.textContent = "Poor";
+    break;
+  case "e":
+    nutriscoreComment.textContent = "Bad";
+    break;
+  default:
+    nutriscoreComment.textContent = "Unknown";
+}
 nutriscoreScoreContainer.appendChild(nutriscoreComment);
+
+// Nutriscore grade
+let nutriscoreGrade = document.createElement("div");
+nutriscoreGrade.id = "nutriscore-grade";
+// let nutriscoreGradeText = productInfo.nutriscore_grade;
+nutriscoreGrade.textContent = productInfo.nutriscore_grade.toUpperCase();
+let nutriscoreGradeColor = productInfo.nutriscore_grade_color;
+nutriscoreGrade.style.color = nutriscoreGradeColor;
+scoreContainer.appendChild(nutriscoreGrade);
+
+// // botton container
+// let endContainer = document.createElement("div");
+// endContainer.id = "end-container";
+// productBody.appendChild(endContainer);
+
+// let bottonText = document.createElement("div");
+// bottonText.id = "botton-text";
+// bottonText.textContent = "powered by";
+// endContainer.appendChild(bottonText);
+
+// let geminiContainer = document.createElement("div");
+// geminiContainer.id = "gemini-container";
+// endContainer.appendChild(geminiContainer);
+
+// // Set the size of the parent container
+// geminiContainer.style.width = "20%";
+// geminiContainer.style.height = "20%";
+
+// (async () => {
+//   await getAndAppendIcon("gemini", "gemini-container", "gemini-svg");
+
+//   // After the SVG is appended, select it and set its width and height to 100%
+//   let geminiSvg = document.getElementById("gemini-svg");
+//   if (geminiSvg) {
+//     geminiSvg.style.width = "100%";
+//     geminiSvg.style.height = "100%";
+//   }
+// })();
