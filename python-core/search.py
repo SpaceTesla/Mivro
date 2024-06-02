@@ -4,7 +4,7 @@ import sys
 from flask import Blueprint, request, jsonify
 from datetime import datetime
 
-from mapping import additive_name, nova_name, grade_color, score_color
+from mapping import additive_name, nova_name, grade_color, score_assessment
 from utils import filter_additive, filter_ingredient, filter_image, filter_data
 from database import database_history, database_search
 from gemini import lumi, swapr
@@ -46,7 +46,7 @@ def barcode():
         'nova_group_name': nova_name(filtered_product_data['nova_group']),
         'nutriments': lumi(filtered_product_data['nutriments']),
         'nutriscore_grade_color': grade_color(filtered_product_data['nutriscore_grade']),
-        'nutriscore_score_color': score_color(filtered_product_data['nutriscore_score']),
+        'nutriscore_assessment': score_assessment(filtered_product_data['nutriscore_score']),
         'selected_images': filter_image(filtered_product_data['selected_images']),
         'recommeded_product': swapr(email, filtered_product_data)
     })
