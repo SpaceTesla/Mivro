@@ -58,6 +58,7 @@ const iconPaths = {
   fetchIconClose: "icons/close.svg",
   fetchHeartFilledSvg: "icons/heart-filled.svg",
   fetchHeartSvg: "icons/heart.svg",
+  fetchIconGemini: "icons/gemini.svg",
 };
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
