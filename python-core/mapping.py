@@ -23,14 +23,14 @@ def grade_color(nutriscore_grade):
     }
     return grade_colors.get(nutriscore_grade.lower(), 'gray')
 
-def score_color(nutriscore_score):
+def score_assessment(nutriscore_score):
     if nutriscore_score >= 90:
-        return 'green'
+        return 'excellent'
     elif nutriscore_score >= 70:
-        return 'blue'
+        return 'good'
     elif nutriscore_score >= 50:
-        return 'yellow'
+        return 'average'
     elif nutriscore_score >= 30:
-        return 'orange'
+        return 'poor'
     else:
-        return 'red'
+        return 'very poor'
