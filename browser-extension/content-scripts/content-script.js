@@ -65,7 +65,7 @@ function getAndAppendIcon(iconName, parentId, id, callback) {
             null,
             callback
           );
-          element.style.height = "20px";
+          element.style.height = "16px";
           element.style.cursor = "pointer";
           element.classList.add("icon-svg");
           resolve();
@@ -152,7 +152,6 @@ productBody.appendChild(productNav);
   productNav.appendChild(functionIconDiv);
 
   await getAndAppendIcon("info", "function-icon-div", "info-svg");
-  await getAndAppendIcon("share", "function-icon-div", "share-svg");
 
   // Heart icon with toggle click handling
   let isHeartFilled = false;
@@ -170,7 +169,7 @@ productBody.appendChild(productNav);
           response.svg,
           "image/svg+xml"
         ).documentElement;
-        newSvgNode.style.height = "20px";
+        newSvgNode.style.height = "16px";
         newSvgNode.style.cursor = "pointer";
         newSvgNode.id = "heart-svg"; // Ensure the new SVG has the correct ID
 
@@ -194,6 +193,8 @@ productBody.appendChild(productNav);
     "heart-svg",
     toggleHeartIcon
   );
+
+  await getAndAppendIcon("share", "function-icon-div", "share-svg");
   await getAndAppendIcon("close", "function-icon-div", "close-svg", () => {
     productBody.style.display = "none";
   });
