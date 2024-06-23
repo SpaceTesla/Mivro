@@ -25,13 +25,13 @@ safety_settings = [
     {'category': 'HARM_CATEGORY_DANGEROUS_CONTENT', 'threshold': 'BLOCK_MEDIUM_AND_ABOVE'}
 ]
 
-with open('lumi_instructions.md', 'r') as file:
+with open('instructions/lumi_instructions.md', 'r') as file:
     lumi_instructions = file.read()
 
-with open('swapr_instructions.md', 'r') as file:
+with open('instructions/swapr_instructions.md', 'r') as file:
     swapr_instructions = file.read()
 
-with open('savora_instructions.md', 'r') as file:
+with open('instructions/savora_instructions.md', 'r') as file:
     savora_instructions = file.read()
 
 lumi_llm = GenerativeModel(
@@ -82,6 +82,7 @@ def swapr(email, product_data):
     )
     # if 'error' in database_response.json():
     #     return jsonify({'product_name': filtered_response})
+
     return database_response.json()
 
 @ai_blueprint.route('/savora', methods=['POST'])
