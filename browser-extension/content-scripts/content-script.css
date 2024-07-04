@@ -1,11 +1,23 @@
+:root {
+  --body-width: 320px;
+}
+
 #product-btn {
+  display: flex;
+  align-items: flex-start;
   position: fixed;
   top: 25vh;
   right: 1px;
+  width: 80px;
+  height: 60px;
+  cursor: pointer;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+#product-btn div {
   width: 60px;
   height: 60px;
-  border-radius: 10px;
-  cursor: pointer;
 }
 
 #product-body {
@@ -14,14 +26,20 @@
   position: fixed;
   bottom: 1vh;
   right: 1vw;
-  width: 320px;
+  width: var(--body-width); /* Use the variable directly */
   height: 640px;
   background-color: white;
   border: 1px solid #d5d5d5;
   border-radius: 4px;
   z-index: 9999;
   font-family: Arial, Helvetica, sans-serif !important;
-  overflow-y: auto;
+  overflow-x: hidden;
+  overflow-y: scroll; /* Ensure scrolling is enabled */
+  scrollbar-width: none; /* For Firefox */
+}
+
+#product-body::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
 }
 
 #product-nav {
@@ -29,6 +47,13 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #d5d5d5;
+  position: fixed;
+  width: calc(var(--body-width) - 2px);
+  background-color: white;
+  height: 33px; /* This might cause problems */
+  overflow-x: hidden;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 }
 
 #icon-div {
@@ -41,6 +66,7 @@
 }
 
 #product-info-container {
+  margin-top: 33px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -104,6 +130,8 @@
   border-radius: 50%;
 }
 
+/* Nutriscore Colors */
+
 #nutriscore-score-container {
   display: flex;
   flex-direction: column;
@@ -118,7 +146,7 @@
   font-weight: bold;
 }
 
-#nutriscore-comment {
+#nutriscore-assessment {
   font-size: 14px;
   padding: 1px;
   color: #666666;
@@ -135,10 +163,57 @@
   padding-right: 16px;
 }
 
-#end-container {
+/* Nutrients */
+
+.grade-title {
+  margin: 8px;
+  padding: 4px;
+  font-size: larger;
+  font-weight: bold;
+}
+
+.nutrient {
   display: flex;
-  justify-content: space-between;
+  margin: 8px 16px;
+  border-bottom: #d5d5d5 1px solid;
+}
+
+.nutrient-center {
+  flex-grow: 1;
+}
+
+.nutrient-name {
+  font-size: large;
+  padding: 1px;
+}
+
+.nutrient-text {
+  font-size: small;
+  color: #666666;
+  padding: 1px;
+}
+
+.nutrient-right {
+  display: flex;
+  justify-content: end;
   align-items: center;
-  padding: 8px;
-  border-top: 1px solid #d5d5d5;
+  gap: 8px;
+}
+
+.nutrient-quantity {
+  font-size: medium;
+  color: #666666;
+  padding: 1px;
+}
+
+.nutrient-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.allergy {
+  margin: 8px 16px;
+  padding: 8px 0;
+  border-bottom: #d5d5d5 1px solid;
 }

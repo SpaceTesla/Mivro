@@ -1,13 +1,22 @@
 {
   "name": "Mivro",
   "description": "Web Extension for Personalized Product Profiling",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "manifest_version": 3,
   "background": {
     "service_worker": "background.js"
   },
   "action": {
     "default_popup": "popup/popup.html"
+  },
+  "icons": {
+    "16": "assets/ext-icons/icon-16.png",
+    "32": "assets/ext-icons/icon-32.png",
+    "48": "assets/ext-icons/icon-48.png",
+    "64": "assets/ext-icons/icon-64.png",
+    "128": "assets/ext-icons/icon-128.png",
+    "256": "assets/ext-icons/icon-256.png",
+    "512": "assets/ext-icons/icon-512.png"
   },
   "content_scripts": [
     {
