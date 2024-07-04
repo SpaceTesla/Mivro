@@ -22,6 +22,7 @@
 
 #product-body {
   display: flex;
+  display: none;
   flex-direction: column;
   position: fixed;
   bottom: 1vh;

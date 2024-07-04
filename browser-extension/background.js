@@ -29,7 +29,7 @@ function fetchSvg(url, sendResponse) {
 //     },
 //     body: JSON.stringify({
 //       email: "admin@mivro.org",
-//       product_barcode: "8901058891430",
+//       product_barcode: "",
 //     }),
 //     timeout: 15000,
 //   })
