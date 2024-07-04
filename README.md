@@ -1,3 +1,3 @@
 <p align="center">
-  <img src="browser-extension/icons/logo.png" alt="Project Logo">
+  <img src="browser-extension/assets/oth-icons/logo.png" alt="Project Logo">
 </p>

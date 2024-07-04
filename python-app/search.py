@@ -46,7 +46,8 @@ def barcode():
         'nova_group_name': nova_name(filtered_product_data['nova_group']),
         'nutriments': lumi(filtered_product_data['nutriments']),
         'nutriscore_grade_color': grade_color(filtered_product_data['nutriscore_grade']),
-        'nutriscore_assessment': score_assessment(filtered_product_data['nutriscore_score']),
+        'nutriscore_assessment': score_assessment(filtered_product_data['nutriscore_score']).title(),
+        'health_risk': lumi(filtered_product_data['ingredients']),
         'selected_images': filter_image(filtered_product_data['selected_images']),
         'recommeded_product': swapr(email, filtered_product_data)
     })
