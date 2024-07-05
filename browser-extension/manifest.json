@@ -1,7 +1,7 @@
 {
   "name": "Mivro",
   "description": "Web Extension for Personalized Product Profiling",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "manifest_version": 3,
   "background": {
     "service_worker": "background.js"

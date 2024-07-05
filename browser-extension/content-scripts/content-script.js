@@ -87,10 +87,29 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-let product = document.querySelector("h1");
+function cleanText(input) {
+  // Remove hyphens, commas, ampersands, and other non-alphanumeric characters except for x (used in 2x1)
+  let cleaned = input.replace(/[-,&]/g, "");
+
+  // Remove numbers followed by specific units (ml, mg, l, g) including patterns like 2x1 L
+  cleaned = cleaned.replace(/\b\d+x?\d*\s*(ml|mg|l|g)\b/gi, "");
+
+  // Remove anything and everything between brackets (e.g., (text), [text], {text})
+  cleaned = cleaned.replace(/\[.*?\]|\(.*?\)|\{.*?\}/g, "");
+
+  // Remove any extra spaces left after cleaning
+  cleaned = cleaned.replace(/\s+/g, " ").trim();
+
+  return cleaned;
+}
+
+// Get the product name from the page
+let productEle = document.querySelector("h1");
+let product = cleanText(productEle.textContent).toLowerCase();
+console.log(product);
 
 chrome.runtime.sendMessage(
-  { text: "fetchProductInfo", product: product.textContent.toLowerCase() },
+  { text: "fetchProductInfo", product: product },
   (response) => {
     if (chrome.runtime.lastError) {
       console.error("Error:", chrome.runtime.lastError.message);
