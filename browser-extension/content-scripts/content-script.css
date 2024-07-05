@@ -21,7 +21,6 @@
 }
 
 #product-body {
-  display: flex;
   display: none;
   flex-direction: column;
   position: fixed;
@@ -92,8 +91,8 @@
 }
 
 #product-image {
-  max-width: 150px;
-  max-height: 150px;
+  max-width: 100% !important;
+  max-height: 100% !important;
 }
 
 #product-main-info {
@@ -122,13 +121,19 @@
   display: flex;
   flex-grow: 1;
   align-items: center;
-  padding: 20px 0;
+  padding: 12px 0;
 }
 
 #nutriscore-color {
   width: 24px;
   height: 24px;
   border-radius: 50%;
+}
+
+#nova-group {
+  margin: 8px 16px;
+  padding: 8px 0;
+  border-bottom: #d5d5d5 1px solid;
 }
 
 /* Nutriscore Colors */
@@ -217,4 +222,14 @@
   margin: 8px 16px;
   padding: 8px 0;
   border-bottom: #d5d5d5 1px solid;
+}
+
+.health {
+  margin: 8px 16px;
+  padding: 8px 0;
+  border-bottom: #d5d5d5 1px solid;
+}
+
+.error {
+  margin: 0 8px;
 }

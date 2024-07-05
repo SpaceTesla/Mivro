@@ -21,37 +21,22 @@ function fetchSvg(url, sendResponse) {
  * Fetches product information and sends it as a response.
  * @param {function} sendResponse - The function to call with the product information.
  */
-// function fetchProductInfo(sendResponse) {
-//   fetch("http://127.0.0.1:5000/api/v1/search/barcode", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//       email: "admin@mivro.org",
-//       product_barcode: "",
-//     }),
-//     timeout: 15000,
-//   })
-//     .then((res) => {
-//       if (!res.ok) {
-//         throw new Error(`Failed to fetch data: HTTP Status ${res.status}`);
-//       }
-//       return res.json();
-//     })
-//     .then((data) => {
-//       console.log("Fetch Successful:", data);
-//       sendResponse({ productInfo: data });
-//     })
-//     .catch((error) => {
-//       console.error("Fetch Failed:", error);
-//       sendResponse({ error: error.toString() });
-//     });
-// }
-
-function fetchProductInfo(sendResponse) {
-  fetch("response.json", {})
+function fetchProductInfo(sendResponse, product) {
+  fetch("http://127.0.0.1:5000/api/v1/search/database", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: "admin@mivro.org",
+      product_keyword: product,
+    }),
+    timeout: 15000,
+  })
     .then((res) => {
+      if (!res.ok) {
+        throw new Error(`Failed to fetch data: HTTP Status ${res.status}`);
+      }
       return res.json();
     })
     .then((data) => {
@@ -81,7 +66,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     fetchSvg(chrome.runtime.getURL(iconPaths[msg.text]), sendResponse);
     return true; // keeps the message channel open until sendResponse is called
   } else if (msg.text === "fetchProductInfo") {
-    fetchProductInfo(sendResponse);
+    fetchProductInfo(sendResponse, msg.product);
     return true; // keeps the message channel open until sendResponse is called
   } else {
     console.error(`Unknown message text: ${msg.text}`);
