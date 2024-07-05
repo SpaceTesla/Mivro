@@ -367,16 +367,22 @@ chrome.runtime.sendMessage(
       allergiesTitle.classList.add("grade-title");
       allergiesContainer.appendChild(allergiesTitle);
 
-      productInfo.allergens_tags.forEach((allergy) => {
-        let allergyDiv = document.createElement("div");
-        allergyDiv.classList.add("allergy");
-        allergy =
-          allergy.charAt(0).toUpperCase() +
-          allergy.substring(1, allergy.length);
-        allergyDiv.innerText = allergy;
-        allergiesContainer.appendChild(allergyDiv);
-      });
+      let allergyDiv = document.createElement("div");
 
+      if (productInfo.allergens_tags.length === 0) {
+        allergyDiv.textContent = "No data available.";
+        allergyDiv.classList.add("error");
+        allergiesContainer.appendChild(allergyDiv);
+      } else {
+        productInfo.allergens_tags.forEach((allergy) => {
+          allergyDiv.classList.add("allergy");
+          allergy =
+            allergy.charAt(0).toUpperCase() +
+            allergy.substring(1, allergy.length);
+          allergyDiv.innerText = allergy;
+          allergiesContainer.appendChild(allergyDiv);
+        });
+      }
       let healthContainer = document.createElement("div");
       healthContainer.id = "additives-container";
       productInfoContainer.appendChild(healthContainer);
@@ -387,12 +393,19 @@ chrome.runtime.sendMessage(
       healthTitle.classList.add("grade-title");
       healthContainer.appendChild(healthTitle);
 
-      productInfo.health_risk.ingredient_warnings.forEach((health) => {
-        let healthDiv = document.createElement("div");
-        healthDiv.classList.add("health");
-        healthDiv.innerText = health;
+      let healthDiv = document.createElement("div");
+
+      if (productInfo.health_risk.ingredient_warnings.length === 0) {
+        healthDiv.textContent = "No data available.";
+        healthDiv.classList.add("error");
         healthContainer.appendChild(healthDiv);
-      });
+      } else {
+        productInfo.health_risk.ingredient_warnings.forEach((health) => {
+          healthDiv.classList.add("health");
+          healthDiv.innerText = health;
+          healthContainer.appendChild(healthDiv);
+        });
+      }
 
       let recommendationTitle = document.createElement("div");
       recommendationTitle.id = `recommendation-title`;
@@ -406,7 +419,8 @@ chrome.runtime.sendMessage(
       productInfoContainer.appendChild(recommendation);
 
       if (productInfo.recommeded_product.error) {
-        recommendation.textContent = "Product not available.";
+        recommendation.removeAttribute("id");
+        recommendation.textContent = "No data available.";
         recommendation.classList.add("error");
       } else {
         // Product image container

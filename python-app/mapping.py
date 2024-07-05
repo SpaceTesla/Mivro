@@ -15,11 +15,11 @@ def nova_name(nova_group):
 
 def grade_color(nutriscore_grade):
     grade_colors = {
-        'a': 'green',
-        'b': 'blue',
-        'c': 'yellow',
-        'd': 'orange',
-        'e': 'red'
+        'a': '#8ac449',
+        'b': '#8fd0ff',
+        'c': '#ffd65a',
+        'd': '#f8a72c',
+        'e': '#df5656'
     }
     return grade_colors.get(nutriscore_grade.lower(), 'gray')
 
