@@ -4,14 +4,14 @@
 
 ## Project Description
 
-The app supports barcode scanning for food, drinks, cosmetics, medicine, and pet food. It provides detailed ingredient information, categorizes nutrients into positive and negative, either on a general basis or based on user-specific health data, while also identifying associated health risks.
+The app supports barcode scanning for foods, drinks, cosmetics, medicines, and pet foods. It provides detailed ingredient information, categorizes nutrients into positive and negative, either on a general basis or based on user-specific health data, while also identifying associated health risks.
 
 ### Key Features
 
 - **Search Engine:** Easily find products without barcode scanning, with upcoming support for image and live product recognition.
 - **Recipe Chatbot:** Receive personalized recipe recommendations based on your recent scans.
 - **Scan History:** View a history of your scanned items for easy reference.
-- **Browser Extension:** Integrate these features seamlessly into your online shopping experience.
+- **Browser Extension:** Integrate app features seamlessly into your online shopping experience.
 
 Additionally, the app features a marketplace where users can discover and purchase alternative partnered healthy products.
 
@@ -23,9 +23,9 @@ Additionally, the app features a marketplace where users can discover and purcha
 
 ---
 
-1. **Barcode Scanning**: Utilizes the `zxing_flutter` library to capture barcode input from the user via the Flutter app. The scanned barcode is then sent to the Django server for further processing.
+1. **Barcode Scan**: Utilizes the `zxing_flutter` library to capture barcode input from the user via the Flutter app. The scanned barcode is then sent to the Django server for further processing.
 
-2. **Text Searching**: Accepts text input from the user through the Flutter app for product lookup. This input is forwarded to the Django server to query the Firestore database for relevant product information.
+2. **Text Search**: Accepts text input from the user through the Flutter app for product lookup. This input is forwarded to the Django server to query the Firestore database for relevant product information.
 
 3. **Django Server**: Serves as the central backend server responsible for data cleaning, user authentication, integration with the Gemini API, and interaction with Google Firebase services.
 
