@@ -4,7 +4,7 @@
 
 ## Project Description
 
-The app supports barcode scanning for foods, drinks, cosmetics, medicines, and pet foods. It provides detailed ingredient information, categorizes nutrients into positive and negative, either on a general basis or based on user-specific health data, while also identifying associated health risks.
+The app supports barcode scanning for foods, drinks, cosmetics, medicines, and pet foods. It provides detailed ingredient information, categorizes nutrients into positive and negative (either generally or based on user-specific health data), identifies associated health risks, and suggests alternatives using an AI recommendation engine.
 
 ### Key Features
 
