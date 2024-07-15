@@ -1,9 +1,9 @@
 from config import DEFAULT_NAME, DEFAULT_PHOTO
 
 class AccountInfo:
-    def __init__(self, display_name=DEFAULT_NAME, photo_url=DEFAULT_PHOTO, email=None,
-                 password=None, phone_number=None, email_verified=False,
-                 created_date=None, created_time=None):
+    def __init__(self, display_name: str = DEFAULT_NAME, photo_url: str = DEFAULT_PHOTO, email: str = None,
+                 password: str = None, phone_number: str = None, email_verified: bool = False,
+                 created_date: str = None, created_time: str = None):
         self.display_name = display_name
         self.photo_url = photo_url
         self.email = email
@@ -13,7 +13,7 @@ class AccountInfo:
         self.created_date = created_date
         self.created_time = created_time
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             'display_name': self.display_name,
             'photo_url': self.photo_url,
@@ -26,18 +26,18 @@ class AccountInfo:
         }
 
 class HealthProfile:
-    def __init__(self, age=None, gender=None, height=None, weight=None, body_mass_index=None,
-                 dietary_preferences=None, medical_conditions=None, allergies=None):
+    def __init__(self, age: int = None, gender: str = None, height: float = None, weight: float = None, body_mass_index: float = None,
+                 allergies: list = None, dietary_preferences: list = None, medical_conditions: list = None):
         self.age = age
         self.gender = gender
         self.height = height
         self.weight = weight
         self.body_mass_index = body_mass_index
+        self.allergies = allergies
         self.dietary_preferences = dietary_preferences
         self.medical_conditions = medical_conditions
-        self.allergies = allergies
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             'age': self.age,
             'gender': self.gender,
@@ -50,53 +50,53 @@ class HealthProfile:
         }
 
 class ScanHistory:
-    def __init__(self, product_barcode=None, product_data=None):
+    def __init__(self, product_barcode: str = None, product_data: dict = None):
         self.product_barcode = product_barcode
         self.product_data = product_data
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             self.product_barcode: self.product_data
         }
 
 class ChatHistory:
-    def __init__(self, user_message=None, bot_response=None):
+    def __init__(self, user_message: str = None, bot_response: str = None):
         self.user_message = user_message
         self.bot_response = bot_response
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             'user_message': self.user_message,
             'bot_response': self.bot_response
         }
 
 class SearchHistory:
-    def __init__(self, user_searches=None):
+    def __init__(self, user_searches: list = None):
         self.user_searches = user_searches
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             'user_searches': self.user_searches
         }
 
 class PaymentHistory:
-    def __init__(self, payment_gateway=None, product_barcode=None, product_data=None):
+    def __init__(self, payment_gateway: str = None, product_barcode: str = None, product_data: dict = None):
         self.payment_gateway = payment_gateway
         self.product_barcode = product_barcode
         self.product_data = product_data
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             'payment_gateway': self.payment_gateway,
             self.product_barcode: self.product_data
         }
 
 class Favorite:
-    def __init__(self, product_name=None, product_barcode=None):
+    def __init__(self, product_name: str = None, product_barcode: str = None):
         self.product_name = product_name
         self.product_barcode = product_barcode
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             'product_name': self.product_name,
             'product_barcode': self.product_barcode

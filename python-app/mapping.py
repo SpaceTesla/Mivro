@@ -1,10 +1,12 @@
-def additive_name(additives_tags, additives_data):
+# Function for mapping the additive number to a human-readable name (Uses additive_names.json)
+def additive_name(additives_tags: list, additives_data: dict) -> list:
     return [
         additives_data.get(additive, 'Unknown')
         for additive in additives_tags
     ]
 
-def nova_name(nova_group):
+# Function for mapping the nova group number to a human-readable name (Used in search.py)
+def nova_name(nova_group: int) -> str:
     group_names = {
         1: 'Unprocessed or minimally processed foods',
         2: 'Processed culinary ingredients',
@@ -13,17 +15,19 @@ def nova_name(nova_group):
     }
     return group_names.get(nova_group, 'Unknown')
 
-def grade_color(nutriscore_grade):
+# Function for mapping the nutriscore grade to a color code (Used in search.py)
+def grade_color(nutriscore_grade: str) -> str:
     grade_colors = {
-        'a': '#8ac449',
-        'b': '#8fd0ff',
-        'c': '#ffd65a',
-        'd': '#f8a72c',
-        'e': '#df5656'
+        'a': '#8AC449',
+        'b': '#8FD0FF',
+        'c': '#FFD65A',
+        'd': '#F8A72C',
+        'e': '#DF5656'
     }
     return grade_colors.get(nutriscore_grade.lower(), 'gray')
 
-def score_assessment(nutriscore_score):
+# Function for mapping the nutriscore score to an assessment category (Used in search.py)
+def score_assessment(nutriscore_score: int) -> str:
     if nutriscore_score >= 90:
         return 'excellent'
     elif nutriscore_score >= 70:
