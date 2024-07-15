@@ -1,39 +1,49 @@
+# Core library imports: Open Food Facts API setup
 import openfoodfacts
 import json
 import sys
 from flask import Blueprint, request, jsonify
 from datetime import datetime
 
+# Local project-specific imports: Mapping, utilities, database, and gemini functions
 from mapping import additive_name, nova_name, grade_color, score_assessment
 from utils import filter_additive, filter_ingredient, filter_image, filter_data
 from database import database_history, database_search
 from gemini import lumi, swapr
 
+# Blueprint for the search routes
 search_blueprint = Blueprint('search', __name__, url_prefix='/api/v1/search')
-api = openfoodfacts.API(user_agent='Mivro/2.9')
+api = openfoodfacts.API(user_agent='Mivro/2.9.3') # Initialize the Open Food Facts API client
 
 @search_blueprint.route('/barcode', methods=['POST'])
-def barcode():
+def barcode() -> dict:
+    # Start the timer for measuring the response time
     start_time = datetime.now()
+    # Get the email and product barcode values from the incoming JSON data
     email = request.json.get('email')
     product_barcode = request.json.get('product_barcode')
 
+    # Define product schema fields and fetch data from Open Food Facts API using barcode
     required_data = json.load(open('product_schema.json'))
     product_data = api.product.get(product_barcode, fields=required_data)
     if not product_data:
         return jsonify({'error': 'Product not found.'})
 
+    # Check for missing fields in the product data
     missing_fields = set(required_data) - set(product_data.keys())
     for field in missing_fields:
         print(f'Warning: Data for "{field}" is missing.')
 
+    # Filter the additive numbers and clean the product data
     product_data['additives_tags'] = filter_additive(product_data['additives_tags'])
     filtered_product_data = filter_data(product_data)
 
+    # Calculate the response time and size for the filtered product data
     end_time = datetime.now()
     response_time = (end_time - start_time).total_seconds()
     response_size = sys.getsizeof(filtered_product_data) / 1024
 
+    # Update the filtered product data with additional information
     filtered_product_data.update({
         'search_type': 'Open Food Facts API',
         'search_response': '200 OK',
@@ -52,11 +62,12 @@ def barcode():
         'recommeded_product': swapr(email, filtered_product_data)
     })
 
+    # Store the scan history for the product barcode in Firestore
     database_history(email, product_barcode, filtered_product_data)
     return jsonify(filtered_product_data)
 
 # @search_blueprint.route('/text', methods=['POST'])
-# def text():
+# def text() -> dict:
 #     product_name = request.form.get('product_name')
 #     product_data = api.product.text_search(product_name)
 
@@ -66,15 +77,19 @@ def barcode():
 #     return jsonify(product_data)
 
 @search_blueprint.route('/database', methods=['POST'])
-def database():
+def database() -> dict:
+    # Start the timer for measuring the response time
     start_time = datetime.now()
+    # Get the email and product keyword values from the incoming JSON data
     email = request.json.get('email')
     product_keyword = request.json.get('product_keyword')
-    search_keys = ['_keywords', 'brands', 'categories', 'product_name']
+    search_keys = ['_keywords', 'brands', 'categories', 'product_name'] # Define the search keys for the database search
 
+    # Split the product keyword into individual words and search the database for each word
     tokenized_keywords = product_keyword.split()
     for keyword in tokenized_keywords:
         product_data = database_search(email, keyword, search_keys)
+        # Check if the product data is found in the database and return the response
         if product_data:
             end_time = datetime.now()
             response_time = (end_time - start_time).total_seconds()

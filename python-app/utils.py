@@ -1,7 +1,8 @@
 import re
 from database import user_reference
 
-def filter_additive(additive_data):
+# Function for filtering additive tags and removing the 'i' suffix (Used in search.py)
+def filter_additive(additive_data: list) -> list:
     additive_info = [
         tag
         for tag in additive_data
@@ -9,7 +10,8 @@ def filter_additive(additive_data):
     ]
     return additive_info
 
-def filter_ingredient(ingredient_data):
+# Function for filtering ingredient data and extracting the name and percentage (Used in search.py)
+def filter_ingredient(ingredient_data: list) -> list:
     ingredient_info = [
         {
             'name': ingredient.get('text', '').title(),
@@ -20,7 +22,9 @@ def filter_ingredient(ingredient_data):
     ]
     return ingredient_info
 
-def analyse_nutrient(nutrient_data, nutrient_limits):
+# DEPRECATED: Replaced by Gemini model for the same purpose
+# Function for analysing the nutrient data based on the nutrient limits (Used in search.py)
+def analyse_nutrient(nutrient_data: dict, nutrient_limits: dict) -> dict:
     positive_nutrients = {}
     negative_nutrients = {}
 
@@ -33,6 +37,7 @@ def analyse_nutrient(nutrient_data, nutrient_limits):
         if nutrient_data.get(f'{nutrient}_100g', 0) != 0
     }
 
+    # Check if the nutrient quantity is within the recommended limits
     for nutrient, value in nutrient_items.items():
         lower_limit = nutrient_limits[nutrient]['lower_limit']
         upper_limit = nutrient_limits[nutrient]['upper_limit']
@@ -48,15 +53,17 @@ def analyse_nutrient(nutrient_data, nutrient_limits):
     }
     return nutriment_info
 
-def filter_image(image_data):
+# Function for filtering the image data and extracting the image link (Used in search.py)
+def filter_image(image_data: dict) -> str:
     image_link = next(
         iter(
-            list(image_data.values())[0].values()
+            list(image_data.values())[0].values() # Return the first image link from the data
         ), None
     )
     return image_link
 
-def filter_data(product_data):
+# Function for filtering the product data and removing the 'en:' prefix (Used in search.py)
+def filter_data(product_data: dict) -> dict:
     product_info = {
         key: [
             re.sub(r'^en:', '', item) if isinstance(item, str) else item
@@ -68,12 +75,14 @@ def filter_data(product_data):
     }
     return product_info
 
-def user_profile(email):
+# Function for retrieving the user's health profile from Firestore (Used in gemini.py)
+def user_profile(email: str) -> dict:
     user_document = user_reference.document(email)
     health_profile = user_document.get().to_dict().get('health_profile', {})
     return health_profile
 
-def chat_history(email, chat_entry):
+# Function for storing the chat history in Firestore (Used in gemini.py)
+def chat_history(email: str, chat_entry: dict) -> None:
     user_document = user_reference.document(email)
     chat_history = user_document.get().to_dict().get('chat_history', [])
 
@@ -82,5 +91,6 @@ def chat_history(email, chat_entry):
         'chat_history': chat_history
     }, merge=True)
 
-def calculate_bmi(weight_kg, height_m):
+# Function for calculating the BMI based on the weight and height (Used in models.py)
+def calculate_bmi(weight_kg: float, height_m: float) -> float:
     return round(weight_kg / (height_m ** 2), 2)
