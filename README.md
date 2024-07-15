@@ -9,11 +9,11 @@ The app supports barcode scanning for foods, drinks, cosmetics, medicines, and p
 ### Key Features
 
 - **Search Engine:** Easily find products without barcode scanning, with upcoming support for image and live product recognition.
-- **Recipe Chatbot:** Receive personalized recipe recommendations based on your recent scans.
-- **Scan History:** View a history of your scanned items for easy reference.
+- **Meal Tracker:** Monitor your daily nutritional intake by scanning product barcodes, allowing you to easily track and manage your meals.
+- **Marketplace:** Discover and purchase alternative partnered healthy products.
 - **Browser Extension:** Integrate app features seamlessly into your online shopping experience.
 
-Additionally, the app features a marketplace where users can discover and purchase alternative partnered healthy products.
+Additionally, the app includes a Recipe Chatbot for personalized recipe recommendations and a Scan History feature to track previously scanned products.
 
 ## System Architecture
 
