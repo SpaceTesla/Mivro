@@ -1,5 +1,5 @@
-import 'package:areeb/widgets/bar_code_scanner.dart';
-import 'package:areeb/widgets/search_bar.dart';
+import 'package:mivro/widgets/bar_code_scanner.dart';
+import 'package:mivro/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 
 class BarcodeScannerScreen extends StatefulWidget {

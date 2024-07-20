@@ -1,5 +1,6 @@
 from config import DEFAULT_NAME, DEFAULT_PHOTO
 
+# Model for user account information
 class AccountInfo:
     def __init__(self, display_name: str = DEFAULT_NAME, photo_url: str = DEFAULT_PHOTO, email: str = None,
                  password: str = None, phone_number: str = None, email_verified: bool = False,
@@ -25,6 +26,7 @@ class AccountInfo:
             'created_time': self.created_time
         }
 
+# Model for user health profile
 class HealthProfile:
     def __init__(self, age: int = None, gender: str = None, height: float = None, weight: float = None, body_mass_index: float = None,
                  allergies: list = None, dietary_preferences: list = None, medical_conditions: list = None):
@@ -49,6 +51,7 @@ class HealthProfile:
             'allergies': self.allergies
         }
 
+# Model for user scan history
 class ScanHistory:
     def __init__(self, product_barcode: str = None, product_data: dict = None):
         self.product_barcode = product_barcode
@@ -59,6 +62,7 @@ class ScanHistory:
             self.product_barcode: self.product_data
         }
 
+# Model for user chat history
 class ChatHistory:
     def __init__(self, user_message: str = None, bot_response: str = None):
         self.user_message = user_message
@@ -70,6 +74,7 @@ class ChatHistory:
             'bot_response': self.bot_response
         }
 
+# Model for user search history
 class SearchHistory:
     def __init__(self, user_searches: list = None):
         self.user_searches = user_searches
@@ -79,6 +84,7 @@ class SearchHistory:
             'user_searches': self.user_searches
         }
 
+# Model for user payment history
 class PaymentHistory:
     def __init__(self, payment_gateway: str = None, product_barcode: str = None, product_data: dict = None):
         self.payment_gateway = payment_gateway
@@ -91,6 +97,7 @@ class PaymentHistory:
             self.product_barcode: self.product_data
         }
 
+# Model for user favorites
 class Favorite:
     def __init__(self, product_name: str = None, product_barcode: str = None):
         self.product_name = product_name

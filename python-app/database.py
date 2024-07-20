@@ -12,7 +12,7 @@ credential = credentials.Certificate('firebase-key.json')
 firebase_admin.initialize_app(credential)
 database = firestore.client() # Initialize the Firestore database client
 
-# Create a reference to the 'users' collection in the Firestore database
+# Create a reference to the 'users' collection in Firestore
 user_reference = database.collection('users')
 
 def database_history(email: str, product_barcode: str, product_data: dict) -> None:
