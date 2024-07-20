@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:areeb/providers/chat_provider.dart';
-import 'package:areeb/widgets/chat_item.dart';
+import 'package:mivro/providers/chat_provider.dart';
+import 'package:mivro/widgets/chat_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

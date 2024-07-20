@@ -1,11 +1,11 @@
 {
-    "name": "areeb",
-    "short_name": "areeb",
+    "name": "Mivro: Scan It. Know It.",
+    "short_name": "Mivro",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Cross-platform app for personalized product profiling",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

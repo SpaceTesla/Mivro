@@ -1,8 +1,8 @@
-import 'package:areeb/screens/barcode_scanner_screen.dart';
-import 'package:areeb/screens/chat_screen.dart';
-import 'package:areeb/screens/marketplace_screen.dart';
-import 'package:areeb/screens/overview_screen.dart';
-import 'package:areeb/screens/profile_screen.dart';
+import 'package:mivro/screens/barcode_scanner_screen.dart';
+import 'package:mivro/screens/chat_screen.dart';
+import 'package:mivro/screens/marketplace_screen.dart';
+import 'package:mivro/screens/overview_screen.dart';
+import 'package:mivro/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
