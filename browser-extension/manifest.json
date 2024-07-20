@@ -1,6 +1,6 @@
 {
   "name": "Mivro",
-  "description": "Web Extension for Personalized Product Profiling",
+  "description": "Web extension for personalized product profiling",
   "version": "2.1.4",
   "manifest_version": 3,
   "background": {
