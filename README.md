@@ -23,21 +23,21 @@ Additionally, the app includes a Recipe Chatbot for personalized recipe recommen
 
 ---
 
-1. **Barcode Scan**: Utilizes the `zxing_flutter` library to capture barcode input from the user via the Flutter app. The scanned barcode is then sent to the Django server for further processing.
+1. **Barcode Scan:** Utilizes the `zxing_flutter` library to capture barcode input from the user via the Flutter app. The scanned barcode is then sent to the Django server for further processing.
 
-2. **Text Search**: Accepts text input from the user through the Flutter app for product lookup. This input is forwarded to the Django server to query the Firestore database for relevant product information.
+2. **Text Search:** Accepts text input from the user through the Flutter app for product lookup. This input is forwarded to the Django server to query the Firestore database for relevant product information.
 
-3. **Django Server**: Serves as the central backend server responsible for data cleaning, user authentication, integration with the Gemini API, and interaction with Google Firebase services.
+3. **Django Server:** Serves as the central backend server responsible for data cleaning, user authentication, integration with the Gemini API, and interaction with Google Firebase services.
 
-4. **OpenFoodFacts API**: Fetches raw, detailed information about products based on barcode or text search inputs. This API provides comprehensive ingredient and nutritional data, including metadata such as name, brand, and more.
+4. **OpenFoodFacts API:** Fetches raw, detailed information about products based on barcode or text search inputs. This API provides comprehensive ingredient and nutritional data, including metadata such as name, brand, and more.
 
-5. **Gemini API**: Processes the raw data obtained from the OpenFoodFacts API, categorizing nutrients into positive and negative groups and identifying any health risks associated with the product.
+5. **Gemini API:** Processes the raw data obtained from the OpenFoodFacts API, categorizing nutrients into positive and negative groups and identifying any health risks associated with the product.
 
-6. **Firestore Database**: Stores processed product information, facilitating quick lookups for both the browser extension and the Flutter app. If no barcode is detected, it searches the database for relevant details.
+6. **Firestore Database:** Stores processed product information, facilitating quick lookups for both the browser extension and the Flutter app. If no barcode is detected, it searches the database for relevant details.
 
-7. **Flutter App**: Cross-platform mobile application enabling users to scan barcodes for offline shopping, access features such as a recipe chatbot, scan history, and a marketplace for healthy products.
+7. **Flutter App:** Cross-platform mobile application enabling users to scan barcodes for offline shopping, access features such as a recipe chatbot, scan history, and a marketplace for healthy products.
 
-8. **Browser Extension**: Extends the features of the Flutter app to the user's online shopping experience, allowing barcode scanning, product lookups, and health risk assessments directly within the browser.
+8. **Browser Extension:** Extends the features of the Flutter app to the user's online shopping experience, allowing barcode scanning, product lookups, and health risk assessments directly within the browser.
 
 ## Getting Started
 
@@ -45,7 +45,7 @@ Follow these steps to set up and run the Mivro software on your local machine, o
 
 ### Prerequisites
 
-- [Python >= 3.11.9](https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe)
+- [Python >= 3.11.9](https://python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe)
 - [Node.js >= 20.14.0](https://nodejs.org/dist/v20.14.0/node-v20.14.0-x64.msi)
 
 ### Installation

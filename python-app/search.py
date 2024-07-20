@@ -13,7 +13,7 @@ from gemini import lumi, swapr
 
 # Blueprint for the search routes
 search_blueprint = Blueprint('search', __name__, url_prefix='/api/v1/search')
-api = openfoodfacts.API(user_agent='Mivro/2.9.3') # Initialize the Open Food Facts API client
+api = openfoodfacts.API(user_agent='Mivro/2.9.4') # Initialize the Open Food Facts API client
 
 @search_blueprint.route('/barcode', methods=['POST'])
 def barcode() -> dict:
@@ -24,7 +24,7 @@ def barcode() -> dict:
     product_barcode = request.json.get('product_barcode')
 
     # Define product schema fields and fetch data from Open Food Facts API using barcode
-    required_data = json.load(open('product_schema.json'))
+    required_data = json.load(open('data/product_schema.json'))
     product_data = api.product.get(product_barcode, fields=required_data)
     if not product_data:
         return jsonify({'error': 'Product not found.'})
@@ -51,7 +51,7 @@ def barcode() -> dict:
         'response_size': f'{response_size:.2f} KB',
         'search_date': datetime.now().strftime('%d-%B-%Y'),
         'search_time': datetime.now().strftime('%I:%M %p'),
-        'additives_names': additive_name(filtered_product_data['additives_tags'], json.load(open('additive_names.json'))),
+        'additives_names': additive_name(filtered_product_data['additives_tags'], json.load(open('data/additive_names.json'))),
         'ingredients': filter_ingredient(filtered_product_data['ingredients']),
         'nova_group_name': nova_name(filtered_product_data['nova_group']),
         'nutriments': lumi(filtered_product_data['nutriments']),
