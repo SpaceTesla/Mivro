@@ -13,7 +13,7 @@ from gemini import lumi, swapr
 
 # Blueprint for the search routes
 search_blueprint = Blueprint('search', __name__, url_prefix='/api/v1/search')
-api = openfoodfacts.API(user_agent='Mivro/2.9.4') # Initialize the Open Food Facts API client
+api = openfoodfacts.API(user_agent='Mivro/2.9.5') # Initialize the Open Food Facts API client
 
 @search_blueprint.route('/barcode', methods=['POST'])
 def barcode() -> dict:
