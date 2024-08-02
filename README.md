@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="browser-extension/assets/oth-icons/logo.png" alt="Project Logo">
+  <img src="browser-extension/assets/oth-icons/logo-transparent.png" alt="Project Logo">
 </p>
 
 ## Project Description
@@ -80,13 +80,35 @@ Follow these steps to set up and run the Mivro software on your local machine, o
     pip install -r requirements.txt
     ```
 
-6. Set up the Chrome extension:
+6. Set up the configuration files:
+   - Create a `.env` file in the project root directory with the following template:
+     ```ini
+     FLASK_SECRET_KEY=your_secret_key
+     GEMINI_API_KEY=your_gemini_api_key
+     ```
+
+   - Create a `firebase-adminsdk.json` file in the project root directory with the following template:
+     ```json
+     {
+       "type": "service_account",
+       "project_id": "your_project_id",
+       "private_key_id": "your_private_key_id",
+       "private_key": "-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY\n-----END PRIVATE KEY-----\n",
+       "client_email": "your_client_email",
+       "client_id": "your_client_id",
+       "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+       "token_uri": "https://oauth2.googleapis.com/token",
+       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/your_client_email",
+       "universe_domain": "googleapis.com"
+     }
+     ```
+
+7. Set up the Chrome extension:
     - Open Chrome and go to `chrome://extensions`.
     - Enable "Developer mode" (top right corner).
     - Click "Load unpacked" (top left corner).
     - Select the `browser-extension` folder in the Mivro repository.
-
-7. Contact [@areeb](https://instagram.com/areebahmeddd) to get the `.env` file containing necessary configuration details.
 
 ### Usage
 
