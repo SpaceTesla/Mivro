@@ -1,3 +1,4 @@
+import 'package:mivro/utils/hexcolor.dart';
 import 'package:flutter/material.dart';
 
 class SearchBarWIdget extends StatelessWidget {
@@ -8,22 +9,19 @@ class SearchBarWIdget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
-        
-        color: const Color(0xFFE0E0E0), // Background color
+        color: myColorFromHex('#EEF1FF'), // Background color
         borderRadius: BorderRadius.circular(30.0), // Rounded corners
       ),
       child: const Padding(
-        padding:  EdgeInsets.all(2.0),
-        child:  Row(
+        padding: EdgeInsets.all(2.0),
+        child: Row(
           children: [
             Icon(Icons.search, color: Colors.black54),
             SizedBox(width: 8.0),
             Expanded(
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: 'Search',
-                  border: InputBorder.none
-                ),
+                    hintText: 'Search', border: InputBorder.none),
               ),
             ),
             Icon(Icons.mic, color: Colors.black54),

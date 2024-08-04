@@ -1,4 +1,4 @@
-name: areeb
+name: mivro
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -27,6 +27,8 @@ environment:
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
+
+
 dependencies:
   flutter:
     sdk: flutter
@@ -42,6 +44,28 @@ dependencies:
   google_generative_ai: ^0.4.3
   riverpod: ^2.5.1
   gap: ^3.0.1
+  mobile_scanner: ^4.0.1
+  image_picker: ^1.1.2
+  google_fonts: ^6.2.1
+  persistent_bottom_nav_bar: ^6.2.1
+  flutter_native_splash: ^2.4.1
+
+flutter_native_splash:
+  color: "#27374D" # Background color of the splash screen
+  image: assets/images/logo-transparent.png # Path to your splash screen image
+  android: true # Enable splash screen for Android
+  ios: true # Enable splash screen for iOS
+  android_gravity: center # Center the splash image for Android
+  ios_content_mode: center # Center the splash image for iOS
+
+  android_12:
+    color: "#27374D" # Background color of the splash screen
+    image: assets/images/logo-transparent.png # Path to your splash screen image
+    android: true # Enable splash screen for Android
+    ios: true # Enable splash screen for iOS
+    android_gravity: center # Center the splash image for Android
+    ios_content_mode: center # Center the splash image for iOS
+  
 
 dev_dependencies:
   flutter_test:
@@ -66,9 +90,13 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/
+    - assets/icons/
+    - assets/images/
   #   - images/a_dot_ham.jpeg
+
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

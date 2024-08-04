@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "areeb" "\0"
+            VALUE "FileDescription", "mivro" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "areeb" "\0"
+            VALUE "InternalName", "mivro" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "areeb.exe" "\0"
-            VALUE "ProductName", "areeb" "\0"
+            VALUE "OriginalFilename", "mivro.exe" "\0"
+            VALUE "ProductName", "mivro" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

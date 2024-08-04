@@ -1,4 +1,4 @@
-package com.example.areeb
+package com.example.mivro
 
 import io.flutter.embedding.android.FlutterActivity
 
