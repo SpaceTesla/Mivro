@@ -86,7 +86,7 @@ Follow these steps to set up and run the Mivro software on your local machine, o
     - Click "Load unpacked" (top left corner).
     - Select the `browser-extension` folder in the Mivro repository.
 
-7. Contact [@mivro](https://instagram.com/mivroahmeddd) to get the `.env` file containing necessary configuration details.
+7. Contact [@areeb](https://instagram.com/areebahmeddd) to get the `.env` file containing necessary configuration details.
 
 ### Usage
 
@@ -115,4 +115,4 @@ This project is licensed under the [MIT License](https://github.com/SpaceTesla/M
 
 ## Authors
 
-[mivro Ahmed](https://github.com/mivroahmeddd) - [Shivansh Karan](https://github.com/SpaceTesla) - [Rishi Chirchi](https://github.com/rishichirchi)
+[Areeb Ahmed](https://github.com/areebahmeddd) - [Shivansh Karan](https://github.com/SpaceTesla) - [Rishi Chirchi](https://github.com/rishichirchi)
