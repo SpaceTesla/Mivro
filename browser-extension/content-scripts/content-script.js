@@ -313,42 +313,53 @@ chrome.runtime.sendMessage(
           container.appendChild(title);
         }
 
-        nutrients.forEach((nutrient) => {
-          console.log(nutrient);
-          let nutrientDiv = document.createElement("div");
-          nutrientDiv.classList.add("nutrient");
-          container.appendChild(nutrientDiv);
+        let errorContainer = document.createElement("div");
+        errorContainer.id = `${containerId}-error`;
+        container.appendChild(errorContainer);
 
-          let centerDiv = document.createElement("div");
-          centerDiv.classList.add("nutrient-center");
-          nutrientDiv.appendChild(centerDiv);
+        if (nutrients.length === 0) {
+          let nutrientsDiv = document.createElement("div");
+          nutrientsDiv.textContent = "No data available.";
+          nutrientsDiv.classList.add("error");
+          errorContainer.appendChild(nutrientsDiv);
+        } else {
+          nutrients.forEach((nutrient) => {
+            console.log(nutrient);
+            let nutrientDiv = document.createElement("div");
+            nutrientDiv.classList.add("nutrient");
+            container.appendChild(nutrientDiv);
 
-          let nutrientName = document.createElement("div");
-          nutrientName.innerText = nutrient.name;
-          nutrientName.classList.add("nutrient-name");
-          centerDiv.appendChild(nutrientName);
+            let centerDiv = document.createElement("div");
+            centerDiv.classList.add("nutrient-center");
+            nutrientDiv.appendChild(centerDiv);
 
-          let nutrientText = document.createElement("div");
-          nutrientText.innerText = nutrient.text;
-          nutrientText.classList.add("nutrient-text");
-          centerDiv.appendChild(nutrientText);
+            let nutrientName = document.createElement("div");
+            nutrientName.innerText = nutrient.name;
+            nutrientName.classList.add("nutrient-name");
+            centerDiv.appendChild(nutrientName);
 
-          let rightDiv = document.createElement("div");
-          rightDiv.classList.add("nutrient-right");
-          nutrientDiv.appendChild(rightDiv);
+            let nutrientText = document.createElement("div");
+            nutrientText.innerText = nutrient.text;
+            nutrientText.classList.add("nutrient-text");
+            centerDiv.appendChild(nutrientText);
 
-          let quantityDiv = document.createElement("div");
-          quantityDiv.innerText = nutrient.quantity;
-          quantityDiv.classList.add("nutrient-quantity");
-          rightDiv.appendChild(quantityDiv);
+            let rightDiv = document.createElement("div");
+            rightDiv.classList.add("nutrient-right");
+            nutrientDiv.appendChild(rightDiv);
 
-          if (!isIngredient) {
-            let colorDiv = document.createElement("div");
-            colorDiv.style.backgroundColor = nutrient.color;
-            colorDiv.classList.add("nutrient-color");
-            rightDiv.appendChild(colorDiv);
-          }
-        });
+            let quantityDiv = document.createElement("div");
+            quantityDiv.innerText = nutrient.quantity;
+            quantityDiv.classList.add("nutrient-quantity");
+            rightDiv.appendChild(quantityDiv);
+
+            if (!isIngredient) {
+              let colorDiv = document.createElement("div");
+              colorDiv.style.backgroundColor = nutrient.color;
+              colorDiv.classList.add("nutrient-color");
+              rightDiv.appendChild(colorDiv);
+            }
+          });
+        }
       }
 
       createNutrientContainer(
