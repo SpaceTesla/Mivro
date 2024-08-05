@@ -3,6 +3,7 @@ import 'package:mivro/screens/chat_screen.dart';
 import 'package:mivro/screens/marketplace_screen.dart';
 import 'package:mivro/screens/overview_screen.dart';
 import 'package:mivro/screens/profile_screen.dart';
+import 'package:mivro/utils/hexcolor.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,6 +20,7 @@ class _HomePageState extends State<HomePage> {
     const ChatbotScreen(),
     const MarketplaceScreen(),
     const BarcodeScannerScreen(),
+
     const OverviewScreen(),
     const ProfileScreen(),
   ];
@@ -27,51 +29,68 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body:  Padding(
-          padding: const EdgeInsets.only(top: 24, left: 8, right: 8),
-          child: screens[myIndex]
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          showUnselectedLabels: false,
-          type: BottomNavigationBarType.shifting,
-          onTap: (index) {
-            setState(() {
-              myIndex = index;
-            });
-          },
-          currentIndex: myIndex,
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.chat,
+        body: screens[myIndex],
+        bottomNavigationBar: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+          child: BottomNavigationBar(
+            showUnselectedLabels: false,
+            type: BottomNavigationBarType.shifting,
+            selectedLabelStyle: const TextStyle(color: Colors.black),
+            selectedItemColor: Colors.black,
+            backgroundColor:
+                Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+            onTap: (index) {
+              setState(() {
+                myIndex = index;
+              });
+            },
+            currentIndex: myIndex,
+            items: [
+              BottomNavigationBarItem(
+                icon: const Image(
+                  image: AssetImage('assets/icons/speech-bubble.png'),
+                  height: 35,
                 ),
                 label: 'Chat',
-                backgroundColor: Colors.black),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.shopify_rounded,
+                backgroundColor: myColorFromHex("#EEF1FF"),
+              ),
+              BottomNavigationBarItem(
+                icon: const Image(
+                  image: AssetImage('assets/icons/collection.png'),
+                  height: 35,
                 ),
                 label: 'Marketplace',
-                backgroundColor: Colors.black),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.barcode_reader,
+                backgroundColor: myColorFromHex("#EEF1FF"),
+              ),
+              BottomNavigationBarItem(
+                icon: const Image(
+                  image: AssetImage('assets/icons/barcode-scan.png'),
+                  height: 35,
                 ),
                 label: 'Scanner',
-                backgroundColor: Colors.black),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.menu,
+                backgroundColor: myColorFromHex("#EEF1FF"),
+              ),
+              BottomNavigationBarItem(
+                icon: const Image(
+                  image: AssetImage('assets/icons/time.png'),
+                  height: 35,
                 ),
                 label: 'Overview',
-                backgroundColor: Colors.black),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.person,
+                backgroundColor: myColorFromHex("#EEF1FF"),
+              ),
+              BottomNavigationBarItem(
+                icon: const Image(
+                  image: AssetImage('assets/icons/user.png'),
+                  height: 35,
                 ),
                 label: 'Profile',
-                backgroundColor: Colors.black),
-          ],
+                backgroundColor: myColorFromHex("#EEF1FF"),
+              ),
+            ],
+          ),
         ),
       ),
     );

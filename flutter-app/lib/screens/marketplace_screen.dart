@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 
 class MarketplaceScreen extends StatefulWidget {
-  const MarketplaceScreen({super.key});
+  const MarketplaceScreen({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    return _MarketplaceScreenState();
-  }
+  State<StatefulWidget> createState() => _MarketplaceScreen();
 }
 
-class _MarketplaceScreenState extends State<MarketplaceScreen> {
+class _MarketplaceScreen extends State<MarketplaceScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'MarketPlace',
-        style: TextStyle(fontSize: 24),
+    return const Scaffold(
+      body: Center(
+        child: Text('Marketplace Screen'),
       ),
     );
   }
