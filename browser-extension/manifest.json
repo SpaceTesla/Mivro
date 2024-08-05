@@ -1,7 +1,7 @@
 {
   "name": "Mivro",
   "description": "Web extension for personalized product profiling",
-  "version": "2.1.7",
+  "version": "2.1.8",
   "manifest_version": 3,
   "background": {
     "service_worker": "background.js"
@@ -25,7 +25,7 @@
         "https://www.swiggy.com/instamart/item/*",
         "https://www.zeptonow.com/pn/*",
         "https://www.jiomart.com/p/groceries/*",
-        "https://www.amazon.in/*",
+        "https://www.amazon.in/*/dp/*",
         "https://www.flipkart.com/*"
       ],
       "css": ["content-scripts/content-script.css"],

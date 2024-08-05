@@ -1,5 +1,59 @@
 console.log("content-script.js loaded");
 
+function scrapeProductDetails() {
+  const hostname = window.location.hostname;
+
+  switch (hostname) {
+    case "www.bigbasket.com":
+      return {
+        name:
+          document.querySelector("h1")?.innerText.trim() ||
+          "Product name not found in h1 tag.",
+      };
+
+    case "www.zeptonow.com":
+      return {
+        name:
+          document.querySelector("h1")?.innerText.trim() ||
+          "Product name not found in h1 tag.",
+      };
+
+    case "www.swiggy.com":
+      return {
+        name:
+          document.querySelector("h1")?.innerText.trim() ||
+          "Product name not found in h1 tag.",
+      };
+
+    case "www.jiomart.com":
+      return {
+        name:
+          document.querySelector(".product-header-name")?.innerText.trim() ||
+          "Product name not found in h1 tag.",
+      };
+
+    case "www.amazon.in":
+      return {
+        name:
+          document.querySelector("#productTitle")?.innerText.trim() ||
+          "Product name not found in h1 tag.",
+      };
+
+    case "www.flipkart.com":
+      return {
+        name:
+          document.querySelector(".VU-ZEz").innerText ||
+          "Product name not found in .VU-ZEz class.",
+      };
+
+    default:
+      // If the hostname doesn't match any cases, return a default value
+      return {
+        name: "No product name found.",
+      };
+  }
+}
+
 /**
  * Creates and appends an SVG element to a specified parent element.
  * @param {string} svgString - The SVG string to be parsed and appended.
@@ -98,8 +152,10 @@ function cleanText(input) {
 }
 
 // Get the product name from the page
-let productEle = document.querySelector("h1");
-let product = cleanText(productEle.textContent).toLowerCase();
+let product_name = scrapeProductDetails().name;
+console.log(":::- ", product_name);
+// let productEle = product_name;
+let product = cleanText(product_name).toLowerCase();
 console.log(product);
 
 chrome.runtime.sendMessage(
