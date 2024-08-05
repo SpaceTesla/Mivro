@@ -1,6 +1,6 @@
 {
-    "name": "Mivro: Scan It. Know It.",
-    "short_name": "Mivro",
+    "name": "mivro",
+    "short_name": "mivro",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
