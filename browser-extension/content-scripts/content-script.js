@@ -88,17 +88,12 @@ function capitalize(str) {
 }
 
 function cleanText(input) {
-  // Remove hyphens, commas, ampersands, and other non-alphanumeric characters except for x (used in 2x1)
-  let cleaned = input.replace(/[-,&]/g, "");
-
-  // Remove numbers followed by specific units (ml, mg, l, g) including patterns like 2x1 L
-  cleaned = cleaned.replace(/\b\d+x?\d*\s*(ml|mg|l|g)\b/gi, "");
-
-  // Remove anything and everything between brackets (e.g., (text), [text], {text})
-  cleaned = cleaned.replace(/\[.*?\]|\(.*?\)|\{.*?\}/g, "");
+  // Remove numbers and special symbols, keeping only letters and spaces
+  let cleaned = input.replace(/[^a-zA-Z\s]/g, "");
 
   // Remove any extra spaces left after cleaning
   cleaned = cleaned.replace(/\s+/g, " ").trim();
+  console.log(cleaned);
 
   return cleaned;
 }

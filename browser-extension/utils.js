@@ -11,7 +11,9 @@ export function scrapeProductDetails() {
 
     case "www.flipkart.com":
       return {
-        name: document.querySelector(".VU-ZEz").innerText || "Product name not found in .VU-ZEz class.",
+        name:
+          document.querySelector(".VU-ZEz").innerText ||
+          "Product name not found in .VU-ZEz class.",
       };
 
     default:
