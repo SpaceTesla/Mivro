@@ -1,5 +1,5 @@
 :root {
-  --body-width: 320px;
+  --body-width: 340px;
 }
 
 #product-btn {
@@ -228,6 +228,24 @@
   margin: 8px 16px;
   padding: 8px 0;
   border-bottom: #d5d5d5 1px solid;
+}
+
+.ingredient {
+  margin: 8px 16px;
+  padding: 8px 0;
+  border-bottom: #d5d5d5 1px solid;
+  display: flex;
+}
+
+.ingredient-name {
+  flex-grow: 1;
+  align-self: center;
+}
+
+.ingredient-quantity {
+  width: 60px;
+  text-align: right;
+  align-content: center;
 }
 
 .error {

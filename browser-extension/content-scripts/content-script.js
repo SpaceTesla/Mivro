@@ -93,7 +93,6 @@ function cleanText(input) {
 
   // Remove any extra spaces left after cleaning
   cleaned = cleaned.replace(/\s+/g, " ").trim();
-  console.log(cleaned);
 
   return cleaned;
 }
@@ -295,17 +294,24 @@ chrome.runtime.sendMessage(
       nutriscoreGrade.style.color = nutriscoreGradeColor;
       scoreContainer.appendChild(nutriscoreGrade);
 
-      function createNutrientContainer(containerId, containerTitle, nutrients) {
+      function createNutrientContainer(
+        containerId,
+        containerTitle,
+        nutrients,
+        isIngredient = false
+      ) {
         let container = document.createElement("div");
         container.id = containerId;
         container.classList.add("grade-container");
         productInfoContainer.appendChild(container);
 
-        let title = document.createElement("div");
-        title.id = `${containerId}-title`;
-        title.textContent = containerTitle;
-        title.classList.add("grade-title");
-        container.appendChild(title);
+        if (!isIngredient) {
+          let title = document.createElement("div");
+          title.id = `${containerId}-title`;
+          title.textContent = containerTitle;
+          title.classList.add("grade-title");
+          container.appendChild(title);
+        }
 
         nutrients.forEach((nutrient) => {
           console.log(nutrient);
@@ -336,10 +342,12 @@ chrome.runtime.sendMessage(
           quantityDiv.classList.add("nutrient-quantity");
           rightDiv.appendChild(quantityDiv);
 
-          let colorDiv = document.createElement("div");
-          colorDiv.style.backgroundColor = nutrient.color;
-          colorDiv.classList.add("nutrient-color");
-          rightDiv.appendChild(colorDiv);
+          if (!isIngredient) {
+            let colorDiv = document.createElement("div");
+            colorDiv.style.backgroundColor = nutrient.color;
+            colorDiv.classList.add("nutrient-color");
+            rightDiv.appendChild(colorDiv);
+          }
         });
       }
 
@@ -353,6 +361,40 @@ chrome.runtime.sendMessage(
         "Positives",
         productInfo.nutriments.positive_nutrient
       );
+
+      let ingredientContainer = document.createElement("div");
+      ingredientContainer.id = "ingredient-container";
+      productInfoContainer.appendChild(ingredientContainer);
+
+      let ingredientTitle = document.createElement("div");
+      ingredientTitle.id = "ingredient-title";
+      ingredientTitle.textContent = "Ingredients";
+      ingredientTitle.classList.add("grade-title");
+      ingredientContainer.appendChild(ingredientTitle);
+
+      if (productInfo.ingredients.length === 0) {
+        let ingredientDiv = document.createElement("div");
+        ingredientDiv.textContent = "No data available.";
+        ingredientDiv.classList.add("error");
+        ingredientContainer.appendChild(ingredientDiv);
+      } else {
+        productInfo.ingredients.forEach((ingredient) => {
+          let ingredientDiv = document.createElement("div");
+          ingredientDiv.classList.add("ingredient");
+
+          let ingredientNameDiv = document.createElement("div");
+          ingredientNameDiv.innerText = ingredient.name;
+          ingredientDiv.appendChild(ingredientNameDiv);
+          ingredientNameDiv.classList.add("ingredient-name");
+
+          let ingredientQuantityDiv = document.createElement("div");
+          ingredientQuantityDiv.innerText = ingredient.percentage;
+          ingredientDiv.appendChild(ingredientQuantityDiv);
+          ingredientQuantityDiv.classList.add("ingredient-quantity");
+
+          ingredientContainer.appendChild(ingredientDiv);
+        });
+      }
 
       // Nova group
       let novaGroupContainer = document.createElement("div");
@@ -371,32 +413,6 @@ chrome.runtime.sendMessage(
       novaGroup.textContent = productInfo.nova_group_name;
       novaGroupContainer.appendChild(novaGroup);
 
-      let allergiesContainer = document.createElement("div");
-      allergiesContainer.id = "allergies-container";
-      productInfoContainer.appendChild(allergiesContainer);
-
-      let allergiesTitle = document.createElement("div");
-      allergiesTitle.id = `allergies-title`;
-      allergiesTitle.textContent = "Allergies";
-      allergiesTitle.classList.add("grade-title");
-      allergiesContainer.appendChild(allergiesTitle);
-
-      let allergyDiv = document.createElement("div");
-
-      if (productInfo.allergens_tags.length === 0) {
-        allergyDiv.textContent = "No data available.";
-        allergyDiv.classList.add("error");
-        allergiesContainer.appendChild(allergyDiv);
-      } else {
-        productInfo.allergens_tags.forEach((allergy) => {
-          allergyDiv.classList.add("allergy");
-          allergy =
-            allergy.charAt(0).toUpperCase() +
-            allergy.substring(1, allergy.length);
-          allergyDiv.innerText = allergy;
-          allergiesContainer.appendChild(allergyDiv);
-        });
-      }
       let healthContainer = document.createElement("div");
       healthContainer.id = "additives-container";
       productInfoContainer.appendChild(healthContainer);
