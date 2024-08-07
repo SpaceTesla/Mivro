@@ -209,6 +209,7 @@ chrome.runtime.sendMessage(
         productNav.appendChild(functionIconDiv);
 
         await getAndAppendIcon("info", "function-icon-div", "info-svg");
+        await getAndAppendIcon("flag", "function-icon-div", "flag-svg");
 
         // Heart icon with toggle click handling
         let isHeartFilled = false;
@@ -544,7 +545,11 @@ chrome.runtime.sendMessage(
 
       let healthDiv = document.createElement("div");
 
-      if (productInfo.health_risk.ingredient_warnings.length === 0) {
+      if (
+        !productInfo.health_risk ||
+        Object.keys(productInfo.health_risk).length === 0 ||
+        productInfo.health_risk.ingredient_warnings.length === 0
+      ) {
         healthDiv.textContent = "No data available.";
         healthDiv.classList.add("error");
         healthContainer.appendChild(healthDiv);
@@ -646,7 +651,7 @@ chrome.runtime.sendMessage(
         nutriscoreGrade = document.createElement("div");
         nutriscoreGrade.id = "nutriscore-grade";
         nutriscoreGrade.textContent =
-          productInfo.nutriscore_grade.toUpperCase();
+          productInfo.recommeded_product.nutriscore_grade.toUpperCase();
         nutriscoreGradeColor =
           productInfo.recommeded_product.nutriscore_grade_color;
         nutriscoreGrade.style.color = nutriscoreGradeColor;

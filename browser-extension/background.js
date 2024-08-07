@@ -58,6 +58,7 @@ const iconPaths = {
   fetchHeartFilledSvg: "assets/btn-icons/heart-filled.svg",
   fetchHeartSvg: "assets/btn-icons/heart.svg",
   fetchIconInfo: "assets/btn-icons/info.svg",
+  fetchIconFlag: "assets/btn-icons/flag.svg",
   fetchIconGemini: "assets/oth-icons/gemini.svg",
 };
 
