@@ -27,8 +27,10 @@ def grade_color(nutriscore_grade: str) -> str:
     return grade_colors.get(nutriscore_grade.lower(), 'gray')
 
 # Function for mapping the nutriscore score to an assessment category (Used in search.py)
-def score_assessment(nutriscore_score: int) -> str:
-    if nutriscore_score >= 90:
+def score_assessment(nutriscore_score) -> str:
+    if nutriscore_score is None:
+        return 'Unknown'
+    elif nutriscore_score >= 90:
         return 'excellent'
     elif nutriscore_score >= 70:
         return 'good'
