@@ -1,5 +1,7 @@
 console.log("content-script.js loaded");
 
+let iconMap = {};
+
 function scrapeProductDetails() {
   const hostname = window.location.hostname;
 
@@ -44,6 +46,13 @@ function scrapeProductDetails() {
         name:
           document.querySelector(".VU-ZEz").innerText ||
           "Product name not found in .VU-ZEz class.",
+      };
+
+    case "blinkit.com":
+      return {
+        name:
+          document.querySelector(".tw-text-600").innerText ||
+          "Product name not found in .tw-text-600 class.",
       };
 
     default:
@@ -394,6 +403,17 @@ chrome.runtime.sendMessage(
 
             container.appendChild(nutrientDiv);
 
+            let leftDiv = document.createElement("div");
+            leftDiv.classList.add("nutrient-left");
+            nutrientDiv.appendChild(leftDiv);
+
+            let nutrientIcon = document.createElement("img");
+            nutrientIcon.src = chrome.runtime.getURL(
+              "assets/food-icons/no-image.png"
+            );
+            nutrientIcon.classList.add("nutrient-icon");
+            leftDiv.appendChild(nutrientIcon);
+
             let centerDiv = document.createElement("div");
             centerDiv.classList.add("nutrient-center");
             nutrientDiv.appendChild(centerDiv);
@@ -478,6 +498,17 @@ chrome.runtime.sendMessage(
           ingredientCounter++;
           let ingredientDiv = document.createElement("div");
           ingredientDiv.classList.add("ingredient");
+
+          let ingredientIconDiv = document.createElement("div");
+          ingredientIconDiv.classList.add("ingredient-icon-div");
+          ingredientDiv.appendChild(ingredientIconDiv);
+
+          let ingredientIcon = document.createElement("img");
+          ingredientIcon.src = chrome.runtime.getURL(
+            "assets/food-icons/no-image.png"
+          );
+          ingredientIcon.classList.add("ingredient-icon");
+          ingredientIconDiv.appendChild(ingredientIcon);
 
           let ingredientNameDiv = document.createElement("div");
           ingredientNameDiv.innerText = ingredient.name;

@@ -1,7 +1,7 @@
 {
   "name": "Mivro",
   "description": "Web extension for personalized product profiling",
-  "version": "2.3.4",
+  "version": "2.3.5",
   "manifest_version": 3,
   "background": {
     "service_worker": "background.js"
@@ -36,7 +36,7 @@
   "host_permissions": ["http://127.0.0.1:5000/"],
   "web_accessible_resources": [
     {
-      "resources": ["*.js"],
+      "resources": ["*.js", "*.png"],
       "matches": ["<all_urls>"]
     }
   ]

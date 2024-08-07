@@ -54,6 +54,7 @@
   overflow-x: hidden;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
+  z-index: 10000;
 }
 
 #icon-div {
@@ -183,6 +184,21 @@
   margin: 8px 16px 0 16px;
   padding-bottom: 8px;
   border-bottom: #d5d5d5 1px solid;
+  gap: 8px;
+}
+
+.nutrient-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.nutrient-left img {
+  width: 32px;
+  height: 32px;
+  opacity: 0.8;
 }
 
 .nutrient-center {
@@ -236,6 +252,20 @@
   padding: 8px 0;
   border-bottom: #d5d5d5 1px solid;
   display: flex;
+  gap: 8px;
+}
+
+.ingredient-icon-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.ingredient-icon-div img {
+  width: 32px;
+  height: 32px;
+  opacity: 0.8;
 }
 
 .ingredient-name {
