@@ -8,19 +8,20 @@
   </head>
 
   <body>
-    <h1>
+    <div class="header">
       <img
         class="mivro-icon"
         src="../assets/oth-icons/mivro.svg"
         alt="mivro"
         srcset=""
       />
-    </h1>
+    </div>
     <div class="main">
-      <div class="profile"></div>
-      <div class="search"></div>
-      <div class="marketplace"></div>
-      <div class="chat">
+      <!-- ! Careful with the order -->
+      <div class="chat container hidden">Chat</div>
+      <div class="marketplace container hidden">Marketplace</div>
+      <div class="search container hidden">Search</div>
+      <div class="profile container">
         <div class="signed-out">You are not signed in!</div>
         <button class="sign-in">Sign In</button>
       </div>
