@@ -12,7 +12,7 @@ def signup() -> dict:
     email = request.json.get('email')
     password = request.json.get('password')
     if not email or not password:
-        return jsonify({'error': 'Email and password are required.'})
+        return jsonify({'error': 'Email and password are required.'}), 400
 
     try:
         # Create a new user with the provided email and password
@@ -24,14 +24,14 @@ def signup() -> dict:
         register_user(email, password)
         return redirect(url_for('auth.verify', email=email)) # Redirect to the email verification route
     except Exception as exc:
-        return jsonify({'error': str(exc)})
+        return jsonify({'error': str(exc)}), 500
 
 @auth_blueprint.route('/verify-email', methods=['GET'])
 def verify() -> dict:
     # Get the email value from the query parameters
     email = request.args.get('email')
-    # if not email:
-    #     return jsonify({'error': 'Email is required for email verification.'})
+    if not email:
+        return jsonify({'error': 'Email is required for email verification.'}), 400
 
     try:
         # Generate an email verification link for a user in Firebase Auth using their email
@@ -39,7 +39,7 @@ def verify() -> dict:
         link = auth.generate_email_verification_link(user.email)
         return jsonify({'message': 'Registration successful! Verify your email to activate your account.'})
     except Exception as exc:
-        return jsonify({'error': str(exc)})
+        return jsonify({'error': str(exc)}), 500
 
 @auth_blueprint.route('/signin', methods=['POST'])
 def signin() -> dict:
@@ -47,7 +47,7 @@ def signin() -> dict:
     email = request.json.get('email')
     password = request.json.get('password')
     if not email or not password:
-        return jsonify({'error': 'Email and password are required.'})
+        return jsonify({'error': 'Email and password are required.'}), 400
 
     try:
         # Check if the user's email and password are valid
@@ -57,21 +57,21 @@ def signin() -> dict:
 
         return jsonify(result)
     except Exception as exc:
-        return jsonify({'error': str(exc)})
+        return jsonify({'error': str(exc)}), 500
 
 @auth_blueprint.route('/reset-password', methods=['POST'])
 def reset() -> dict:
     # Get email value from the incoming JSON data
     email = request.json.get('email')
     if not email:
-        return jsonify({'error': 'Email is required for password reset.'})
+        return jsonify({'error': 'Email is required for password reset.'}), 400
 
     try:
         # Generate a password reset link for a user in Firebase Auth using their email
         link = auth.generate_password_reset_link(email)
         return jsonify({'message': 'Password reset link sent.'})
     except Exception as exc:
-        return jsonify({'error': str(exc)})
+        return jsonify({'error': str(exc)}), 500
 
 @auth_blueprint.route('/logout', methods=['POST'])
 def logout() -> dict:
@@ -80,7 +80,7 @@ def logout() -> dict:
         session.pop('email')
         return jsonify({'message': 'Logged out successfully.'})
     else:
-        return jsonify({'error': 'User not logged in.'})
+        return jsonify({'error': 'User not logged in.'}), 401
 
 @auth_blueprint.route('/delete-account', methods=['POST'])
 def delete() -> dict:
@@ -88,7 +88,7 @@ def delete() -> dict:
     email = request.json.get('email')
     password = request.json.get('password')
     if not email or not password:
-        return jsonify({'error': 'Email and password are required.'})
+        return jsonify({'error': 'Email and password are required.'}), 400
 
     try:
         # Check if the user's email and password are valid
@@ -96,11 +96,11 @@ def delete() -> dict:
         auth.delete_user(user.uid) # Delete the user from Firebase Auth
         result = remove_user(email) # Remove the user from Firestore database
         if 'error' in result:
-            return jsonify(result)
+            return jsonify(result), 500
 
         if 'email' in session:
             session.pop('email') # Remove the user's email from the session if they are logged in
 
         return jsonify({'message': 'Account deleted successfully.'})
     except Exception as exc:
-        return jsonify({'error': str(exc)})
+        return jsonify({'error': str(exc)}), 500
