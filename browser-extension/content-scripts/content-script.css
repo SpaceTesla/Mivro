@@ -180,7 +180,8 @@
 
 .nutrient {
   display: flex;
-  margin: 8px 16px;
+  margin: 8px 16px 0 16px;
+  padding-bottom: 8px;
   border-bottom: #d5d5d5 1px solid;
 }
 
@@ -248,7 +249,8 @@
   align-content: center;
 }
 
-.hide-ingredient {
+.hide-ingredient,
+.hide-nutrient {
   display: none;
 }
 

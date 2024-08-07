@@ -379,10 +379,18 @@ chrome.runtime.sendMessage(
           nutrientsDiv.classList.add("error");
           errorContainer.appendChild(nutrientsDiv);
         } else {
-          nutrients.forEach((nutrient) => {
+          let nutrientCounter = 0;
+          nutrients.forEach((nutrient, index) => {
+            nutrientCounter++;
             console.log(nutrient);
             let nutrientDiv = document.createElement("div");
             nutrientDiv.classList.add("nutrient");
+
+            // Initially hide nutrients after the third one
+            if (index >= 3) {
+              nutrientDiv.classList.add("hide-nutrient");
+            }
+
             container.appendChild(nutrientDiv);
 
             let centerDiv = document.createElement("div");
@@ -415,6 +423,25 @@ chrome.runtime.sendMessage(
               rightDiv.appendChild(colorDiv);
             }
           });
+
+          if (nutrientCounter > 3) {
+            let showMoreDiv = document.createElement("div");
+            showMoreDiv.classList.add("show-more");
+            showMoreDiv.innerText = "Show More";
+            showMoreDiv.addEventListener("click", () => {
+              let nutrients = container.querySelectorAll(".nutrient");
+              nutrients.forEach((nutrient, index) => {
+                if (index >= 3) {
+                  nutrient.classList.toggle("hide-nutrient");
+                }
+              });
+              showMoreDiv.innerText =
+                showMoreDiv.innerText === "Show More"
+                  ? "Show Less"
+                  : "Show More";
+            });
+            container.appendChild(showMoreDiv);
+          }
         }
       }
 
