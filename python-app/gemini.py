@@ -70,43 +70,63 @@ savora_chat_session = savora_llm.start_chat(history=[])
 
 @ai_blueprint.route('/lumi', methods=['POST'])
 def lumi(product_data: dict) -> dict:
-    # Get the user's health profile based on their email
-    email = request.json.get('email')
-    health_profile = user_profile(email)
+    try:
+        # Get the user's health profile based on their email
+        email = request.json.get('email')
 
-    # Send the user's health profile and product data to the Gemini model
-    user_message = f'Health Profile: {health_profile}\nProduct Data: {product_data}'
-    bot_response = lumi_chat_session.send_message(user_message)
+        if not email or not product_data:
+            return jsonify({'error': 'Email and product data are required.'}), 400
 
-    # Filter the response to remove code blocks and return the evaluated product data
-    filtered_response = bot_response.text.replace('```python', '').replace('```', '')
-    return eval(filtered_response) # If eval() throws an error, use ast.literal_eval() or json.loads() instead
+        health_profile = user_profile(email)
+
+        # Send the user's health profile and product data to the Gemini model
+        user_message = f'Health Profile: {health_profile}\nProduct Data: {product_data}'
+        bot_response = lumi_chat_session.send_message(user_message)
+
+        # Filter the response to remove code blocks and return the evaluated product data
+        filtered_response = bot_response.text.replace('```python', '').replace('```', '')
+        return eval(filtered_response) # If eval() throws an error, use ast.literal_eval() or json.loads() instead
+    except Exception as exc:
+        return jsonify({'error': str(exc)}), 500
 
 @ai_blueprint.route('/swapr', methods=['POST'])
 def swapr(email: str, product_data: dict) -> dict:
-    # Send the product data to the Gemini model
-    user_message = f'Product Data: {product_data}'
-    bot_response = swapr_chat_session.send_message(user_message)
+    try:
+        # Send the product data to the Gemini model
+        user_message = f'Product Data: {product_data}'
+        bot_response = swapr_chat_session.send_message(user_message)
 
-    # Filter the response to remove bold formatting and search the database for the product name
-    filtered_response = bot_response.text.replace('**', '')
-    database_response = requests.post(
-        'http://localhost:5000/api/v1/search/database',
-        json={'email': email, 'product_keyword': filtered_response}
-    )
-    # if 'error' in database_response.json():
-    #     return jsonify({'product_name': filtered_response})
+        # Filter the response to remove bold formatting and search the database for the product name
+        filtered_response = bot_response.text.replace('**', '')
+        database_response = requests.post(
+            'http://localhost:5000/api/v1/search/database',
+            json={'email': email, 'product_keyword': filtered_response}
+        )
 
-    return database_response.json()
+        if database_response.status_code != 200:
+            # return jsonify({'error': 'Database search failed.'}), database_response.status_code
+            return jsonify({'product_name': filtered_response})
+
+        return database_response.json()
+    except Exception as exc:
+        return jsonify({'error': str(exc)}), 500
 
 @ai_blueprint.route('/savora', methods=['POST'])
 def savora() -> dict:
-    # Get the user's email and message to send to the Gemini model
-    email = request.json.get('email')
-    user_message = request.json.get('message')
-    bot_response = savora_chat_session.send_message(user_message)
+    try:
+        # Get the user's email and message to send to the Gemini model
+        email = request.json.get('email')
+        user_message = request.json.get('message')
 
-    # Store the chat history for the user's email in Firestore
-    chat_entry = ChatHistory(user_message=user_message, bot_response=bot_response.text)
-    chat_history(email, chat_entry)
-    return jsonify({'response': bot_response.text})
+        if not email or not user_message:
+            return jsonify({'error': 'Email and message are required.'}), 400
+
+        bot_response = savora_chat_session.send_message(user_message)
+
+        # Store the chat history for the user's email in Firestore
+        chat_entry = ChatHistory(user_message=user_message, bot_response=bot_response.text)
+        chat_history(email, chat_entry)
+
+        return jsonify({'response': bot_response.text})
+    except Exception as exc:
+        return jsonify({'error': str(exc)}), 500
