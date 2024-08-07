@@ -445,7 +445,9 @@ chrome.runtime.sendMessage(
         ingredientDiv.classList.add("error");
         ingredientContainer.appendChild(ingredientDiv);
       } else {
-        productInfo.ingredients.forEach((ingredient) => {
+        let ingredientCounter = 0;
+        productInfo.ingredients.forEach((ingredient, index) => {
+          ingredientCounter++;
           let ingredientDiv = document.createElement("div");
           ingredientDiv.classList.add("ingredient");
 
@@ -459,8 +461,31 @@ chrome.runtime.sendMessage(
           ingredientDiv.appendChild(ingredientQuantityDiv);
           ingredientQuantityDiv.classList.add("ingredient-quantity");
 
+          // Initially hide ingredients after the third one
+          if (index >= 3) {
+            ingredientDiv.classList.add("hide-ingredient");
+          }
+
           ingredientContainer.appendChild(ingredientDiv);
         });
+
+        if (ingredientCounter > 3) {
+          let showMoreDiv = document.createElement("div");
+          showMoreDiv.classList.add("show-more");
+          showMoreDiv.innerText = "Show More";
+          showMoreDiv.addEventListener("click", () => {
+            let ingredients =
+              ingredientContainer.querySelectorAll(".ingredient");
+            ingredients.forEach((ingredient, index) => {
+              if (index >= 3) {
+                ingredient.classList.toggle("hide-ingredient");
+              }
+            });
+            showMoreDiv.innerText =
+              showMoreDiv.innerText === "Show More" ? "Show Less" : "Show More";
+          });
+          ingredientContainer.appendChild(showMoreDiv);
+        }
       }
 
       // Nova group

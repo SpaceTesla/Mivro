@@ -231,7 +231,7 @@
 }
 
 .ingredient {
-  margin: 8px 16px;
+  margin: 8px 16px 0 16px;
   padding: 8px 0;
   border-bottom: #d5d5d5 1px solid;
   display: flex;
@@ -246,6 +246,25 @@
   width: 60px;
   text-align: right;
   align-content: center;
+}
+
+.hide-ingredient {
+  display: none;
+}
+
+.show-more {
+  display: flex;
+  font-size: small;
+  justify-content: center;
+  align-items: center;
+  margin: 0 16px 8px 16px;
+  padding: 4px 0;
+  border: 1px #d5d5d5 solid;
+  border-top: none;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  cursor: pointer;
+  background-color: #f2f2f2;
 }
 
 .error {
