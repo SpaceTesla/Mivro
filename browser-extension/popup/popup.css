@@ -131,16 +131,16 @@ body {
   color: var(--primary);
 }
 
-.nav-list > li:hover > a > svg {
-  stroke: var(--primary);
+.nav-list > li:hover > a > img {
+  opacity: 1;
 }
 
 .nav-list > .active > a {
   color: var(--primary);
 }
 
-.nav-list > .active > a > svg {
-  stroke: var(--primary);
+.nav-list > .active > a > img {
+  opacity: 1;
 }
 
 .active-bar {
@@ -175,4 +175,8 @@ body {
 
 .hidden {
   display: none;
+}
+
+.grey {
+  opacity: 0.5;
 }
