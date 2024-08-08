@@ -8,10 +8,10 @@ The app supports barcode scanning for foods, drinks, cosmetics, medicines, and p
 
 ### Key Features
 
-- **Search Engine:** Easily find products without barcode scanning, with upcoming support for image and live product recognition.
-- **Meal Tracker:** Monitor your daily nutritional intake by scanning product barcodes, allowing you to easily track and manage your meals.
-- **Marketplace:** Discover and purchase alternative partnered healthy products.
-- **Browser Extension:** Integrate app features seamlessly into your online shopping experience.
+- **Search Engine**: Easily find products without barcode scanning, with upcoming support for image and live product recognition.
+- **Meal Tracker**: Monitor your daily nutritional intake by scanning product barcodes, allowing you to easily track and manage your meals.
+- **Marketplace**: Discover and purchase alternative partnered healthy products.
+- **Browser Extension**: Integrate app features seamlessly into your online shopping experience.
 
 Additionally, the app includes a Recipe Chatbot for personalized recipe recommendations and a Scan History feature to track previously scanned products.
 
@@ -23,21 +23,21 @@ Additionally, the app includes a Recipe Chatbot for personalized recipe recommen
 
 ---
 
-1. **Barcode Scan:** Utilizes the `zxing_flutter` library to capture barcode input from the user via the Flutter app. The scanned barcode is then sent to the Django server for further processing.
+1. **Barcode Scan**: Utilizes the `zxing_flutter` library to capture barcode input from the user via the Flutter app. The scanned barcode is then sent to the Django server for further processing.
 
-2. **Text Search:** Accepts text input from the user through the Flutter app for product lookup. This input is forwarded to the Django server to query the Firestore database for relevant product information.
+2. **Text Search**: Accepts text input from the user through the Flutter app for product lookup. This input is forwarded to the Django server to query the Firestore database for relevant product information.
 
-3. **Django Server:** Serves as the central backend server responsible for data cleaning, user authentication, integration with the Gemini API, and interaction with Google Firebase services.
+3. **Django Server**: Serves as the central backend server responsible for data cleaning, user authentication, integration with the Gemini API, and interaction with Google Firebase services.
 
-4. **OpenFoodFacts API:** Fetches raw, detailed information about products based on barcode or text search inputs. This API provides comprehensive ingredient and nutritional data, including metadata such as name, brand, and more.
+4. **OpenFoodFacts API**: Fetches raw, detailed information about products based on barcode or text search inputs. This API provides comprehensive ingredient and nutritional data, including metadata such as name, brand, and more.
 
-5. **Gemini API:** Processes the raw data obtained from the OpenFoodFacts API, categorizing nutrients into positive and negative groups and identifying any health risks associated with the product.
+5. **Gemini API**: Processes the raw data obtained from the OpenFoodFacts API, categorizing nutrients into positive and negative groups and identifying any health risks associated with the product.
 
-6. **Firestore Database:** Stores processed product information, facilitating quick lookups for both the browser extension and the Flutter app. If no barcode is detected, it searches the database for relevant details.
+6. **Firestore Database**: Stores processed product information, facilitating quick lookups for both the browser extension and the Flutter app. If no barcode is detected, it searches the database for relevant details.
 
-7. **Flutter App:** Cross-platform mobile application enabling users to scan barcodes for offline shopping, access features such as a recipe chatbot, scan history, and a marketplace for healthy products.
+7. **Flutter App**: Cross-platform mobile application enabling users to scan barcodes for offline shopping, access features such as a recipe chatbot, scan history, and a marketplace for healthy products.
 
-8. **Browser Extension:** Extends the features of the Flutter app to the user's online shopping experience, allowing barcode scanning, product lookups, and health risk assessments directly within the browser.
+8. **Browser Extension**: Extends the features of the Flutter app to the user's online shopping experience, allowing barcode scanning, product lookups, and health risk assessments directly within the browser.
 
 ## Getting Started
 
@@ -47,40 +47,43 @@ Follow these steps to set up and run the Mivro software on your local machine, o
 
 - [Python >= 3.11.9](https://python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe)
 - [Node.js >= 20.14.0](https://nodejs.org/dist/v20.14.0/node-v20.14.0-x64.msi)
+- [Flutter SDK >= 3.22.3](https://storage.googleapis.com/flutter_infra_release/releases/stable/windows/flutter_windows_3.22.3-stable.zip)
 
 ### Installation
 
-1. Clone the repository to your local machine:
+#### Python Server
+
+1. **Clone the repository to your local machine**:
     ```shell
     git clone https://github.com/SpaceTesla/Mivro.git
     ```
 
-2. Navigate to the project directory:
+2. **Navigate to the project directory**:
     ```shell
     cd Mivro
     ```
 
-3. Create a virtual environment (optional but recommended):
+3. **Create a virtual environment (optional but recommended)**:
     ```shell
     python -m venv .venv
     ```
 
-4. Activate the virtual environment:
-    - Windows:
+4. **Activate the virtual environment**:
+    - **Windows**:
         ```shell
         .venv\Scripts\activate
         ```
-    - macOS and Linux:
+    - **macOS and Linux**:
         ```shell
         source .venv/bin/activate
         ```
 
-5. Install the project dependencies:
+5. **Install the project dependencies**:
     ```shell
     pip install -r requirements.txt
     ```
 
-6. Set up the configuration files:
+6. **Set up the configuration files**:
    - Create a `.env` file in the project root directory with the following template:
      ```ini
      FLASK_SECRET_KEY=your_secret_key
@@ -104,22 +107,23 @@ Follow these steps to set up and run the Mivro software on your local machine, o
      }
      ```
 
-7. Set up the Chrome extension:
+7. **Run the Python application**:
+    ```shell
+    python python-app/app.py
+    ```
+
+#### Browser Extension
+
+1. **Set up the Chrome extension**:
     - Open Chrome and go to `chrome://extensions`.
     - Enable "Developer mode" (top right corner).
     - Click "Load unpacked" (top left corner).
     - Select the `browser-extension` folder in the Mivro repository.
 
-### Usage
-
-1. Launch the application by clicking the run button in the top right of VS Code, or execute:
-    ```shell
-    python python-app/app.py
-    ```
-
-2. Using the Browser Extension:
+2. **Using the Browser Extension**:
     - Navigate to any of the following supported websites:
       - https://www.bigbasket.com
+      - https://www.blinkit.com
       - https://www.swiggy.com
       - https://www.zeptonow.com
       - https://www.jiomart.com
@@ -128,8 +132,25 @@ Follow these steps to set up and run the Mivro software on your local machine, o
 
     - Select and open any product. The browser extension will appear on the right side of the screen. Click on the extension icon to access detailed information.
 
-3. For Contributors:
-    - To apply changes made to the browser extension, visit `chrome://extensions`, click the "Update" button at the top left, and reload the product page to see the updates.
+#### Flutter Application
+
+1. **Navigate to the flutter-app directory**:
+    ```shell
+    cd flutter-app
+    ```
+
+2. **Get Flutter dependencies**:
+    ```shell
+    flutter pub get
+    ```
+
+3. **Prepare your device**:
+    - Ensure an Android device is connected and debugging is enabled, or start an Android emulator.
+
+4. **Run the Flutter app**:
+    ```shell
+    flutter run
+    ```
 
 ## License
 
