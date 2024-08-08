@@ -563,7 +563,7 @@ chrome.runtime.sendMessage(
       productInfoContainer.appendChild(novaGroupContainer);
 
       let novaGroupTitle = document.createElement("div");
-      novaGroupTitle.id = `allergies-title`;
+      novaGroupTitle.id = "allergies-title";
       novaGroupTitle.textContent = "Nova Group";
       novaGroupTitle.classList.add("grade-title");
       novaGroupContainer.appendChild(novaGroupTitle);
@@ -571,8 +571,29 @@ chrome.runtime.sendMessage(
       let novaGroup = document.createElement("div");
       novaGroup.id = "nova-group";
       novaGroup.classList.add("nova-group");
-      novaGroup.textContent = productInfo.nova_group_name;
       novaGroupContainer.appendChild(novaGroup);
+
+      let novaGroupNumberDiv = document.createElement("div"); // Corrected variable name
+      novaGroupNumberDiv.classList.add("nova-group-number-div"); // Corrected class addition
+
+      let novaGroupNumber = document.createElement("img");
+      novaGroupNumber.src = chrome.runtime.getURL(
+        `assets/food-icons/${productInfo.nova_group}.png`
+      );
+      novaGroupNumber.onerror = function () {
+        novaGroupNumber.src = chrome.runtime.getURL(
+          "assets/food-icons/no-image.png"
+        );
+      };
+      novaGroupNumber.classList.add("nova-group-number");
+      novaGroupNumberDiv.appendChild(novaGroupNumber);
+
+      novaGroup.appendChild(novaGroupNumberDiv);
+
+      let novaGroupText = document.createElement("div");
+      novaGroupText.classList.add("nova-group-text");
+      novaGroupText.textContent = productInfo.nova_group_name;
+      novaGroup.appendChild(novaGroupText);
 
       let healthContainer = document.createElement("div");
       healthContainer.id = "additives-container";
@@ -584,8 +605,6 @@ chrome.runtime.sendMessage(
       healthTitle.classList.add("grade-title");
       healthContainer.appendChild(healthTitle);
 
-      let healthDiv = document.createElement("div");
-
       if (
         !productInfo.health_risk ||
         Object.keys(productInfo.health_risk).length === 0 ||
@@ -595,11 +614,39 @@ chrome.runtime.sendMessage(
         healthDiv.classList.add("error");
         healthContainer.appendChild(healthDiv);
       } else {
-        productInfo.health_risk.ingredient_warnings.forEach((health) => {
+        let healthCounter = 0;
+        productInfo.health_risk.ingredient_warnings.forEach((health, index) => {
+          healthCounter++;
+          let healthDiv = document.createElement("div");
           healthDiv.classList.add("health");
+
+          // Initially hide health risks after the first one
+          if (index >= 1) {
+            healthDiv.classList.add("hide-health");
+          }
+
           healthDiv.innerText = health;
           healthContainer.appendChild(healthDiv);
         });
+
+        if (healthCounter > 1) {
+          let showMoreHealthDiv = document.createElement("div");
+          showMoreHealthDiv.classList.add("show-more");
+          showMoreHealthDiv.innerText = "Show More";
+          showMoreHealthDiv.addEventListener("click", () => {
+            let healthRisks = healthContainer.querySelectorAll(".health");
+            healthRisks.forEach((health, index) => {
+              if (index >= 1) {
+                health.classList.toggle("hide-health");
+              }
+            });
+            showMoreHealthDiv.innerText =
+              showMoreHealthDiv.innerText === "Show More"
+                ? "Show Less"
+                : "Show More";
+          });
+          healthContainer.appendChild(showMoreHealthDiv);
+        }
       }
 
       let recommendationTitle = document.createElement("div");
@@ -625,9 +672,9 @@ chrome.runtime.sendMessage(
 
         if (!productInfo.recommeded_product.selected_images) {
           productImage = document.createElement("img");
-          productImage.id = "product-image";
+          productImage.classList.add("no-database");
           productImage.src = chrome.runtime.getURL(
-            "assets/food-icons/no-image.png"
+            "assets/oth-icons/no-database.png"
           );
           productImageContainer.appendChild(productImage);
 

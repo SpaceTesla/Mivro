@@ -41,6 +41,7 @@ body {
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   box-shadow: 0px 4px 16px rgba(148, 156, 169, 0.15);
+  background: var(--nav-bg);
 }
 
 .mivro-icon {
@@ -75,6 +76,7 @@ body {
   font-size: 16px !important;
   border-radius: 8px;
   background-color: #8fd0ff !important;
+  cursor: pointer;
 }
 
 /* Navigation Styles */
@@ -158,11 +160,15 @@ body {
 }
 
 .nav-list li:nth-child(3).active ~ .active-bar {
-  transform: translatex(calc((var(--item-width) / 1.5) * 2 + (var(--gap) * 2) * 2));
+  transform: translatex(
+    calc((var(--item-width) / 1.5) * 2 + (var(--gap) * 2) * 2)
+  );
 }
 
 .nav-list li:nth-child(4).active ~ .active-bar {
-  transform: translatex(calc((var(--item-width) / 1.5) * 3 + (var(--gap) * 2) * 3));
+  transform: translatex(
+    calc((var(--item-width) / 1.5) * 3 + (var(--gap) * 2) * 3)
+  );
 }
 
 /* Miscellaneous */
