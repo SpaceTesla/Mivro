@@ -1,5 +1,4 @@
 import 'package:mivro/screens/home_page.dart';
-import 'package:mivro/screens/temp.dart';
 import 'package:mivro/utils/hexcolor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: theme,
-      home:  HomePage(),
+      home: const HomePage(),
     );
   }
 }

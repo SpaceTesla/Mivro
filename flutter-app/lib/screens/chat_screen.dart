@@ -44,7 +44,7 @@ class _ChatbotScreenState extends ConsumerState<ChatbotScreen> {
       log(userPrompt);
       var responseMessage =
           await ref.read(chatsProvider.notifier).getResponse(userPrompt);
-      log(responseMessage.text!);
+      log(responseMessage!.text);
       setState(() {
         ref.read(chatHistoryProvider.notifier).addMessage(responseMessage);
       });
@@ -72,7 +72,8 @@ class _ChatbotScreenState extends ConsumerState<ChatbotScreen> {
                       if (idx < messages.length) {
                         return ChatItem(message: messages[idx]);
                       } else if (isLoading) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Center(
+                            child: CircularProgressIndicator());
                       } else {
                         return const SizedBox.shrink();
                       }
@@ -102,6 +103,10 @@ class _ChatbotScreenState extends ConsumerState<ChatbotScreen> {
                       keyboardType: TextInputType.text,
                       controller: _userMessage,
                     ),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.mic),
                   ),
                   IconButton(
                     onPressed: sendPromptAndGetResponse,
