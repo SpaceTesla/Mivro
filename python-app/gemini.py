@@ -105,7 +105,7 @@ def swapr(email: str, product_data: dict) -> dict:
 
         if database_response.status_code != 200:
             # return jsonify({'error': 'Database search failed.'}), database_response.status_code
-            return jsonify({'product_name': filtered_response})
+            return {'product_name': filtered_response}
 
         return database_response.json()
     except Exception as exc:

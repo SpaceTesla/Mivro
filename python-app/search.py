@@ -7,13 +7,13 @@ from datetime import datetime
 
 # Local project-specific imports: Mapping, utilities, database, and gemini functions
 from mapping import additive_name, nova_name, grade_color, score_assessment
-from utils import filter_additive, filter_ingredient, filter_image, filter_data
+from utils import filter_additive, filter_ingredient, filter_nutriment, filter_image, filter_data
 from database import database_history, database_search
 from gemini import lumi, swapr
 
 # Blueprint for the search routes
 search_blueprint = Blueprint('search', __name__, url_prefix='/api/v1/search')
-api = openfoodfacts.API(user_agent='Mivro/2.9.6') # Initialize the Open Food Facts API client
+api = openfoodfacts.API(user_agent='Mivro/2.9.7') # Initialize the Open Food Facts API client
 
 @search_blueprint.route('/barcode', methods=['POST'])
 def barcode() -> dict:
@@ -38,9 +38,10 @@ def barcode() -> dict:
         for field in missing_fields:
             print(f'Warning: Data for "{field}" is missing.')
 
-        # Filter the additive numbers and clean the product data
+        # Filter the additive numbers, nutriments, and clean the product data
         product_data['additives_tags'] = filter_additive(product_data.get('additives_tags', []))
         filtered_product_data = filter_data(product_data)
+        filtered_product_data['nutriments'] = filter_nutriment(filtered_product_data.get('nutriments', {}))
 
         # Calculate the response time and size for the filtered product data
         end_time = datetime.now()
@@ -127,4 +128,3 @@ def database() -> dict:
         return jsonify({'error': 'Product not found.'}), 404
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
-
