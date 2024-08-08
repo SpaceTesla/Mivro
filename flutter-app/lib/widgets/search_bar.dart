@@ -16,7 +16,7 @@ class SearchBarWIdget extends StatelessWidget {
         padding: EdgeInsets.all(2.0),
         child: Row(
           children: [
-            Icon(Icons.search, color: Colors.black54),
+            Image(image: AssetImage('assets/navigation/search.png'), height: 20),
             SizedBox(width: 8.0),
             Expanded(
               child: TextField(
