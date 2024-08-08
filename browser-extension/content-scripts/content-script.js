@@ -623,80 +623,100 @@ chrome.runtime.sendMessage(
         productImageContainer.id = "product-image-container";
         recommendation.appendChild(productImageContainer);
 
-        // Product image
-        productImage = document.createElement("img");
-        productImage.id = "product-image";
-        recommendedImages = productInfo.recommeded_product.selected_images;
-        imageUrl;
+        if (!productInfo.recommeded_product.selected_images) {
+          productImage = document.createElement("img");
+          productImage.id = "product-image";
+          productImage.src = chrome.runtime.getURL(
+            "assets/food-icons/no-image.png"
+          );
+          productImageContainer.appendChild(productImage);
 
-        // Iterate through the keys of selected_images object
-        for (key in recommendedImages) {
-          if (recommendedImages.hasOwnProperty(key)) {
-            imageUrl = recommendedImages[key];
-            break;
+          // Product main info container
+          productMainInfo = document.createElement("div");
+          productMainInfo.id = "product-main-info";
+          recommendation.appendChild(productMainInfo);
+
+          // Product name
+          productName = document.createElement("div");
+          productName.id = "product-name";
+          productName.textContent = productInfo.recommeded_product.product_name;
+          productMainInfo.appendChild(productName);
+        } else {
+          // Product image
+          productImage = document.createElement("img");
+          productImage.id = "product-image";
+          newRecommendedImages = productInfo.recommeded_product.selected_images;
+          imageUrl;
+
+          // Iterate through the keys of selected_images object
+          for (key in newRecommendedImages) {
+            if (newRecommendedImages.hasOwnProperty(key)) {
+              imageUrl = newRecommendedImages[key];
+              break;
+            }
           }
+
+          productImage.src = imageUrl;
+          productImageContainer.appendChild(productImage);
+
+          // Product main info container
+          productMainInfo = document.createElement("div");
+          productMainInfo.id = "product-main-info";
+          recommendation.appendChild(productMainInfo);
+
+          // Product name
+          productName = document.createElement("div");
+          productName.id = "product-name";
+          productName.textContent = productInfo.recommeded_product.product_name;
+          productMainInfo.appendChild(productName);
+
+          // Brand name
+          brandName = document.createElement("div");
+          brandName.id = "brand-name";
+          brandName.textContent = productInfo.recommeded_product.brands;
+          productMainInfo.appendChild(brandName);
+
+          // Score container
+          scoreContainer = document.createElement("div");
+          scoreContainer.id = "score-container";
+          productMainInfo.appendChild(scoreContainer);
+
+          // Nutriscore color indicator
+          nutriscoreScoreColor =
+            productInfo.recommeded_product.nutriscore_grade_color;
+          nutriscoreColor = document.createElement("div");
+          nutriscoreColor.id = "nutriscore-color";
+          nutriscoreColor.style.backgroundColor = nutriscoreScoreColor;
+          scoreContainer.appendChild(nutriscoreColor);
+
+          // Nutriscore score container
+          nutriscoreScoreContainer = document.createElement("div");
+          nutriscoreScoreContainer.id = "nutriscore-score-container";
+          scoreContainer.appendChild(nutriscoreScoreContainer);
+
+          // Nutriscore score
+          nutriscoreScore = document.createElement("div");
+          nutriscoreScore.id = "nutriscore-score";
+          nutriscoreScore.textContent = `${productInfo.recommeded_product.nutriscore_score}/100`;
+          nutriscoreScoreContainer.appendChild(nutriscoreScore);
+
+          // Nutriscore assessment
+          nutriscoreAssessment = document.createElement("div");
+          nutriscoreAssessment.id = "nutriscore-assessment";
+          nutriscoreAssessment.textContent =
+            productInfo.recommeded_product.nutriscore_assessment;
+          nutriscoreScoreContainer.appendChild(nutriscoreAssessment);
+
+          // Nutriscore grade
+          nutriscoreGrade = document.createElement("div");
+          nutriscoreGrade.id = "nutriscore-grade";
+          nutriscoreGrade.textContent =
+            productInfo.recommeded_product.nutriscore_grade.toUpperCase();
+          nutriscoreGradeColor =
+            productInfo.recommeded_product.nutriscore_grade_color;
+          nutriscoreGrade.style.color = nutriscoreGradeColor;
+          scoreContainer.appendChild(nutriscoreGrade);
         }
-
-        productImage.src = imageUrl;
-        productImageContainer.appendChild(productImage);
-
-        // Product main info container
-        productMainInfo = document.createElement("div");
-        productMainInfo.id = "product-main-info";
-        recommendation.appendChild(productMainInfo);
-
-        // Product name
-        productName = document.createElement("div");
-        productName.id = "product-name";
-        productName.textContent = productInfo.recommeded_product.product_name;
-        productMainInfo.appendChild(productName);
-
-        // Brand name
-        brandName = document.createElement("div");
-        brandName.id = "brand-name";
-        brandName.textContent = productInfo.recommeded_product.brands;
-        productMainInfo.appendChild(brandName);
-
-        // Score container
-        scoreContainer = document.createElement("div");
-        scoreContainer.id = "score-container";
-        productMainInfo.appendChild(scoreContainer);
-
-        // Nutriscore color indicator
-        nutriscoreScoreColor =
-          productInfo.recommeded_product.nutriscore_grade_color;
-        nutriscoreColor = document.createElement("div");
-        nutriscoreColor.id = "nutriscore-color";
-        nutriscoreColor.style.backgroundColor = nutriscoreScoreColor;
-        scoreContainer.appendChild(nutriscoreColor);
-
-        // Nutriscore score container
-        nutriscoreScoreContainer = document.createElement("div");
-        nutriscoreScoreContainer.id = "nutriscore-score-container";
-        scoreContainer.appendChild(nutriscoreScoreContainer);
-
-        // Nutriscore score
-        nutriscoreScore = document.createElement("div");
-        nutriscoreScore.id = "nutriscore-score";
-        nutriscoreScore.textContent = `${productInfo.recommeded_product.nutriscore_score}/100`;
-        nutriscoreScoreContainer.appendChild(nutriscoreScore);
-
-        // Nutriscore assessment
-        nutriscoreAssessment = document.createElement("div");
-        nutriscoreAssessment.id = "nutriscore-assessment";
-        nutriscoreAssessment.textContent =
-          productInfo.recommeded_product.nutriscore_assessment;
-        nutriscoreScoreContainer.appendChild(nutriscoreAssessment);
-
-        // Nutriscore grade
-        nutriscoreGrade = document.createElement("div");
-        nutriscoreGrade.id = "nutriscore-grade";
-        nutriscoreGrade.textContent =
-          productInfo.recommeded_product.nutriscore_grade.toUpperCase();
-        nutriscoreGradeColor =
-          productInfo.recommeded_product.nutriscore_grade_color;
-        nutriscoreGrade.style.color = nutriscoreGradeColor;
-        scoreContainer.appendChild(nutriscoreGrade);
       }
     } else {
       console.error("Failed to receive product info: No response received.");
