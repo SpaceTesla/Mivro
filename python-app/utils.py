@@ -1,5 +1,9 @@
 import re
+import json
 from database import user_reference
+
+with open('metadata/food_categories.json') as file:
+    food_categories = json.load(file)
 
 # Function for filtering additive tags and removing the 'i' suffix (Used in search.py)
 def filter_additive(additive_data: list) -> list:
@@ -10,17 +14,33 @@ def filter_additive(additive_data: list) -> list:
     ]
     return additive_info
 
-# Function for filtering ingredient data and extracting the name and percentage (Used in search.py)
+# Function for filtering ingredient data and extracting the name, icon, and percentage (Used in search.py)
 def filter_ingredient(ingredient_data: list) -> list:
     ingredient_info = [
         {
             'name': ingredient.get('text', '').title(),
+            'icon': get_icon(ingredient.get('text', '').title(), food_categories),
             'percentage': f"{abs(float(ingredient.get('percent_estimate', 0))):.2f} %"
         }
         for ingredient in ingredient_data
         if ingredient.get('text') and ingredient.get('percent_estimate', 0) != 0
     ]
     return ingredient_info
+
+# Function for mapping the nutrient name to an icon (Used in search.py)
+def filter_nutriment(nutriment_data: dict) -> dict:
+    for category in ['negative_nutrient', 'positive_nutrient']:
+        if category in nutriment_data:
+            for nutrient in nutriment_data[category]:
+                nutrient['icon'] = get_icon(nutrient.get('name', ''), food_categories)
+    return nutriment_data
+
+# Function for getting the icon based on the category map
+def get_icon(name: str, category_map: dict) -> str:
+    for category, items in category_map.items():
+        if name in items:
+            return category.lower().replace(' ', '-')
+    return name.lower().replace(' ', '-')
 
 # DEPRECATED: Replaced by Gemini model for the same purpose
 # Function for analysing the nutrient data based on the nutrient limits (Used in search.py)

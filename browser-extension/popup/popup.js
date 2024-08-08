@@ -3,9 +3,8 @@ const containers = document.querySelectorAll(".container");
 
 list.forEach((item, index) => {
   item.addEventListener("click", function (e) {
-    // Remove active class from all list items
+    // Remove active class from all list items and add it to the clicked list item
     list.forEach((li) => li.classList.remove("active"));
-    // Add active class to the clicked list item
     e.currentTarget.classList.add("active");
 
     // Add grey class to all li > a > img elements
@@ -22,9 +21,8 @@ list.forEach((item, index) => {
       clickedImg.classList.remove("grey");
     }
 
-    // Hide all containers
+    // Hide all containers and show the selected one
     containers.forEach((container) => container.classList.add("hidden"));
-    // Show the corresponding container
     containers[index].classList.remove("hidden");
   });
 });
