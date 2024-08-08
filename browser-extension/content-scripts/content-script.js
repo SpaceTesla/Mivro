@@ -408,9 +408,16 @@ chrome.runtime.sendMessage(
             nutrientDiv.appendChild(leftDiv);
 
             let nutrientIcon = document.createElement("img");
+
             nutrientIcon.src = chrome.runtime.getURL(
-              "assets/food-icons/no-image.png"
+              `assets/food-icons/${nutrient.icon}.png`
             );
+            nutrientIcon.onerror = function () {
+              nutrientIcon.src = chrome.runtime.getURL(
+                "assets/food-icons/no-image.png"
+              );
+            };
+
             nutrientIcon.classList.add("nutrient-icon");
             leftDiv.appendChild(nutrientIcon);
 
@@ -437,12 +444,10 @@ chrome.runtime.sendMessage(
             quantityDiv.classList.add("nutrient-quantity");
             rightDiv.appendChild(quantityDiv);
 
-            if (!isIngredient) {
-              let colorDiv = document.createElement("div");
-              colorDiv.style.backgroundColor = nutrient.color;
-              colorDiv.classList.add("nutrient-color");
-              rightDiv.appendChild(colorDiv);
-            }
+            let colorDiv = document.createElement("div");
+            colorDiv.style.backgroundColor = nutrient.color;
+            colorDiv.classList.add("nutrient-color");
+            rightDiv.appendChild(colorDiv);
           });
 
           if (nutrientCounter > 3) {
@@ -505,8 +510,13 @@ chrome.runtime.sendMessage(
 
           let ingredientIcon = document.createElement("img");
           ingredientIcon.src = chrome.runtime.getURL(
-            "assets/food-icons/no-image.png"
+            `assets/food-icons/${ingredient.icon}.png`
           );
+          ingredientIcon.onerror = function () {
+            ingredientIcon.src = chrome.runtime.getURL(
+              "assets/food-icons/no-image.png"
+            );
+          };
           ingredientIcon.classList.add("ingredient-icon");
           ingredientIconDiv.appendChild(ingredientIcon);
 

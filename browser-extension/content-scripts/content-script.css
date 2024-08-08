@@ -192,6 +192,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  min-width: 32px;
   gap: 4px;
 }
 
@@ -220,6 +221,7 @@
   display: flex;
   justify-content: end;
   align-items: center;
+  min-width: 92px;
   gap: 8px;
 }
 
@@ -227,10 +229,11 @@
   font-size: medium;
   color: #666666;
   padding: 1px;
+  text-align: right;
 }
 
 .nutrient-color {
-  width: 20px;
+  min-width: 20px;
   height: 20px;
   border-radius: 50%;
 }
@@ -260,6 +263,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  min-width: 32px;
+  gap: 4px;
 }
 
 .ingredient-icon-div img {
@@ -274,7 +279,7 @@
 }
 
 .ingredient-quantity {
-  width: 60px;
+  min-width: 68px;
   text-align: right;
   align-content: center;
 }

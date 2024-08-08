@@ -1,160 +1,100 @@
 {
-    "Ammonium": [
-        "Ammonium Carbonate"
-    ],
-    "Artificial-Flavours": [
-        "Acidity Regulator",
-        "Acidity Regulators",
-        "Artificial",
-        "Artificial Colors",
-        "Artificial Flavouring Sugar",
-        "Colour",
-        "Contains Added Flavours",
-        "Flavour Enhancer",
-        "Flavouring",
-        "Flavouring Substance",
-        "Natural Colour",
-        "Natural Flavors",
-        "Nature-Identical Flavouring Substance",
-        "Preservative",
-        "Preservatives",
-        "Used As Natural Flavouring Agent"
-    ],
-    "Calcium": [
-        "Calcium Carbonate",
-        "Calcium Pantothenate"
-    ],
-    "Caffeine": [
-        "Contains Caffeine",
-        "Instant Coffee Chicory Mixture"
-    ],
-    "Carbohydrates": [
-        "Carbohydrate"
-    ],
-    "Cocoa": [
-        "Cocoa Butter",
-        "Cocoa Mass",
-        "Cocoa Solids",
-        "Low-Fat Cocoa"
-    ],
-    "Corn": [
-        "Corn Grits",
-        "Corn Meal",
-        "Corn Starch"
-    ],
-    "Cream": [
-        "Choco Crème"
-    ],
-    "Dal": [
-        "Urad Dal"
-    ],
-    "Emulsifiers": [
-        "Emulsifier",
-        "Emulsifier Of Vegetable"
-    ],
-    "Energy": [
-        "Calories"
-    ],
-    "Fat": [
-        "Fractionated Vegetable Fat",
-        "Hydrogenated Vegetable Fats",
-        "Saturated Fat",
-        "Total Fat Sodium",
-        "Trans Fat"
-    ],
-    "Fiber": [
-        "Fibre"
-    ],
-    "Magnesium": [
-        "Magnesium Carbonate"
-    ],
-    "Masala": [
-        "Masala Testemaker"
-    ],
-    "Milk": [
-        "Milk Products",
-        "Milk Solids"
-    ],
-    "Minerals": [
-        "Mineral"
-    ],
-    "No-Image": [
-        "Ammonium Carbonate Sodium Carbonate",
-        "Dextrose",
-        "Gram Meal",
-        "Mung Bean",
-        "N Humectant",
-        "Niacinamide",
-        "Pantothenic Acid",
-        "Pyridoxine Hci",
-        "Raising Agents",
-        "Thickener",
-        "Thio Ners",
-        "Unknown"
-    ],
-    "Nuts": [
-        "Cashew Nuts"
-    ],
-    "Oil": [
-        "Hydrogenated Vegetable Oil",
-        "Rapeseed Oil"
-    ],
-    "Palm-Oil": [
-        "Edible Palm Vegetable Oil",
-        "Vegetable Oil Palm Oil"
-    ],
-    "Protein": [
-        "Proteins"
-    ],
-    "Rice": [
-        "Rice Meal"
-    ],
-    "Salt": [
-        "Common Salt",
-        "Edible Common Salt",
-        "Fenugreek And Lodized Salt",
-        "Iodised Salt",
-        "Table Salt"
-    ],
-    "Spices": [
-        "Mixed Spices"
-    ],
-    "Sodium": [
-        "Sodium Bicarbonate",
-        "Sodium Carbonate"
-    ],
-    "Sugars": [
-        "Added Sugar",
-        "Added Sugars",
-        "Sugar"
-    ],
-    "Syrup": [
-        "Glucose-Fructose Syrup",
-        "Invert Syrup",
-        "Refined Palm Oil Vert Sugar Syrup"
-    ],
-    "Vitamin": [
-        "Vitamin A",
-        "Vitamin B",
-        "Vitamin B1",
-        "Vitamin B12",
-        "Vitamin B6",
-        "Vitamin C",
-        "Vitamin D",
-        "Vitamin D2",
-        "Vitamin E",
-        "Vitamin PP",
-        "Vitamins"
-    ],
-    "Water": [
-        "Carbonated Water"
-    ],
-    "Wheat-Flour": [
-        "Flour Treatment Agent",
-        "Refined Wheat Flour",
-        "Refined Wheat Flour Maidal",
-        "Wheat",
-        "Wheat Gluten",
-        "Wheat Starch"
-    ]
+  "Ammonium": ["Ammonium Carbonate"],
+  "Artificial-Flavours": [
+    "Acidity Regulator",
+    "Acidity Regulators",
+    "Artificial",
+    "Artificial Colors",
+    "Artificial Flavouring Sugar",
+    "Colour",
+    "Contains Added Flavours",
+    "Flavour Enhancer",
+    "Flavouring",
+    "Flavouring Substance",
+    "Natural Colour",
+    "Natural Flavors",
+    "Nature-Identical Flavouring Substance",
+    "Preservative",
+    "Preservatives",
+    "Used As Natural Flavouring Agent"
+  ],
+  "Calcium": ["Calcium Carbonate", "Calcium Pantothenate"],
+  "Caffeine": ["Contains Caffeine", "Instant Coffee Chicory Mixture"],
+  "Carbohydrates": ["Carbohydrate"],
+  "Cocoa": ["Cocoa Butter", "Cocoa Mass", "Cocoa Solids", "Low-Fat Cocoa"],
+  "Corn": ["Corn Grits", "Corn Meal", "Corn Starch"],
+  "Cream": ["Choco CrÃ¨me"],
+  "Dal": ["Urad Dal"],
+  "Emulsifiers": ["Emulsifier", "Emulsifier Of Vegetable"],
+  "Energy": ["Calories"],
+  "Fat": [
+    "Fractionated Vegetable Fat",
+    "Hydrogenated Vegetable Fats",
+    "Saturated Fat",
+    "Total Fat Sodium",
+    "Trans Fat"
+  ],
+  "Fiber": ["Fibre"],
+  "Magnesium": ["Magnesium Carbonate"],
+  "Masala": ["Masala Testemaker"],
+  "Milk": ["Milk Products", "Milk Solids"],
+  "Minerals": ["Mineral"],
+  "No-Image": [
+    "Ammonium Carbonate Sodium Carbonate",
+    "Dextrose",
+    "Gram Meal",
+    "Mung Bean",
+    "N Humectant",
+    "Niacinamide",
+    "Pantothenic Acid",
+    "Pyridoxine Hci",
+    "Raising Agents",
+    "Thickener",
+    "Thio Ners",
+    "Unknown"
+  ],
+  "Nuts": ["Cashew Nuts"],
+  "Oil": ["Hydrogenated Vegetable Oil", "Rapeseed Oil"],
+  "Palm-Oil": ["Edible Palm Vegetable Oil", "Vegetable Oil Palm Oil"],
+  "Proteins": ["Protein"],
+  "Rice": ["Rice Meal"],
+  "Salt": [
+    "Common Salt",
+    "Edible Common Salt",
+    "Fenugreek And Lodized Salt",
+    "Iodised Salt",
+    "Table Salt"
+  ],
+  "Sauces": ["Soy Sauce"],
+  "Spices": ["Mixed Spices"],
+  "Sodium": ["Sodium Bicarbonate", "Sodium Carbonate"],
+  "Sugars": ["Added Sugar", "Added Sugars", "Sugar"],
+  "Syrup": [
+    "Glucose-Fructose Syrup",
+    "Invert Syrup",
+    "Refined Palm Oil Vert Sugar Syrup"
+  ],
+  "Vitamin": [
+    "Vitamin A",
+    "Vitamin B",
+    "Vitamin B1",
+    "Vitamin B12",
+    "Vitamin B6",
+    "Vitamin C",
+    "Vitamin D",
+    "Vitamin D2",
+    "Vitamin E",
+    "Vitamin PP",
+    "Vitamins"
+  ],
+  "Water": ["Carbonated Water"],
+  "Wheat-Flour": [
+    "Flour Treatment Agent",
+    "Refined Wheat Flour",
+    "Refined Wheat Flour Maida",
+    "Refined Wheat Flor Maidal",
+    "Wheat",
+    "Wheat Gluten",
+    "Wheat Starch"
+  ]
 }
