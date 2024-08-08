@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
             items: [
               BottomNavigationBarItem(
                 icon: const Image(
-                  image: AssetImage('assets/icons/speech-bubble.png'),
+                  image: AssetImage('assets/navigation/chat.png'),
                   height: 35,
                 ),
                 label: 'Chat',
@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
               ),
               BottomNavigationBarItem(
                 icon: const Image(
-                  image: AssetImage('assets/icons/collection.png'),
+                  image: AssetImage('assets/navigation/marketplace.png'),
                   height: 35,
                 ),
                 label: 'Marketplace',
@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
               ),
               BottomNavigationBarItem(
                 icon: const Image(
-                  image: AssetImage('assets/icons/barcode-scan.png'),
+                  image: AssetImage('assets/navigation/scanner.png'),
                   height: 35,
                 ),
                 label: 'Scanner',
@@ -75,15 +75,15 @@ class _HomePageState extends State<HomePage> {
               ),
               BottomNavigationBarItem(
                 icon: const Image(
-                  image: AssetImage('assets/icons/time.png'),
+                  image: AssetImage('assets/navigation/tracker.png'),
                   height: 35,
                 ),
-                label: 'Overview',
+                label: 'Tracker',
                 backgroundColor: myColorFromHex("#EEF1FF"),
               ),
               BottomNavigationBarItem(
                 icon: const Image(
-                  image: AssetImage('assets/icons/user.png'),
+                  image: AssetImage('assets/navigation/profile.png'),
                   height: 35,
                 ),
                 label: 'Profile',
