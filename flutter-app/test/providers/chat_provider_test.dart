@@ -6,7 +6,8 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
-@GenerateMocks([], customMocks: [MockSpec<GenerativeModel>(as: #MockGenerativeModel)])
+@GenerateMocks([],
+    customMocks: [MockSpec<GenerativeModel>(as: #MockGenerativeModel)])
 void main() {
   var geminiApiKey = '';
 
@@ -27,7 +28,7 @@ void main() {
 
       final chats = container.read(chatsProvider);
       expect(chats, [Message(text: 'Response text', isUser: false)]);
-      expect(response.text, 'Response text');
+      expect(response?.text, 'Response text');
     });
 
     test('getResponse sets isLoading to true while fetching', () async {
@@ -49,7 +50,7 @@ void main() {
 
       final chats = container.read(chatsProvider);
       expect(chats, [Message(text: '', isUser: false)]);
-      expect(response.text, '');
+      expect(response?.text, '');
     });
   });
 }
