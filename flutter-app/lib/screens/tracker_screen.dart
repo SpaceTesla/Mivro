@@ -2,14 +2,16 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-class MarketplaceScreen extends StatefulWidget {
-  const MarketplaceScreen({Key? key}) : super(key: key);
+class OverviewScreen extends StatefulWidget {
+  const OverviewScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() => _MarketplaceScreen();
+  State<StatefulWidget> createState() {
+    return _OverviewScreenState();
+  }
 }
 
-class _MarketplaceScreen extends State<MarketplaceScreen> {
+class _OverviewScreenState extends State<OverviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
