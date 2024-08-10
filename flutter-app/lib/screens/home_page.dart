@@ -1,7 +1,7 @@
 import 'package:mivro/screens/barcode_scanner_screen.dart';
 import 'package:mivro/screens/chat_screen.dart';
 import 'package:mivro/screens/marketplace_screen.dart';
-import 'package:mivro/screens/overview_screen.dart';
+import 'package:mivro/screens/tracker_screen.dart';
 import 'package:mivro/screens/profile_screen.dart';
 import 'package:mivro/utils/hexcolor.dart';
 import 'package:flutter/material.dart';
