@@ -33,7 +33,6 @@ def database_history(email: str, product_barcode: str, product_data: dict) -> No
 
         print(f'[Database] Scan history for "{product_barcode}" stored.')
     except Exception as exc:
-        # print(f'Firestore storage error:\n {exc}')
         return {'error': 'Firestore storage error: ' + str(exc)}, 500
 
 def database_search(email: str, product_keyword: str, search_keys: list) -> dict:
@@ -63,10 +62,9 @@ def database_search(email: str, product_keyword: str, search_keys: list) -> dict
         print(f'[Database] Found {len(scan_results)} document(s) for "{product_keyword}".')
         return scan_results[0] if scan_results else None # Return the first search result found (if any)
     except Exception as exc:
-        # print(f'Database search error:\n {exc}')
         return {'error': 'Database search error: ' + str(exc)}, 500
 
-def register_user(email: str, password: str) -> dict:
+def register_user_profile(email: str, password: str) -> dict:
     try:
         # Check if the user document already exists in Firestore
         user_document = user_reference.document(email)
@@ -83,10 +81,12 @@ def register_user(email: str, password: str) -> dict:
         user_document.set({
             'account_info': account_info.to_dict()
         })
+
+        # return {'message': 'Account created successfully.'}
     except Exception as exc:
         return {'error': 'Firestore registration error: ' + str(exc)}, 500
 
-def validate_user(email: str, password: str) -> dict:
+def validate_user_profile(email: str, password: str) -> dict:
     try:
         # Check if the user document exists in Firestore
         user_document = user_reference.document(email)
@@ -102,13 +102,30 @@ def validate_user(email: str, password: str) -> dict:
     except Exception as exc:
         return {'error': 'Firestore validation error: ' + str(exc)}, 500
 
-def remove_user(email: str) -> dict:
+def remove_user_profile(email: str) -> dict:
     try:
         # Check if the user document exists in Firestore
         user_document = user_reference.document(email)
         if user_document.get().exists:
             user_document.delete() # Delete the user document from Firestore
+            return {'message': 'Account deleted successfully.'}
         else:
             return {'error': 'User document does not exist.'}, 404
     except Exception as exc:
         return {'error': 'Firestore deletion error: ' + str(exc)}, 500
+
+def save_health_profile(email: str, profile_data: dict) -> dict:
+    try:
+        # Check if the user document exists in Firestore
+        user_document = user_reference.document(email)
+        if not user_document.get().exists:
+            return {'error': 'User does not exist.'}, 404
+
+        # Set or update the health profile in Firestore
+        user_document.set({
+            'health_profile': profile_data
+        }, merge=True)  # Merge the health profile with the existing user document (if any)
+
+        return {'message': 'Health profile saved successfully.'}
+    except Exception as exc:
+        return {'error': 'Firestore storage error: ' + str(exc)}, 500
