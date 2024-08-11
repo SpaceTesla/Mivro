@@ -84,7 +84,7 @@ body {
   position: fixed;
   bottom: 60px;
   width: calc(100% - 12px); /* Adjust width to account for padding and margin */
-  padding: 4px 8px;
+  padding: 4px;
   margin: 0 4px 4px 4px;
   background: var(--white);
   box-sizing: border-box;
@@ -111,12 +111,30 @@ body {
   outline: none;
 }
 
-.input-container .send {
+.input-container .icon-div {
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
 }
 
-.input-container .send img {
-  max-height: 32px;
+.icon-div img {
+  width: 32px;
+  height: 32px;
+  opacity: 0.75;
+  margin: 2px;
+  border-radius: 50%;
+}
+
+.icon-div img:hover {
+  opacity: 1;
+}
+
+.icon-div img:active {
+  transform: scale(0.9);
 }
 
 .message {
