@@ -14,15 +14,25 @@
       <img class="mivro-icon" src="../assets/oth-icons/mivro.svg" alt="mivro" />
     </div>
 
-    <div class="main">
-      <!-- Main content sections -->
-      <div class="chat container hidden">Chat</div>
-      <div class="marketplace container hidden">Marketplace</div>
-      <div class="search container hidden">Search</div>
-      <div class="profile container">
-        <div class="signed-out">You are not signed in!</div>
-        <button class="sign-in">Sign In</button>
+    <!-- Main content sections -->
+    <div class="chat container hidden">
+      <div class="chat-header">Ask Savora, Any Recipe...</div>
+      <div class="input-container">
+        <textarea
+          class="inp"
+          placeholder="Ask Savora a question..."
+          rows="1"
+        ></textarea>
+        <div class="send">
+          <img src="../assets/oth-icons/send.png" alt="send" srcset="" />
+        </div>
       </div>
+    </div>
+    <div class="marketplace container hidden">Marketplace</div>
+    <div class="search container hidden">Search</div>
+    <div class="profile container">
+      <div class="signed-out">You are not signed in!</div>
+      <button class="sign-in">Sign In</button>
     </div>
 
     <!-- Navigation bar -->
@@ -64,6 +74,6 @@
       </ul>
     </nav>
 
-    <script src="popup.js"></script>
+    <script type="module" src="popup.js"></script>
   </body>
 </html>

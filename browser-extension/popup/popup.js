@@ -1,28 +1,38 @@
-const list = document.querySelectorAll(".nav-list li");
-const containers = document.querySelectorAll(".container");
+import { initializeNavigation } from "./utils/navigation.js";
+import { getSavoraResponse, renderMessage, sendHandler } from "./utils/chat.js";
+import { initializeTextarea, resetTextarea } from "./utils/textareaHandler.js";
 
-list.forEach((item, index) => {
-  item.addEventListener("click", function (e) {
-    // Remove active class from all list items and add it to the clicked list item
-    list.forEach((li) => li.classList.remove("active"));
-    e.currentTarget.classList.add("active");
+const chatDiv = document.querySelector(".chat");
+const sendButton = document.querySelector(".send");
+const inputElement = document.querySelector(".inp");
+const chatHeader = document.querySelector(".chat-header");
 
-    // Add grey class to all li > a > img elements
-    list.forEach((li) => {
-      const img = li.querySelector("a > img");
-      if (img) {
-        img.classList.add("grey");
-      }
-    });
-
-    // Remove grey class from the img element inside the clicked li > a
-    const clickedImg = e.currentTarget.querySelector("a > img");
-    if (clickedImg) {
-      clickedImg.classList.remove("grey");
-    }
-
-    // Hide all containers and show the selected one
-    containers.forEach((container) => container.classList.add("hidden"));
-    containers[index].classList.remove("hidden");
-  });
+sendButton.addEventListener("click", () => {
+  if (!chatHeader.classList.contains("hide")) {
+    chatHeader.classList.add("hide");
+  }
+  handleSend(inputElement, chatDiv);
 });
+inputElement.addEventListener("keyup", (event) => {
+  if (!chatHeader.classList.contains("hide")) {
+    chatHeader.classList.add("hide");
+  }
+  if (event.key === "Enter" && !event.shiftKey) {
+    handleSend(inputElement, chatDiv);
+  }
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+  initializeNavigation();
+});
+
+const textarea = document.querySelector(".input-container textarea");
+const maxRows = 3;
+const lineHeight = 20; // Line height in pixels (must match the CSS line-height)
+
+initializeTextarea(textarea, maxRows, lineHeight, handleSend, chatDiv);
+
+function handleSend(inputElement, chatDiv) {
+  sendHandler(inputElement, chatDiv);
+  resetTextarea(textarea);
+}

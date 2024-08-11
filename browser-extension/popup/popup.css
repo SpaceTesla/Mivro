@@ -8,6 +8,8 @@
   --white: #fff;
   --gap: 0.5rem;
   --item-width: 5.25rem;
+  --sage: #7c8e76;
+  --mivro-blue: #8fd0ff;
 }
 
 /* Global Styles */
@@ -49,19 +51,89 @@ body {
 }
 
 /* Main Content Styles */
-.main {
+.container {
   flex-grow: 1;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  overflow: hidden; /* Prevent scrolling on the main container */
 }
 
-/* Chat Styles */
+/* Chat */
 .chat {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-bottom: 48px;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
+.chat::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.chat-header {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 8px;
+  font-size: large;
+  flex-grow: 1;
+}
+
+.input-container {
+  position: fixed;
+  bottom: 60px;
+  width: calc(100% - 12px); /* Adjust width to account for padding and margin */
+  padding: 4px 8px;
+  margin: 0 4px 4px 4px;
+  background: var(--white);
+  box-sizing: border-box;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0px 4px 16px rgba(148, 156, 169, 0.15);
+}
+
+.input-container textarea {
+  flex-grow: 1;
+  border: none;
+  padding: 0 4px 0 8px;
+  background: var(--white);
+  border-radius: 20px;
+  font-family: "Mulish", sans-serif;
+  overflow-y: hidden; /* Hide vertical scrollbar */
+  resize: none; /* Prevent manual resizing */
+  line-height: 20px; /* Set line height in pixels */
+  font-size: 14px;
+}
+
+.input-container textarea:focus {
+  outline: none;
+}
+
+.input-container .send {
+  cursor: pointer;
+}
+
+.input-container .send img {
+  max-height: 32px;
+}
+
+.message {
+  margin: 4px 0;
+  padding: 8px 16px;
+  border: #f8f8ff 1px solid;
+  border-radius: 16px;
+  background: var(--white);
+  overflow-wrap: break-word;
+}
+
+.message-user {
+  font-size: 12px;
+  align-self: flex-end;
+  width: fit-content;
+  max-width: 70%;
+  background: var(--mivro-blue);
 }
 
 /* Button and Text Styles */
@@ -75,7 +147,7 @@ body {
   width: 100%;
   font-size: 16px !important;
   border-radius: 8px;
-  background-color: #8fd0ff !important;
+  background-color: var(--mivro-blue) !important;
   cursor: pointer;
 }
 
@@ -179,4 +251,8 @@ body {
 
 .grey {
   opacity: 0.5;
+}
+
+.hide {
+  display: none;
 }
