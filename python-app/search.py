@@ -13,7 +13,7 @@ from gemini import lumi, swapr
 
 # Blueprint for the search routes
 search_blueprint = Blueprint('search', __name__, url_prefix='/api/v1/search')
-api = openfoodfacts.API(user_agent='Mivro/2.9.7') # Initialize the Open Food Facts API client
+api = openfoodfacts.API(user_agent='Mivro/2.9.8') # Initialize the Open Food Facts API client
 
 @search_blueprint.route('/barcode', methods=['POST'])
 def barcode() -> dict:
@@ -77,12 +77,12 @@ def barcode() -> dict:
 # @search_blueprint.route('/text', methods=['POST'])
 # def text() -> dict:
 #     try:
+#         email = request.form.get('email')
 #         product_name = request.form.get('product_name')
 #         if not product_name:
-#             return jsonify({'error': 'Product name is required.'}), 400
+#             return jsonify({'error': 'Email and product name are required.'}), 400
 
 #         product_data = api.product.text_search(product_name)
-
 #         if not product_data:
 #             return jsonify({'error': 'Product not found.'}), 404
 

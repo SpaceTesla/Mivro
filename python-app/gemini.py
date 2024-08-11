@@ -73,12 +73,10 @@ def lumi(product_data: dict) -> dict:
     try:
         # Get the user's health profile based on their email
         email = request.json.get('email')
-
         if not email or not product_data:
             return jsonify({'error': 'Email and product data are required.'}), 400
 
-        health_profile = user_profile(email)
-
+        health_profile = user_profile(email) # Retrieve the user's health profile from Firestore (if any)
         # Send the user's health profile and product data to the Gemini model
         user_message = f'Health Profile: {health_profile}\nProduct Data: {product_data}'
         bot_response = lumi_chat_session.send_message(user_message)
@@ -117,12 +115,10 @@ def savora() -> dict:
         # Get the user's email and message to send to the Gemini model
         email = request.json.get('email')
         user_message = request.json.get('message')
-
         if not email or not user_message:
             return jsonify({'error': 'Email and message are required.'}), 400
 
         bot_response = savora_chat_session.send_message(user_message)
-
         # Store the chat history for the user's email in Firestore
         chat_entry = ChatHistory(user_message=user_message, bot_response=bot_response.text)
         chat_history(email, chat_entry)

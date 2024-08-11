@@ -40,3 +40,10 @@ def score_assessment(nutriscore_score) -> str:
         return 'poor'
     else:
         return 'very poor'
+
+# Function for getting the icon based on the category map (Used in utils.py)
+def food_icon(name: str, category_map: dict) -> str:
+    for category, items in category_map.items():
+        if name in items:
+            return category.lower().replace(' ', '-')
+    return name.lower().replace(' ', '-')
