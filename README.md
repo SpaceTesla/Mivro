@@ -41,7 +41,7 @@ Additionally, the app includes a Recipe Chatbot for personalized recipe recommen
 
 ## Getting Started
 
-Follow these steps to set up and run the Mivro software on your local machine, or you can watch the [demo video](https://youtube.com/watch?v=sWd4kOQU9as).
+Follow these steps to set up and run the Mivro software on your local machine, or you can watch the [demo video](https://youtube.com/watch?v=ToXUq-NSkUg).
 
 ### Prerequisites
 
