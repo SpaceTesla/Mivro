@@ -143,7 +143,8 @@ body {
 
 .active-bar {
   position: absolute;
-  top: -0.5rem;
+  bottom: 0; /* Adjusted to bottom */
+  left: 0;
   min-width: calc(var(--item-width) / 1.5);
   height: 0.25rem;
   background: var(--primary);
@@ -152,21 +153,21 @@ body {
 }
 
 .nav-list li:nth-child(1).active ~ .active-bar {
-  transform: translatex(0);
+  transform: translateX(0);
 }
 
 .nav-list li:nth-child(2).active ~ .active-bar {
-  transform: translatex(calc((var(--item-width) / 1.5) + (var(--gap) * 2)));
+  transform: translateX(calc((var(--item-width) / 1.5) + (var(--gap) * 2)));
 }
 
 .nav-list li:nth-child(3).active ~ .active-bar {
-  transform: translatex(
+  transform: translateX(
     calc((var(--item-width) / 1.5) * 2 + (var(--gap) * 2) * 2)
   );
 }
 
 .nav-list li:nth-child(4).active ~ .active-bar {
-  transform: translatex(
+  transform: translateX(
     calc((var(--item-width) / 1.5) * 3 + (var(--gap) * 2) * 3)
   );
 }
