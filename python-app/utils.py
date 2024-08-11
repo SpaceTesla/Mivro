@@ -1,6 +1,8 @@
 import re
 import json
+
 from database import user_reference
+from mapping import food_icon
 
 with open('metadata/food_categories.json') as file:
     food_categories = json.load(file)
@@ -19,7 +21,7 @@ def filter_ingredient(ingredient_data: list) -> list:
     ingredient_info = [
         {
             'name': ingredient.get('text', '').title(),
-            'icon': get_icon(ingredient.get('text', '').title(), food_categories),
+            'icon': food_icon(ingredient.get('text', '').title(), food_categories),
             'percentage': f"{abs(float(ingredient.get('percent_estimate', 0))):.2f} %"
         }
         for ingredient in ingredient_data
@@ -32,15 +34,8 @@ def filter_nutriment(nutriment_data: dict) -> dict:
     for category in ['negative_nutrient', 'positive_nutrient']:
         if category in nutriment_data:
             for nutrient in nutriment_data[category]:
-                nutrient['icon'] = get_icon(nutrient.get('name', ''), food_categories)
+                nutrient['icon'] = food_icon(nutrient.get('name', ''), food_categories)
     return nutriment_data
-
-# Function for getting the icon based on the category map
-def get_icon(name: str, category_map: dict) -> str:
-    for category, items in category_map.items():
-        if name in items:
-            return category.lower().replace(' ', '-')
-    return name.lower().replace(' ', '-')
 
 # DEPRECATED: Replaced by Gemini model for the same purpose
 # Function for analysing the nutrient data based on the nutrient limits (Used in search.py)
