@@ -47,7 +47,8 @@ export async function sendHandler(inputElement, chatDiv) {
   const message = inputElement.value.trim();
 
   if (!message) {
-    return;
+    console.log("No message to send");
+    return false;
   }
 
   inputElement.value = "";
@@ -56,7 +57,9 @@ export async function sendHandler(inputElement, chatDiv) {
   try {
     const response = await getSavoraResponse(message);
     renderMessage(response, chatDiv, false);
+    return true;
   } catch (error) {
     console.error("Error getting Savora response:", error);
+    return false;
   }
 }

@@ -144,12 +144,12 @@ body {
   border-radius: 16px;
   background: var(--white);
   overflow-wrap: break-word;
+  width: fit-content;
 }
 
 .message-user {
   font-size: 12px;
   align-self: flex-end;
-  width: fit-content;
   max-width: 70%;
   background: var(--mivro-blue);
 }
