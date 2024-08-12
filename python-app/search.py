@@ -23,7 +23,6 @@ def barcode() -> dict:
         # Get the email and product barcode values from the incoming JSON data
         email = request.json.get('email')
         product_barcode = request.json.get('product_barcode')
-
         if not email or not product_barcode:
             return jsonify({'error': 'Email and product barcode are required.'}), 400
 
@@ -85,7 +84,7 @@ def barcode() -> dict:
 #     try:
 #         email = request.form.get('email')
 #         product_name = request.form.get('product_name')
-#         if not product_name:
+#         if not email or not product_name:
 #             return jsonify({'error': 'Email and product name are required.'}), 400
 
 #         product_data = api.product.text_search(product_name)
@@ -104,14 +103,13 @@ def database() -> dict:
         # Get the email and product keyword values from the incoming JSON data
         email = request.json.get('email')
         product_keyword = request.json.get('product_keyword')
-
         if not email or not product_keyword:
             return jsonify({'error': 'Email and product keyword are required.'}), 400
 
         search_keys = ['_keywords', 'brands', 'categories', 'product_name'] # Define the search keys for the database search
-
         # Split the product keyword into individual words and search the database for each word
         tokenized_keywords = product_keyword.split()
+
         for keyword in tokenized_keywords:
             product_data = database_search(email, keyword, search_keys)
             # Check if the product data is found in the database and return the response
