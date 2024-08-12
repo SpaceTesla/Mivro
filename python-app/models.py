@@ -31,7 +31,7 @@ class AccountInfo:
 class HealthProfile:
     def __init__(self, age: int = None, gender: str = None, height: float = None, weight: float = None, body_mass_index: float = None,
                  allergies: list = None, dietary_preferences: list = None, medical_conditions: list = None):
-        from utils import calculate_bmi # Importing here to avoid circular import
+        from utils import calculate_bmi # Importing here to avoid circular import error
 
         self.age = age
         self.gender = gender
