@@ -5,7 +5,7 @@ from flask_cors import CORS
 # Local project-specific imports: Configuration and blueprints
 from config import FLASK_SECRET_KEY
 from search import search_blueprint
-from authentication import auth_blueprint
+from auth import auth_blueprint
 from gemini import ai_blueprint
 
 app = Flask(__name__) # Initialize Flask application instance

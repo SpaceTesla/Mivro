@@ -2,7 +2,7 @@
 import requests
 import google.generativeai as genai
 from google.generativeai import GenerativeModel
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, Response, request, jsonify
 
 # Local project-specific imports: Configuration, models, and utilities
 from config import GEMINI_API_KEY
@@ -69,7 +69,7 @@ swapr_chat_session = swapr_llm.start_chat(history=[])
 savora_chat_session = savora_llm.start_chat(history=[])
 
 @ai_blueprint.route('/lumi', methods=['POST'])
-def lumi(product_data: dict) -> dict:
+def lumi(product_data: dict) -> Response:
     try:
         # Get the user's health profile based on their email
         email = request.json.get('email')
@@ -88,7 +88,7 @@ def lumi(product_data: dict) -> dict:
         return jsonify({'error': str(exc)}), 500
 
 @ai_blueprint.route('/swapr', methods=['POST'])
-def swapr(email: str, product_data: dict) -> dict:
+def swapr(email: str, product_data: dict) -> Response:
     try:
         # Send the product data to the Gemini model
         user_message = f'Product Data: {product_data}'
@@ -110,7 +110,7 @@ def swapr(email: str, product_data: dict) -> dict:
         return jsonify({'error': str(exc)}), 500
 
 @ai_blueprint.route('/savora', methods=['POST'])
-def savora() -> dict:
+def savora() -> Response:
     try:
         # Get the user's email and message to send to the Gemini model
         email = request.json.get('email')

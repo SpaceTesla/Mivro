@@ -1,8 +1,13 @@
+# Core library imports: Regular expressions and JSON parsing
 import re
 import json
 
+# Local project-specific imports: Database and mapping functions
 from database import user_reference
 from mapping import food_icon
+
+# with open('metadata/nutrient_limits.json') as file:
+#     nutrient_limits = json.load(file)
 
 with open('metadata/food_categories.json') as file:
     food_categories = json.load(file)
@@ -43,7 +48,7 @@ def analyse_nutrient(nutrient_data: dict, nutrient_limits: dict) -> dict:
     positive_nutrients = {}
     negative_nutrients = {}
 
-    nutrient_items = {
+    nutrient_map = {
         nutrient: {
             'name': nutrient.title(),
             'quantity': f"{abs(float(nutrient_data.get(f'{nutrient}_100g', 0))):.2f} {value['unit']}"
@@ -53,7 +58,7 @@ def analyse_nutrient(nutrient_data: dict, nutrient_limits: dict) -> dict:
     }
 
     # Check if the nutrient quantity is within the recommended limits
-    for nutrient, value in nutrient_items.items():
+    for nutrient, value in nutrient_map.items():
         lower_limit = nutrient_limits[nutrient]['lower_limit']
         upper_limit = nutrient_limits[nutrient]['upper_limit']
 
@@ -99,8 +104,10 @@ def user_profile(email: str) -> dict:
 # Function for storing the chat history in Firestore (Used in gemini.py)
 def chat_history(email: str, chat_entry: dict) -> None:
     user_document = user_reference.document(email)
-    chat_history = user_document.get().to_dict().get('chat_history', [])
+    # if not user_document.get().exists:
+    #     return {'error': 'User does not exist.'}, 404
 
+    chat_history = user_document.get().to_dict().get('chat_history', [])
     chat_history.append(chat_entry.to_dict())
     user_document.set({
         'chat_history': chat_history

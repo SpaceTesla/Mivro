@@ -1,6 +1,6 @@
 # Core library imports: Firebase Admin SDK setup
 from firebase_admin import auth
-from flask import Blueprint, request, jsonify, redirect, url_for, session
+from flask import Blueprint, Response, request, jsonify, redirect, url_for, session
 
 # Local project-specific imports: Database functions and models
 from database import register_user_profile, validate_user_profile, remove_user_profile, save_health_profile
@@ -10,7 +10,7 @@ from models import HealthProfile
 auth_blueprint = Blueprint('auth', __name__, url_prefix='/api/v1/auth')
 
 @auth_blueprint.route('/signup', methods=['POST'])
-def signup() -> dict:
+def signup() -> Response:
     # Get email and password values from the incoming JSON data
     email = request.json.get('email')
     password = request.json.get('password')
@@ -30,7 +30,7 @@ def signup() -> dict:
         return jsonify({'error': str(exc)}), 500
 
 @auth_blueprint.route('/verify-email', methods=['GET'])
-def verify() -> dict:
+def verify() -> Response:
     # Get the email value from the query parameters
     email = request.args.get('email')
     # if not email:
@@ -45,7 +45,7 @@ def verify() -> dict:
         return jsonify({'error': str(exc)}), 500
 
 @auth_blueprint.route('/signin', methods=['POST'])
-def signin() -> dict:
+def signin() -> Response:
     # Get email and password values from the incoming JSON data
     email = request.json.get('email')
     password = request.json.get('password')
@@ -63,7 +63,7 @@ def signin() -> dict:
         return jsonify({'error': str(exc)}), 500
 
 @auth_blueprint.route('/reset-password', methods=['POST'])
-def reset() -> dict:
+def reset() -> Response:
     # Get email value from the incoming JSON data
     email = request.json.get('email')
     if not email:
@@ -78,7 +78,7 @@ def reset() -> dict:
         return jsonify({'error': str(exc)}), 500
 
 @auth_blueprint.route('/logout', methods=['POST'])
-def logout() -> dict:
+def logout() -> Response:
     # Check if the user is logged in and remove their email from the session
     if 'email' in session:
         session.pop('email')
@@ -87,7 +87,7 @@ def logout() -> dict:
         return jsonify({'error': 'User not logged in.'}), 401
 
 @auth_blueprint.route('/delete-account', methods=['POST'])
-def delete() -> dict:
+def delete() -> Response:
     # Get email value from the incoming JSON data
     email = request.json.get('email')
     password = request.json.get('password')
@@ -110,7 +110,7 @@ def delete() -> dict:
         return jsonify({'error': str(exc)}), 500
 
 @auth_blueprint.route('/health-profile', methods=['POST'])
-def health_profile() -> dict:
+def health_profile() -> Response:
     # Get email from the incoming JSON request
     email = request.json.get('email')
     if not email:
