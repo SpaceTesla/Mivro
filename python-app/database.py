@@ -14,6 +14,7 @@ database = firestore.client() # Initialize the Firestore database client
 
 # Create a reference to the 'users' collection in Firestore
 user_reference = database.collection('users')
+not_found_reference = database.collection('not_found')
 
 def database_history(email: str, product_barcode: str, product_data: dict) -> None:
     try:
@@ -64,7 +65,22 @@ def database_search(email: str, product_keyword: str, search_keys: list) -> dict
     except Exception as exc:
         return {'error': 'Database search error: ' + str(exc)}, 500
 
-def register_user_profile(email: str, password: str) -> dict:
+def database_not_found(search_value: str, search_type: str) -> None:
+    try:
+        # Select the document name based on the search type
+        document_name = 'barcodes' if search_type == 'barcode' else 'keywords'
+        not_found_document = not_found_reference.document(document_name)
+
+        # Add the search value to the not found list in Firestore
+        not_found_document.set({
+            'search_values': firestore.ArrayUnion([search_value])
+        }, merge=True) # Merge the search value with the existing not found document (if any)
+
+        print(f'[Database] "{search_value}" added to the "{document_name}" not found list.')
+    except Exception as exc:
+        return {'error': 'Firestore storage error: ' + str(exc)}, 500
+
+def register_user_profile(email: str, password: str) -> None:
     try:
         # Check if the user document already exists in Firestore
         user_document = user_reference.document(email)

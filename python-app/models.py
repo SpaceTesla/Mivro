@@ -1,3 +1,4 @@
+from datetime import datetime
 from config import DEFAULT_NAME, DEFAULT_PHOTO
 
 # Model for user account information
@@ -66,14 +67,16 @@ class ScanHistory:
 
 # Model for user chat history
 class ChatHistory:
-    def __init__(self, user_message: str = None, bot_response: str = None):
+    def __init__(self, user_message: str = None, bot_response: str = None, timestamp: str = None):
         self.user_message = user_message
         self.bot_response = bot_response
+        self.timestamp = timestamp or datetime.now().strftime('%d-%B-%Y %I:%M %p')
 
     def to_dict(self) -> dict:
         return {
             'user_message': self.user_message,
-            'bot_response': self.bot_response
+            'bot_response': self.bot_response,
+            'timestamp': self.timestamp
         }
 
 # Model for user search history
@@ -88,14 +91,16 @@ class SearchHistory:
 
 # Model for user payment history
 class PaymentHistory:
-    def __init__(self, payment_gateway: str = None, product_barcode: str = None, product_data: dict = None):
+    def __init__(self, payment_gateway: str = None, product_barcode: str = None, product_data: dict = None, timestamp: str = None):
         self.payment_gateway = payment_gateway
         self.product_barcode = product_barcode
         self.product_data = product_data
+        self.timestamp = timestamp or datetime.now().strftime('%d-%B-%Y %I:%M %p')
 
     def to_dict(self) -> dict:
         return {
             'payment_gateway': self.payment_gateway,
+            'timestamp': self.timestamp,
             self.product_barcode: self.product_data
         }
 

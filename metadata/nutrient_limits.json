@@ -1,0 +1,102 @@
+{
+  "calcium": {
+    "unit": "mg",
+    "lower_limit": 1000,
+    "upper_limit": 1300
+  },
+  "carbohydrates": {
+    "unit": "g",
+    "lower_limit": 225,
+    "upper_limit": 325
+  },
+  "cholesterol": {
+    "unit": "mg",
+    "lower_limit": 0,
+    "upper_limit": 300
+  },
+  "copper": {
+    "unit": "mcg",
+    "lower_limit": 900,
+    "upper_limit": 1400
+  },
+  "energy-kcal": {
+    "unit": "kcal",
+    "lower_limit": 2000,
+    "upper_limit": 2500
+  },
+  "fat": {
+    "unit": "g",
+    "lower_limit": 44,
+    "upper_limit": 78
+  },
+  "fiber": {
+    "unit": "g",
+    "lower_limit": 25,
+    "upper_limit": 30
+  },
+  "iodine": {
+    "unit": "mcg",
+    "lower_limit": 150,
+    "upper_limit": 250
+  },
+  "iron": {
+    "unit": "mg",
+    "lower_limit": 8,
+    "upper_limit": 18
+  },
+  "magnesium": {
+    "unit": "mg",
+    "lower_limit": 400,
+    "upper_limit": 420
+  },
+  "manganese": {
+    "unit": "mg",
+    "lower_limit": 1.8,
+    "upper_limit": 2.6
+  },
+  "phosphorus": {
+    "unit": "mg",
+    "lower_limit": 700,
+    "upper_limit": 1250
+  },
+  "potassium": {
+    "unit": "mg",
+    "lower_limit": 3400,
+    "upper_limit": 4700
+  },
+  "proteins": {
+    "unit": "g",
+    "lower_limit": 46,
+    "upper_limit": 56
+  },
+  "saturated-fat": {
+    "unit": "g",
+    "lower_limit": 0,
+    "upper_limit": 20
+  },
+  "selenium": {
+    "unit": "mcg",
+    "lower_limit": 55,
+    "upper_limit": 70
+  },
+  "sodium": {
+    "unit": "mg",
+    "lower_limit": 0,
+    "upper_limit": 2300
+  },
+  "sugars": {
+    "unit": "g",
+    "lower_limit": 0,
+    "upper_limit": 50
+  },
+  "water": {
+    "unit": "ml",
+    "lower_limit": 2500,
+    "upper_limit": 3500
+  },
+  "zinc": {
+    "unit": "mg",
+    "lower_limit": 8,
+    "upper_limit": 11
+  }
+}
