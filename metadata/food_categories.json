@@ -18,12 +18,13 @@
     "Preservatives",
     "Used As Natural Flavouring Agent"
   ],
+  "Butter": ["Cocoa Butter"],
   "Calcium": ["Calcium Carbonate", "Calcium Pantothenate"],
   "Caffeine": ["Contains Caffeine", "Instant Coffee Chicory Mixture"],
   "Carbohydrates": ["Carbohydrate"],
-  "Cocoa": ["Cocoa Butter", "Cocoa Mass", "Cocoa Solids", "Low-Fat Cocoa"],
+  "Cocoa": ["Cocoa Mass", "Cocoa Solids", "Low-Fat Cocoa"],
   "Corn": ["Corn Grits", "Corn Meal", "Corn Starch"],
-  "Cream": ["Choco CrÃ¨me"],
+  "Cream": ["Choco Crème"],
   "Dal": ["Urad Dal"],
   "Emulsifiers": ["Emulsifier", "Emulsifier Of Vegetable"],
   "Energy": ["Calories"],
@@ -63,6 +64,7 @@
     "Edible Common Salt",
     "Fenugreek And Lodized Salt",
     "Iodised Salt",
+    "Lodized Salt",
     "Table Salt"
   ],
   "Sauces": ["Soy Sauce"],
