@@ -79,7 +79,7 @@ def barcode() -> dict:
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
 
-# DEPRECATED: text_search function fails to return the expected results from the Open Food Facts API.
+# DEPRECATED: text_search function fails to return the expected results from the Open Food Facts API
 # @search_blueprint.route('/text', methods=['POST'])
 # def text() -> dict:
 #     try:
