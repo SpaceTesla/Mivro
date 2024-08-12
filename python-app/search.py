@@ -8,12 +8,12 @@ from datetime import datetime
 # Local project-specific imports: Mapping, utilities, database, and gemini functions
 from mapping import additive_name, nova_name, grade_color, score_assessment
 from utils import filter_additive, filter_ingredient, filter_nutriment, filter_image, filter_data
-from database import database_history, database_search
+from database import database_history, database_search, database_not_found
 from gemini import lumi, swapr
 
 # Blueprint for the search routes
 search_blueprint = Blueprint('search', __name__, url_prefix='/api/v1/search')
-api = openfoodfacts.API(user_agent='Mivro/2.9.8') # Initialize the Open Food Facts API client
+api = openfoodfacts.API(user_agent='Mivro/2.9') # Initialize the Open Food Facts API client
 
 @search_blueprint.route('/barcode', methods=['POST'])
 def barcode() -> dict:
@@ -31,6 +31,8 @@ def barcode() -> dict:
         required_data = json.load(open('metadata/product_schema.json'))
         product_data = api.product.get(product_barcode, fields=required_data)
         if not product_data:
+            # Store "Product not found" event in Firestore for analytics
+            database_not_found(product_barcode, 'barcode')
             return jsonify({'error': 'Product not found.'}), 404
 
         # Check for missing fields in the product data
@@ -57,15 +59,19 @@ def barcode() -> dict:
             'search_date': datetime.now().strftime('%d-%B-%Y'),
             'search_time': datetime.now().strftime('%I:%M %p'),
             'additives_names': additive_name(filtered_product_data.get('additives_tags', []),
-                                             json.load(open('metadata/additive_names.json'))),
+                                            json.load(open('metadata/additive_names.json'))),
             'ingredients': filter_ingredient(filtered_product_data.get('ingredients', [])),
             'nova_group_name': nova_name(filtered_product_data.get('nova_group', '')),
             'nutriments': lumi(filtered_product_data.get('nutriments', {})),
+            'total_nutriments': len(filtered_product_data.get('nutriments', {}).get('positive_nutrient', [])) + 
+                                len(filtered_product_data.get('nutriments', {}).get('negative_nutrient', [])),
             'nutriscore_grade_color': grade_color(filtered_product_data.get('nutriscore_grade', '')),
             'nutriscore_assessment': score_assessment(filtered_product_data.get('nutriscore_score', None)).title(),
             'health_risk': lumi(filtered_product_data.get('ingredients', [])),
+            'total_health_risk': len(filtered_product_data.get('health_risk', {}).get('ingredient_warnings', [])),
             'selected_images': filter_image(filtered_product_data.get('selected_images', [])),
-            'recommeded_product': swapr(email, filtered_product_data)
+            'recommeded_product': swapr(email, filtered_product_data),
+            'warning': 'The information provided is for general guidance only and should not be considered medical advice. Always seek professional advice for important health decisions.'
         })
 
         # Store the scan history for the product barcode in Firestore
@@ -125,6 +131,8 @@ def database() -> dict:
 
                 return jsonify(product_data)
 
+        # Store "Product not found" event in Firestore for analytics
+        database_not_found(product_keyword, 'database')
         return jsonify({'error': 'Product not found.'}), 404
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
