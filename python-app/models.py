@@ -67,15 +67,17 @@ class ScanHistory:
 
 # Model for user chat history
 class ChatHistory:
-    def __init__(self, user_message: str = None, bot_response: str = None, timestamp: str = None):
+    def __init__(self, user_message: str = None, bot_response: str = None, message_type: str = None, timestamp: str = None):
         self.user_message = user_message
         self.bot_response = bot_response
+        self.message_type = message_type
         self.timestamp = timestamp or datetime.now().strftime('%d-%B-%Y %I:%M %p')
 
     def to_dict(self) -> dict:
         return {
             'user_message': self.user_message,
             'bot_response': self.bot_response,
+            'message_type': self.message_type,
             'timestamp': self.timestamp
         }
 
@@ -104,8 +106,8 @@ class PaymentHistory:
             self.product_barcode: self.product_data
         }
 
-# Model for user favorites
-class Favorite:
+# Model for user favorite products
+class FavoriteProduct:
     def __init__(self, product_name: str = None, product_barcode: str = None):
         self.product_name = product_name
         self.product_barcode = product_barcode

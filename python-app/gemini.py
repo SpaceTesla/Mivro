@@ -1,8 +1,10 @@
 # Core library imports: Google Generative AI setup
 import requests
+import os
 import google.generativeai as genai
 from google.generativeai import GenerativeModel
 from flask import Blueprint, Response, request, jsonify
+from werkzeug.utils import secure_filename
 
 # Local project-specific imports: Configuration, models, and utilities
 from config import GEMINI_API_KEY
@@ -112,15 +114,52 @@ def swapr(email: str, product_data: dict) -> Response:
 @ai_blueprint.route('/savora', methods=['POST'])
 def savora() -> Response:
     try:
-        # Get the user's email and message to send to the Gemini model
-        email = request.json.get('email')
-        user_message = request.json.get('message')
-        if not email or not user_message:
-            return jsonify({'error': 'Email and message are required.'}), 400
+        # Check if the request contains a file upload (multipart/form-data)
+        if 'media' in request.files:
+            email = request.form.get('email')
+            message_type = request.form.get('type')
+            user_message = request.form.get('message')
+            media_file = request.files.get('media')
+        else:
+            # Otherwise, expect JSON input (application/json)
+            email = request.json.get('email')
+            message_type = request.json.get('type')
+            user_message = request.json.get('message')
+            media_file = None
 
-        bot_response = savora_chat_session.send_message(user_message)
+        if not email or not message_type or not user_message:
+            return jsonify({'error': 'Email, message type, and message are required.'}), 400
+
+        # Send the user's message to the Gemini model
+        if message_type == 'text':
+            bot_response = savora_chat_session.send_message(user_message)
+
+        # Upload the media file to the Gemini model and generate content
+        elif message_type == 'media':
+            if not media_file or media_file.filename == '':
+                return jsonify({'error': 'No file selected.'}), 400
+
+            # Check if the media file type is allowed
+            if not media_file.filename.endswith(('.png', '.jpg', '.jpeg', '.pdf', '.txt')):
+                return jsonify({'error': 'Invalid file type. Allowed types: PNG, JPG, JPEG, PDF, TXT.'}), 400
+
+            # Save the media file to a temporary location
+            file_name = secure_filename(media_file.filename)
+            temp_path = os.path.join(file_name)
+            media_file.save(temp_path)
+
+            # Upload the media file to the Gemini model using the temporary path
+            user_file = genai.upload_file(temp_path)
+            bot_response = savora_llm.generate_content([user_file, "\n\n", user_message])
+
+            # Delete the temporary file after processing
+            os.remove(temp_path)
+
+        else:
+            return jsonify({'error': 'Invalid message type.'}), 400
+
         # Store the chat history for the user's email in Firestore
-        chat_entry = ChatHistory(user_message=user_message, bot_response=bot_response.text)
+        chat_entry = ChatHistory(user_message=user_message, bot_response=bot_response.text, message_type=message_type)
         chat_history(email, chat_entry)
 
         return jsonify({'response': bot_response.text})

@@ -104,8 +104,8 @@ def user_profile(email: str) -> dict:
 # Function for storing the chat history in Firestore (Used in gemini.py)
 def chat_history(email: str, chat_entry: dict) -> None:
     user_document = user_reference.document(email)
-    # if not user_document.get().exists:
-    #     return {'error': 'User does not exist.'}, 404
+    if not user_document.get().exists:
+        user_document.set({ 'chat_history': [] })
 
     chat_history = user_document.get().to_dict().get('chat_history', [])
     chat_history.append(chat_entry.to_dict())
