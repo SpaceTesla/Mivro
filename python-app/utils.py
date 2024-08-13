@@ -1,10 +1,10 @@
 # Core library imports: Regular expressions and JSON parsing
-import re
 import json
+import re
 
-# Local project-specific imports: Database and mapping functions
-from database import user_reference
+# Local project-specific imports: Mapping and database functions
 from mapping import food_icon
+from database import user_reference
 
 # with open('metadata/nutrient_limits.json') as file:
 #     nutrient_limits = json.load(file)
@@ -73,15 +73,6 @@ def analyse_nutrient(nutrient_data: dict, nutrient_limits: dict) -> dict:
     }
     return nutriment_info
 
-# Function for filtering the image data and extracting the image link (Used in search.py)
-def filter_image(image_data: dict) -> str:
-    image_link = next(
-        iter(
-            list(image_data.values())[0].values() # Return the first image link from the data
-        ), None
-    )
-    return image_link
-
 # Function for filtering the product data and removing the 'en:' prefix (Used in search.py)
 def filter_data(product_data: dict) -> dict:
     product_info = {
@@ -94,6 +85,15 @@ def filter_data(product_data: dict) -> dict:
         for key, value in product_data.items()
     }
     return product_info
+
+# Function for filtering the image data and extracting the image link (Used in search.py)
+def filter_image(image_data: dict) -> str:
+    image_link = next(
+        iter(
+            list(image_data.values())[0].values() # Return the first image link from the data
+        ), None
+    )
+    return image_link
 
 # Function for retrieving the user's health profile from Firestore (Used in gemini.py)
 def user_profile(email: str) -> dict:
