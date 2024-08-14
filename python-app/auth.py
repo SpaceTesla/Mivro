@@ -6,7 +6,7 @@ from flask import Blueprint, Response, request, jsonify, redirect, url_for, sess
 from database import register_user_profile, validate_user_profile, remove_user_profile, user_reference
 
 # Blueprint for the authentication routes
-auth_blueprint = Blueprint('auth', __name__, url_prefix='/api/v1/auth')
+auth_blueprint = Blueprint('auth', __name__)
 
 @auth_blueprint.route('/signup', methods=['POST'])
 def signup() -> Response:
@@ -19,7 +19,7 @@ def signup() -> Response:
 
     try:
         # Create a new user with the provided email and password
-        user = auth.create_user(
+        auth.create_user(
             email=email,
             password=password
         )
@@ -33,13 +33,13 @@ def signup() -> Response:
 def verify_email() -> Response:
     # Get the email value from the query parameters
     email = request.args.get('email')
-    # if not email:
-    #     return jsonify({'error': 'Email is required for email verification.'}), 400
+    if not email:
+        return jsonify({'error': 'Email is required for email verification.'}), 400
 
     try:
         # Generate an email verification link for a user in Firebase Auth using their email
         user = auth.get_user_by_email(email)
-        link = auth.generate_email_verification_link(user.email)
+        auth.generate_email_verification_link(user.email)
         return jsonify({'message': 'Registration successful! Verify your email to activate your account.'})
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
@@ -71,29 +71,22 @@ def reset_password() -> Response:
         return jsonify({'error': 'Email is required for password reset.'}), 400
 
     try:
-        if auth.get_user_by_email(email):
-            # Generate a password reset link for a user in Firebase Auth using their email
-            link = auth.generate_password_reset_link(email)
-            return jsonify({'message': 'Password reset link sent.'})
+        # Generate a password reset link for a user in Firebase Auth using their email
+        auth.generate_password_reset_link(email)
+        return jsonify({'message': 'Password reset link sent successfully.'})
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
 
 @auth_blueprint.route('/update-email', methods=['POST'])
 def update_email() -> Response:
-    # Get current email, new email, and password from the incoming JSON data
+    # Get current email and new email values from the incoming JSON data
     current_email = request.json.get('current_email')
     new_email = request.json.get('new_email')
-    password = request.json.get('password')
 
-    if not current_email or not new_email or not password:
-        return jsonify({'error': 'Current email, new email, and password are required.'}), 400
+    if not current_email or not new_email:
+        return jsonify({'error': 'Current email and new email are required.'}), 400
 
     try:
-        # Validate the user's current credentials
-        result = validate_user_profile(current_email, password)
-        if 'error' in result:
-            return jsonify(result), 401
-
         # Get the user by their current email and update their email in Firebase Auth
         user = auth.get_user_by_email(current_email)
         auth.update_user(user.uid, email=new_email)
@@ -119,7 +112,7 @@ def update_email() -> Response:
 def logout() -> Response:
     # Check if the user is logged in and remove their email from the session
     if 'email' in session:
-        session.pop('email')
+        session.pop('email', None)
         return jsonify({'message': 'Logged out successfully.'})
     else:
         return jsonify({'error': 'User not logged in.'}), 401
@@ -128,10 +121,8 @@ def logout() -> Response:
 def delete_account() -> Response:
     # Get email value from the incoming JSON data
     email = request.json.get('email')
-    password = request.json.get('password')
-    
-    if not email or not password:
-        return jsonify({'error': 'Email and password are required.'}), 400
+    if not email:
+        return jsonify({'error': 'Email is required for account deletion.'}), 400
 
     try:
         # Check if the user's email and password are valid
@@ -142,7 +133,7 @@ def delete_account() -> Response:
             return jsonify(result), 500
 
         if 'email' in session:
-            session.pop('email') # Remove the user's email from the session if they are logged in
+            session.pop('email', None) # Remove the user's email from the session if they are logged in
 
         return jsonify(result)
     except Exception as exc:

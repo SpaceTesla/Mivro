@@ -3,52 +3,39 @@ from firebase_admin import auth, firestore
 from flask import Blueprint, Response, request, jsonify
 
 # Local project-specific imports: Database functions and models
-from database import user_reference, validate_user_profile, save_health_profile
+from database import user_reference, save_health_profile
 from models import HealthProfile, FavoriteProduct
 
 # Blueprint for the user routes
-user_blueprint = Blueprint('user', __name__, url_prefix='/api/v1/user')
+user_blueprint = Blueprint('user', __name__)
 
 @user_blueprint.route('/load-profile', methods=['POST'])
 def load_profile() -> Response:
-    # Get email and password values from the incoming JSON data
+    # Get email value from the incoming JSON data
     email = request.json.get('email')
-    password = request.json.get('password')
-
-    if not email or not password:
-        return jsonify({'error': 'Email and password are required.'}), 400
+    if not email:
+        return jsonify({'error': 'Email is required.'}), 400
 
     try:
-        # Validate the user's email and password
-        result = validate_user_profile(email, password)
-        if 'error' in result:
-            return jsonify(result), 401
-
         # Reference the user document by email and retrieve the user profile data
         user_document = user_reference.document(email)
         return jsonify(user_document.get().to_dict())
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
 
-@user_blueprint.route('/update-user-profile', methods=['POST'])
-def update_user_profile() -> Response:
-    # Get email and password values from the incoming JSON data
+@user_blueprint.route('/update-profile', methods=['POST'])
+def update_profile() -> Response:
+    # Get email from the incoming JSON data
     email = request.json.get('email')
-    password = request.json.get('password')
-
-    if not email or not password:
-        return jsonify({'error': 'Email and password are required.'}), 400
+    if not email:
+        return jsonify({'error': 'Email is required.'}), 400
 
     try:
-        # Validate the user's email and password
-        result = validate_user_profile(email, password)
-        if 'error' in result:
-            return jsonify(result), 401
-
-        # Reference the user document by email and update the profile fields
+        # Reference the user document by email and prepare for updates
         user_document = user_reference.document(email)
         update_data = {}
 
+        # Update account info fields if provided
         if (display_name := request.json.get('display_name')) not in [None, '']:
             update_data['account_info.display_name'] = display_name
         if (photo_url := request.json.get('photo_url')) not in [None, '']:
@@ -56,17 +43,33 @@ def update_user_profile() -> Response:
         if (phone_number := request.json.get('phone_number')) not in [None, '']:
             update_data['account_info.phone_number'] = phone_number
 
-        # Update the user document with the new user profile data
+        # Update health profile fields if provided
+        if (age := request.json.get('age')) not in [None, '']:
+            update_data['health_profile.age'] = age
+        if (gender := request.json.get('gender')) not in [None, '']:
+            update_data['health_profile.gender'] = gender
+        if (height := request.json.get('height')) not in [None, '']:
+            update_data['health_profile.height'] = height
+        if (weight := request.json.get('weight')) not in [None, '']:
+            update_data['health_profile.weight'] = weight
+        if (dietary_preferences := request.json.get('dietary_preferences')) not in [None, '']:
+            update_data['health_profile.dietary_preferences'] = dietary_preferences
+        if (allergies := request.json.get('allergies')) not in [None, '']:
+            update_data['health_profile.allergies'] = allergies
+        if (medical_conditions := request.json.get('medical_conditions')) not in [None, '']:
+            update_data['health_profile.medical_conditions'] = medical_conditions
+
+        # Update the user document with the provided data
         if update_data:
             user_document.update(update_data)
-            return jsonify({'message': 'User profile updated successfully.'})
+            return jsonify({'message': 'Profile updated successfully.'})
         else:
             return jsonify({'message': 'No changes detected.'})
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
 
-@user_blueprint.route('/submit-health-profile', methods=['POST'])
-def submit_health_profile() -> Response:
+@user_blueprint.route('/health-profile', methods=['POST'])
+def health_profile() -> Response:
     # Get email from the incoming JSON request
     email = request.json.get('email')
     if not email:
@@ -77,7 +80,7 @@ def submit_health_profile() -> Response:
         if not auth.get_user_by_email(email):
             return jsonify({'error': 'User not found.'}), 404
 
-        # Create an instance of HealthProfile using the request data
+        # Create a HealthProfile object from the incoming JSON data
         health_data = HealthProfile(
             age=request.json.get('age'),
             gender=request.json.get('gender'),
@@ -97,51 +100,8 @@ def submit_health_profile() -> Response:
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
 
-@user_blueprint.route('/update-health-profile', methods=['POST'])
-def update_health_profile() -> Response:
-    # Get email and password values from the incoming JSON data
-    email = request.json.get('email')
-    password = request.json.get('password')
-
-    if not email or not password:
-        return jsonify({'error': 'Email and password are required.'}), 400
-
-    try:
-        # Validate the user's email and password
-        result = validate_user_profile(email, password)
-        if 'error' in result:
-            return jsonify(result), 401
-
-        # Reference the user document by email and update the health profile fields
-        user_document = user_reference.document(email)
-        update_data = {}
-
-        if (age := request.json.get('age')) not in [None, '']:
-            update_data['health_profile.age'] = age
-        if (gender := request.json.get('gender')) not in [None, '']:
-            update_data['health_profile.gender'] = gender
-        if (height := request.json.get('height')) not in [None, '']:
-            update_data['health_profile.height'] = height
-        if (weight := request.json.get('weight')) not in [None, '']:
-            update_data['health_profile.weight'] = weight
-        if (dietary_preferences := request.json.get('dietary_preferences')) not in [None, '']:
-            update_data['health_profile.dietary_preferences'] = dietary_preferences
-        if (allergies := request.json.get('allergies')) not in [None, '']:
-            update_data['health_profile.allergies'] = allergies
-        if (medical_conditions := request.json.get('medical_conditions')) not in [None, '']:
-            update_data['health_profile.medical_conditions'] = medical_conditions
-
-        # Update the user document with the new health profile data
-        if update_data:
-            user_document.update(update_data)
-            return jsonify({'message': 'Health profile updated successfully.'})
-        else:
-            return jsonify({'message': 'No changes detected.'})
-    except Exception as exc:
-        return jsonify({'error': str(exc)}), 500
-
-@user_blueprint.route('/add-favorite', methods=['POST'])
-def add_favorite() -> Response:
+@user_blueprint.route('/favorite-product', methods=['POST'])
+def favorite_product() -> Response:
     # Get email, product name, brand, and image values from the incoming JSON data
     email = request.json.get('email')
     product_name = request.json.get('product_name')
@@ -154,10 +114,6 @@ def add_favorite() -> Response:
     try:
         # Reference the user document by email and add the favorite product
         user_document = user_reference.document(email)
-        if not user_document.get().exists:
-            return jsonify({'error': 'User not found.'}), 404
-
-        # Store the favorite product data for the user in Firestore
         favorite_product = FavoriteProduct(product_name=product_name, product_brand=product_brand, product_image=product_image)
         user_document.set({
             'favorite_product': firestore.ArrayUnion([favorite_product.to_dict()])
@@ -167,36 +123,30 @@ def add_favorite() -> Response:
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
 
-@user_blueprint.route('/clear-scan-history', methods=['POST'])
-@user_blueprint.route('/clear-search-history', methods=['POST'])
-@user_blueprint.route('/clear-chat-history', methods=['POST'])
-@user_blueprint.route('/clear-favorite-product', methods=['POST'])
+@user_blueprint.route('/clear-scan', methods=['POST'])
+@user_blueprint.route('/clear-search', methods=['POST'])
+@user_blueprint.route('/clear-chat', methods=['POST'])
+@user_blueprint.route('/clear-favorite', methods=['POST'])
 def clear_history() -> Response:
-    # Mapping of the request path to the Firestore document field to clear
-    path_mapping = {
-        '/api/v1/user/clear-scan-history': 'scan_history',
-        '/api/v1/user/clear-search-history': 'search_history',
-        '/api/v1/user/clear-chat-history': 'chat_history',
-        '/api/v1/user/clear-favorite-product': 'favorite_product'
+    # Get email value from the incoming JSON data
+    email = request.json.get('email')
+    if not email:
+        return jsonify({'error': 'Email is required.'}), 400
+
+    # Map the request path to the corresponding Firestore field to clear
+    path_map = {
+        '/api/v1/user/clear-scan': 'scan_history',
+        '/api/v1/user/clear-search': 'search_history',
+        '/api/v1/user/clear-chat': 'chat_history',
+        '/api/v1/user/clear-favorite': 'favorite_product'
     }
 
-    # Get email and password values from the incoming JSON data
-    email = request.json.get('email')
-    password = request.json.get('password')
-
-    if not email or not password:
-        return jsonify({'error': 'Email and password are required.'}), 400
-
     try:
-        # Validate the user's email and password
-        result = validate_user_profile(email, password)
-        if 'error' in result:
-            return jsonify(result), 401
-
-        # Reference the user document by email and clear the specified field
+        # Reference the user document by email and clear the specified history field
         user_document = user_reference.document(email)
-        user_document.update({path_mapping.get(request.path): firestore.DELETE_FIELD})
+        user_document.update({path_map.get(request.path): firestore.DELETE_FIELD})
 
-        return jsonify({'message': f'{path_mapping.get(request.path).replace("_", " ").capitalize()} cleared successfully.'})
+        formatted_message = f'{path_map.get(request.path).replace("_", " ").capitalize()}'
+        return jsonify({'message': f'{formatted_message} cleared successfully.'})
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
