@@ -5,9 +5,9 @@ import sys
 from flask import Blueprint, request, jsonify
 from datetime import datetime
 
-# Local project-specific imports: Mapping, utilities, database, and gemini functions
+# Local project-specific imports: Utilities, mapping, database, and gemini functions
+from utils import filter_additive, filter_ingredient, filter_nutriment, filter_data, filter_image
 from mapping import additive_name, nova_name, grade_color, score_assessment
-from utils import filter_additive, filter_ingredient, filter_nutriment, filter_image, filter_data
 from database import database_history, database_search, database_not_found
 from gemini import lumi, swapr
 

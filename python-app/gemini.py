@@ -116,18 +116,20 @@ def savora() -> Response:
     try:
         # Check if the request contains a file upload (multipart/form-data)
         if 'media' in request.files:
-            email = request.form.get('email')
+            message_index = request.form.get('index')
+            user_email = request.form.get('email')
             message_type = request.form.get('type')
             user_message = request.form.get('message')
             media_file = request.files.get('media')
         else:
             # Otherwise, expect JSON input (application/json)
-            email = request.json.get('email')
+            message_index = request.json.get('index')
+            user_email = request.json.get('email')
             message_type = request.json.get('type')
             user_message = request.json.get('message')
             media_file = None
 
-        if not email or not message_type or not user_message:
+        if not user_email or not message_type or not user_message:
             return jsonify({'error': 'Email, message type, and message are required.'}), 400
 
         # Send the user's message to the Gemini model
@@ -159,8 +161,8 @@ def savora() -> Response:
             return jsonify({'error': 'Invalid message type.'}), 400
 
         # Store the chat history for the user's email in Firestore
-        chat_entry = ChatHistory(user_message=user_message, bot_response=bot_response.text, message_type=message_type)
-        chat_history(email, chat_entry)
+        chat_entry = ChatHistory(message_index=message_index, user_message=user_message, bot_response=bot_response.text, message_type=message_type)
+        chat_history(user_email, chat_entry)
 
         return jsonify({'response': bot_response.text})
     except Exception as exc:

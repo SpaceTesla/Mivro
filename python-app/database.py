@@ -55,9 +55,9 @@ def database_search(email: str, product_keyword: str, search_keys: list) -> dict
                     # found_keys.append(key)
 
         # Store the search history for the product keyword in Firestore
-        # search_history = SearchHistory(user_searches=product_keyword)
+        search_history = SearchHistory(user_searches=product_keyword)
         user_reference.document(email).set({
-            'search_history': firestore.ArrayUnion([product_keyword])
+            'search_history': firestore.ArrayUnion([search_history.to_dict()])
         }, merge=True) # Merge the search history with the existing user document (if any)
 
         print(f'[Database] Found {len(scan_results)} document(s) for "{product_keyword}".')
@@ -130,16 +130,12 @@ def remove_user_profile(email: str) -> dict:
     except Exception as exc:
         return {'error': 'Firestore deletion error: ' + str(exc)}, 500
 
-def save_health_profile(email: str, profile_data: dict) -> dict:
+def save_health_profile(email: str, health_data: dict) -> dict:
     try:
-        # Check if the user document exists in Firestore
+        # Store the health profile data for the user in Firestore
         user_document = user_reference.document(email)
-        if not user_document.get().exists:
-            return {'error': 'User does not exist.'}, 404
-
-        # Set or update the health profile in Firestore
         user_document.set({
-            'health_profile': profile_data
+            'health_profile': health_data
         }, merge=True)  # Merge the health profile with the existing user document (if any)
 
         return {'message': 'Health profile saved successfully.'}
