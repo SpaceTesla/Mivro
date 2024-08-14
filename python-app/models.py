@@ -27,8 +27,9 @@ class AccountInfo:
 
 # Model for user health profile
 class HealthProfile:
-    def __init__(self, age: int = None, gender: str = None, height: float = None, weight: float = None, body_mass_index: float = None,
-                 allergies: list = None, dietary_preferences: list = None, medical_conditions: list = None):
+    def __init__(self, age: int = None, gender: str = None, height: float = None,
+                 weight: float = None, body_mass_index: float = None, allergies: list = None,
+                 dietary_preferences: list = None, medical_conditions: list = None):
         from utils import calculate_bmi # Importing here to avoid circular import error
 
         self.age = age
@@ -63,9 +64,18 @@ class ScanHistory:
             self.product_barcode: self.product_data
         }
 
+# Model for user search history
+class SearchHistory:
+    def __init__(self, user_searches: list = None):
+        self.user_searches = user_searches or []
+
+    def to_dict(self) -> list:
+        return self.user_searches
+
 # Model for user chat history
 class ChatHistory:
-    def __init__(self, message_index: int = None, user_message: str = None, bot_response: str = None, message_type: str = None, timestamp: str = None):
+    def __init__(self, message_index: int = None, user_message: str = None, bot_response: str = None,
+                 message_type: str = None, timestamp: str = None):
         self.message_index = message_index
         self.user_message = user_message
         self.bot_response = bot_response
@@ -81,17 +91,10 @@ class ChatHistory:
             'timestamp': self.timestamp
         }
 
-# Model for user search history
-class SearchHistory:
-    def __init__(self, user_searches: list = None):
-        self.user_searches = user_searches or []
-
-    def to_dict(self) -> list:
-        return self.user_searches
-
 # Model for user payment history
 class PaymentHistory:
-    def __init__(self, payment_gateway: str = None, product_barcode: str = None, product_data: dict = None, timestamp: str = None):
+    def __init__(self, payment_gateway: str = None, product_barcode: str = None, product_data: dict = None,
+                 timestamp: str = None):
         self.payment_gateway = payment_gateway
         self.product_barcode = product_barcode
         self.product_data = product_data

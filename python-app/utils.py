@@ -51,6 +51,7 @@ def analyse_nutrient(nutrient_data: dict, nutrient_limits: dict) -> dict:
     nutrient_map = {
         nutrient: {
             'name': nutrient.title(),
+            'icon': food_icon(nutrient.title(), food_categories),
             'quantity': f"{abs(float(nutrient_data.get(f'{nutrient}_100g', 0))):.2f} {value['unit']}"
         }
         for nutrient, value in nutrient_limits.items()
