@@ -172,3 +172,37 @@ def add_favorite() -> Response:
         return jsonify({'message': 'Favorite product added successfully.'}), 200
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
+
+@user_blueprint.route('/clear-scan-history', methods=['POST'])
+@user_blueprint.route('/clear-search-history', methods=['POST'])
+@user_blueprint.route('/clear-chat-history', methods=['POST'])
+@user_blueprint.route('/clear-favorite-product', methods=['POST'])
+def clear_history() -> Response:
+    # Mapping of the request path to the Firestore document field to clear
+    path_mapping = {
+        '/api/v1/user/clear-scan-history': 'scan_history',
+        '/api/v1/user/clear-search-history': 'search_history',
+        '/api/v1/user/clear-chat-history': 'chat_history',
+        '/api/v1/user/clear-favorite-product': 'favorite_product'
+    }
+
+    # Get email and password values from the incoming JSON data
+    email = request.json.get('email')
+    password = request.json.get('password')
+
+    if not email or not password:
+        return jsonify({'error': 'Email and password are required.'}), 400
+
+    try:
+        # Validate the user's email and password
+        result = validate_user_profile(email, password)
+        if 'error' in result:
+            return jsonify(result), 401
+
+        # Reference the user document by email and clear the specified field
+        user_document = user_reference.document(email)
+        user_document.update({path_mapping.get(request.path): firestore.DELETE_FIELD})
+
+        return jsonify({'message': f'{path_mapping.get(request.path).replace("_", " ").capitalize()} cleared successfully.'}), 200
+    except Exception as exc:
+        return jsonify({'error': str(exc)}), 500
