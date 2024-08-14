@@ -102,21 +102,22 @@ def register_user_profile(email: str, password: str) -> None:
     except Exception as exc:
         return {'error': 'Firestore registration error: ' + str(exc)}, 500
 
+# This function does not have status codes because middleware.py handles the status codes
 def validate_user_profile(email: str, password: str) -> dict:
     try:
         # Check if the user document exists in Firestore
         user_document = user_reference.document(email)
         if not user_document.get().exists:
-            return {'error': 'User does not exist.'}, 404
+            return {'error': 'User does not exist.'}
 
         # Check if the password matches the hashed password stored in Firestore
         user_data = user_document.get().to_dict()
         if not check_password_hash(user_data['account_info']['password'], password):
-            return {'error': 'Incorrect password.'}, 401
+            return {'error': 'Incorrect password.'}
 
         return {'message': 'Login successful.'}
     except Exception as exc:
-        return {'error': 'Firestore validation error: ' + str(exc)}, 500
+        return {'error': 'Firestore validation error: ' + str(exc)}
 
 def remove_user_profile(email: str) -> dict:
     try:

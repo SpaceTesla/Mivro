@@ -12,8 +12,8 @@ from database import database_history, database_search, database_not_found
 from gemini import lumi, swapr
 
 # Blueprint for the search routes
-search_blueprint = Blueprint('search', __name__, url_prefix='/api/v1/search')
-api = openfoodfacts.API(user_agent='Mivro/2.9') # Initialize the Open Food Facts API client
+search_blueprint = Blueprint('search', __name__)
+api = openfoodfacts.API(user_agent='Mivro/1.0') # Initialize the Open Food Facts API client
 
 @search_blueprint.route('/barcode', methods=['POST'])
 def barcode() -> dict:
@@ -23,6 +23,7 @@ def barcode() -> dict:
         # Get the email and product barcode values from the incoming JSON data
         email = request.json.get('email')
         product_barcode = request.json.get('product_barcode')
+
         if not email or not product_barcode:
             return jsonify({'error': 'Email and product barcode are required.'}), 400
 
@@ -104,6 +105,7 @@ def database() -> dict:
         # Get the email and product keyword values from the incoming JSON data
         email = request.json.get('email')
         product_keyword = request.json.get('product_keyword')
+
         if not email or not product_keyword:
             return jsonify({'error': 'Email and product keyword are required.'}), 400
 

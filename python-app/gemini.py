@@ -12,7 +12,7 @@ from models import ChatHistory
 from utils import user_profile, chat_history
 
 # Blueprint for the ai routes
-ai_blueprint = Blueprint('ai', __name__, url_prefix='/api/v1/ai')
+ai_blueprint = Blueprint('ai', __name__)
 genai.configure(api_key=GEMINI_API_KEY) # Load Gemini API key from .env
 
 # Generation settings to control the model's output
@@ -73,7 +73,7 @@ savora_chat_session = savora_llm.start_chat(history=[])
 @ai_blueprint.route('/lumi', methods=['POST'])
 def lumi(product_data: dict) -> Response:
     try:
-        # Get the user's health profile based on their email
+        # Get email value from the incoming JSON data
         email = request.json.get('email')
         if not email or not product_data:
             return jsonify({'error': 'Email and product data are required.'}), 400
@@ -116,21 +116,21 @@ def savora() -> Response:
     try:
         # Check if the request contains a file upload (multipart/form-data)
         if 'media' in request.files:
-            message_index = request.form.get('index')
             user_email = request.form.get('email')
+            message_index = request.form.get('index')
             message_type = request.form.get('type')
             user_message = request.form.get('message')
             media_file = request.files.get('media')
         else:
             # Otherwise, expect JSON input (application/json)
-            message_index = request.json.get('index')
             user_email = request.json.get('email')
+            message_index = request.json.get('index')
             message_type = request.json.get('type')
             user_message = request.json.get('message')
             media_file = None
 
-        if not user_email or not message_type or not user_message:
-            return jsonify({'error': 'Email, message type, and message are required.'}), 400
+        if not user_email or not message_index or not message_type or not user_message:
+            return jsonify({'error': 'Email, index, type, and message are required.'}), 400
 
         # Send the user's message to the Gemini model
         if message_type == 'text':
