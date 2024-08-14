@@ -1,10 +1,10 @@
 # Core library imports: Firebase Admin SDK setup
-from firebase_admin import auth
+from firebase_admin import auth, firestore
 from flask import Blueprint, Response, request, jsonify
 
 # Local project-specific imports: Database functions and models
 from database import user_reference, validate_user_profile, save_health_profile
-from models import HealthProfile
+from models import HealthProfile, FavoriteProduct
 
 # Blueprint for the user routes
 user_blueprint = Blueprint('user', __name__, url_prefix='/api/v1/user')
@@ -143,5 +143,32 @@ def update_health_profile() -> Response:
         else:
             return jsonify({'message': 'No changes detected.'})
 
+    except Exception as exc:
+        return jsonify({'error': str(exc)}), 500
+
+@user_blueprint.route('/add-favorite', methods=['POST'])
+def add_favorite() -> Response:
+    # Get email, product name, brand, and image values from the incoming JSON data
+    email = request.json.get('email')
+    product_name = request.json.get('product_name')
+    product_brand = request.json.get('product_brand')
+    product_image = request.json.get('product_image')
+
+    if not email or not product_name or not product_brand or not product_image:
+        return jsonify({'error': 'Email, product name, brand, and image are required.'}), 400
+
+    try:
+        # # Reference the user document by email and add the favorite product
+        user_document = user_reference.document(email)
+        if not user_document.get().exists:
+            return jsonify({'error': 'User not found.'}), 404
+
+        # Store the favorite product data for the user in Firestore
+        favorite_product = FavoriteProduct(product_name=product_name, product_brand=product_brand, product_image=product_image)
+        user_document.set({
+            'favorite_product': firestore.ArrayUnion([favorite_product.to_dict()])
+        }, merge=True) # Merge the favorite product with the existing user document (if any)
+
+        return jsonify({'message': 'Favorite product added successfully.'}), 200
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500

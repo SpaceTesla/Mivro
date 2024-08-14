@@ -82,12 +82,10 @@ class ChatHistory:
 # Model for user search history
 class SearchHistory:
     def __init__(self, user_searches: list = None):
-        self.user_searches = user_searches
+        self.user_searches = user_searches or []
 
-    def to_dict(self) -> dict:
-        return {
-            'user_searches': self.user_searches
-        }
+    def to_dict(self) -> list:
+        return self.user_searches
 
 # Model for user payment history
 class PaymentHistory:
@@ -106,12 +104,14 @@ class PaymentHistory:
 
 # Model for user favorite products
 class FavoriteProduct:
-    def __init__(self, product_name: str = None, product_barcode: str = None):
+    def __init__(self, product_name: str = None, product_brand: str = None, product_image: str = None):
         self.product_name = product_name
-        self.product_barcode = product_barcode
+        self.product_brand = product_brand
+        self.product_image = product_image
 
     def to_dict(self) -> dict:
         return {
             'product_name': self.product_name,
-            'product_barcode': self.product_barcode
+            'product_brand': self.product_brand,
+            'product_image': self.product_image
         }

@@ -55,9 +55,9 @@ def database_search(email: str, product_keyword: str, search_keys: list) -> dict
                     # found_keys.append(key)
 
         # Store the search history for the product keyword in Firestore
-        # search_history = SearchHistory(user_searches=product_keyword)
+        search_history = SearchHistory(user_searches=product_keyword)
         user_reference.document(email).set({
-            'search_history': firestore.ArrayUnion([product_keyword])
+            'search_history': firestore.ArrayUnion([search_history.to_dict()])
         }, merge=True) # Merge the search history with the existing user document (if any)
 
         print(f'[Database] Found {len(scan_results)} document(s) for "{product_keyword}".')
