@@ -26,12 +26,7 @@ def load_profile() -> Response:
 
         # Reference the user document by email and retrieve the user profile data
         user_document = user_reference.document(email)
-        user_data = user_document.get()
-
-        if not user_data.exists:
-            return jsonify({'error': 'User not found.'}), 404
-
-        return jsonify(user_data.to_dict()), 200
+        return jsonify(user_document.get().to_dict())
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
 
@@ -142,7 +137,6 @@ def update_health_profile() -> Response:
             return jsonify({'message': 'Health profile updated successfully.'})
         else:
             return jsonify({'message': 'No changes detected.'})
-
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
 
@@ -158,7 +152,7 @@ def add_favorite() -> Response:
         return jsonify({'error': 'Email, product name, brand, and image are required.'}), 400
 
     try:
-        # # Reference the user document by email and add the favorite product
+        # Reference the user document by email and add the favorite product
         user_document = user_reference.document(email)
         if not user_document.get().exists:
             return jsonify({'error': 'User not found.'}), 404
@@ -169,7 +163,7 @@ def add_favorite() -> Response:
             'favorite_product': firestore.ArrayUnion([favorite_product.to_dict()])
         }, merge=True) # Merge the favorite product with the existing user document (if any)
 
-        return jsonify({'message': 'Favorite product added successfully.'}), 200
+        return jsonify({'message': 'Favorite product added successfully.'})
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
 
@@ -203,6 +197,6 @@ def clear_history() -> Response:
         user_document = user_reference.document(email)
         user_document.update({path_mapping.get(request.path): firestore.DELETE_FIELD})
 
-        return jsonify({'message': f'{path_mapping.get(request.path).replace("_", " ").capitalize()} cleared successfully.'}), 200
+        return jsonify({'message': f'{path_mapping.get(request.path).replace("_", " ").capitalize()} cleared successfully.'})
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500

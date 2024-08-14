@@ -65,7 +65,8 @@ class ScanHistory:
 
 # Model for user chat history
 class ChatHistory:
-    def __init__(self, user_message: str = None, bot_response: str = None, message_type: str = None, timestamp: str = None):
+    def __init__(self, message_index: int = None, user_message: str = None, bot_response: str = None, message_type: str = None, timestamp: str = None):
+        self.message_index = message_index
         self.user_message = user_message
         self.bot_response = bot_response
         self.message_type = message_type
@@ -73,6 +74,7 @@ class ChatHistory:
 
     def to_dict(self) -> dict:
         return {
+            'message_index': self.message_index,
             'user_message': self.user_message,
             'bot_response': self.bot_response,
             'message_type': self.message_type,
