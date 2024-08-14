@@ -13,6 +13,7 @@ def signup() -> Response:
     # Get email and password values from the incoming JSON data
     email = request.json.get('email')
     password = request.json.get('password')
+
     if not email or not password:
         return jsonify({'error': 'Email and password are required.'}), 400
 
@@ -22,14 +23,14 @@ def signup() -> Response:
             email=email,
             password=password
         )
-        # Register the user in the firestore database (workaround for Firebase Auth)
+        # Register the user in Firestore database (Workaround for Firebase Auth not supporting direct user data storage in Firestore)
         register_user_profile(email, password)
-        return redirect(url_for('auth.verify', email=email)) # Redirect to the email verification route
+        return redirect(url_for('auth.verify_email', email=email)) # Redirect to the email verification route
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
 
 @auth_blueprint.route('/verify-email', methods=['GET'])
-def verify() -> Response:
+def verify_email() -> Response:
     # Get the email value from the query parameters
     email = request.args.get('email')
     # if not email:
@@ -48,6 +49,7 @@ def signin() -> Response:
     # Get email and password values from the incoming JSON data
     email = request.json.get('email')
     password = request.json.get('password')
+
     if not email or not password:
         return jsonify({'error': 'Email and password are required.'}), 400
 
@@ -62,7 +64,7 @@ def signin() -> Response:
         return jsonify({'error': str(exc)}), 500
 
 @auth_blueprint.route('/reset-password', methods=['POST'])
-def reset() -> Response:
+def reset_password() -> Response:
     # Get email value from the incoming JSON data
     email = request.json.get('email')
     if not email:
@@ -82,6 +84,7 @@ def update_email() -> Response:
     current_email = request.json.get('current_email')
     new_email = request.json.get('new_email')
     password = request.json.get('password')
+
     if not current_email or not new_email or not password:
         return jsonify({'error': 'Current email, new email, and password are required.'}), 400
 
@@ -96,13 +99,13 @@ def update_email() -> Response:
         auth.update_user(user.uid, email=new_email)
 
         # Reference the user document by current email and update the email field
-        user_document = user_reference.document(current_email)
-        user_document.update({'account_info.email': new_email})
+        current_user_document = user_reference.document(current_email)
+        current_user_document.update({'account_info.email': new_email})
 
-        # Create a new user document with the new email and delete the old one
+        # Create a new user document with the new email and delete the old one (Workdaround for Firestore not supporting document ID updates)
         new_user_document = user_reference.document(new_email)
-        new_user_document.set(user_document.get().to_dict())
-        user_document.delete()
+        new_user_document.set(current_user_document.get().to_dict())
+        current_user_document.delete()
 
         # Update the email in the session if the user is logged in
         if 'email' in session and session['email'] == current_email:
@@ -122,10 +125,11 @@ def logout() -> Response:
         return jsonify({'error': 'User not logged in.'}), 401
 
 @auth_blueprint.route('/delete-account', methods=['POST'])
-def delete() -> Response:
+def delete_account() -> Response:
     # Get email value from the incoming JSON data
     email = request.json.get('email')
     password = request.json.get('password')
+    
     if not email or not password:
         return jsonify({'error': 'Email and password are required.'}), 400
 

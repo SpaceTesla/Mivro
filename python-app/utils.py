@@ -115,4 +115,7 @@ def chat_history(email: str, chat_entry: dict) -> None:
 
 # Function for calculating the BMI based on the weight and height (Used in models.py)
 def calculate_bmi(weight_kg: float, height_m: float) -> float:
+    if not weight_kg or not height_m:
+        return None
+
     return round(weight_kg / (height_m ** 2), 2)

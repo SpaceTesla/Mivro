@@ -130,16 +130,12 @@ def remove_user_profile(email: str) -> dict:
     except Exception as exc:
         return {'error': 'Firestore deletion error: ' + str(exc)}, 500
 
-def save_health_profile(email: str, profile_data: dict) -> dict:
+def save_health_profile(email: str, health_data: dict) -> dict:
     try:
-        # Check if the user document exists in Firestore
+        # Store the health profile data for the user in Firestore
         user_document = user_reference.document(email)
-        if not user_document.get().exists:
-            return {'error': 'User does not exist.'}, 404
-
-        # Set or update the health profile in Firestore
         user_document.set({
-            'health_profile': profile_data
+            'health_profile': health_data
         }, merge=True)  # Merge the health profile with the existing user document (if any)
 
         return {'message': 'Health profile saved successfully.'}
