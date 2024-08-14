@@ -16,6 +16,7 @@ app.register_blueprint(auth_blueprint) # Register the auth blueprint
 app.register_blueprint(search_blueprint) # Register the search blueprint
 app.register_blueprint(ai_blueprint) # Register the ai blueprint
 app.register_blueprint(user_blueprint) # Register the user blueprint
+app.register_blueprint(chat_blueprint) # Register the chat blueprint
 
 # Enable CORS for all routes under /api/*, allowing all origins
 CORS(app, resources={

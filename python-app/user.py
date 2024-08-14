@@ -9,6 +9,32 @@ from models import HealthProfile
 # Blueprint for the user routes
 user_blueprint = Blueprint('user', __name__, url_prefix='/api/v1/user')
 
+@user_blueprint.route('/load-profile', methods=['POST'])
+def load_profile() -> Response:
+    # Get email and password values from the incoming JSON data
+    email = request.json.get('email')
+    password = request.json.get('password')
+
+    if not email or not password:
+        return jsonify({'error': 'Email and password are required.'}), 400
+
+    try:
+        # Validate the user's email and password
+        result = validate_user_profile(email, password)
+        if 'error' in result:
+            return jsonify(result), 401
+
+        # Reference the user document by email and retrieve the user profile data
+        user_document = user_reference.document(email)
+        user_data = user_document.get()
+
+        if not user_data.exists:
+            return jsonify({'error': 'User not found.'}), 404
+
+        return jsonify(user_data.to_dict()), 200
+    except Exception as exc:
+        return jsonify({'error': str(exc)}), 500
+
 @user_blueprint.route('/update-user-profile', methods=['POST'])
 def update_user_profile() -> Response:
     # Get email and password values from the incoming JSON data
