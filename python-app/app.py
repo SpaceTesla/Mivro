@@ -22,7 +22,8 @@ app.register_blueprint(user_blueprint, url_prefix='/api/v1/user')
 app.register_blueprint(chat_blueprint, url_prefix='/api/v1/chat')
 
 # Apply the authenticate middleware to all incoming requests
-# app.before_request(authenticate) (COMMENTED OUT: Authentication through HTTP headers are exposed in the frontend)
+app.before_request(authenticate)
+
 # Enable CORS for all routes under /api/*
 CORS(app, resources={
     r'/api/*': {
