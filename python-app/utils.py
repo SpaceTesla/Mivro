@@ -97,7 +97,7 @@ def filter_image(image_data: dict) -> str:
     return image_link
 
 # Function for retrieving the user's health profile from Firestore (Used in gemini.py)
-def user_profile(email: str) -> dict:
+def health_profile(email: str) -> dict:
     user_document = user_reference.document(email)
     health_profile = user_document.get().to_dict().get('health_profile', {})
     return health_profile
