@@ -4,7 +4,7 @@ from flask import request, jsonify
 # Local project-specific imports: Database functions
 from database import validate_user_profile
 
-def authenticate():
+def auth_handler():
     # Allow OPTIONS requests to pass through
     if request.method == 'OPTIONS':
         return None # Skip authentication for OPTIONS requests
@@ -36,3 +36,6 @@ def authenticate():
             return jsonify(result), status_code
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
+
+def error_handler(e):
+    return jsonify({'message': 'Error with request path. Check and try again.'}), 500
