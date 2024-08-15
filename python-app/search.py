@@ -13,7 +13,7 @@ from gemini import lumi, swapr
 
 # Blueprint for the search routes
 search_blueprint = Blueprint('search', __name__)
-api = openfoodfacts.API(user_agent='Mivro/1.0') # Initialize the Open Food Facts API client
+api = openfoodfacts.API(user_agent='Mivro/1.5') # Initialize the Open Food Facts API client
 
 @search_blueprint.route('/barcode', methods=['POST'])
 def barcode() -> dict:
@@ -21,7 +21,7 @@ def barcode() -> dict:
         # Start the timer for measuring the response time
         start_time = datetime.now()
         # Get the email and product barcode values from the incoming JSON data
-        email = request.json.get('email')
+        email = request.headers.get('Mivro-Email')
         product_barcode = request.json.get('product_barcode')
 
         if not email or not product_barcode:
@@ -103,7 +103,7 @@ def database() -> dict:
         # Start the timer for measuring the response time
         start_time = datetime.now()
         # Get the email and product keyword values from the incoming JSON data
-        email = request.json.get('email')
+        email = request.headers.get('Mivro-Email')
         product_keyword = request.json.get('product_keyword')
 
         if not email or not product_keyword:

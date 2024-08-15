@@ -80,7 +80,7 @@ def reset_password() -> Response:
 @auth_blueprint.route('/update-email', methods=['POST'])
 def update_email() -> Response:
     # Get current email and new email values from the incoming JSON data
-    current_email = request.json.get('current_email')
+    current_email = request.headers.get('Mivro-Email')
     new_email = request.json.get('new_email')
 
     if not current_email or not new_email:
@@ -119,8 +119,8 @@ def logout() -> Response:
 
 @auth_blueprint.route('/delete-account', methods=['POST'])
 def delete_account() -> Response:
-    # Get email value from the incoming JSON data
-    email = request.json.get('email')
+    # Get email value from the request headers
+    email = request.headers.get('Mivro-Email')
     if not email:
         return jsonify({'error': 'Email is required for account deletion.'}), 400
 

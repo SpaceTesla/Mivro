@@ -26,9 +26,10 @@ function fetchProductInfo(sendResponse, product) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Mivro-Email": "test@gmail.com",
+      "Mivro-Password": "test123",
     },
     body: JSON.stringify({
-      email: "admin@mivro.org",
       product_keyword: product,
     }),
     timeout: 15000,

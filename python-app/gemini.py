@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 # Local project-specific imports: Configuration, models, and utilities
 from config import GEMINI_API_KEY
 from models import ChatHistory
-from utils import user_profile, chat_history
+from utils import health_profile, chat_history
 
 # Blueprint for the ai routes
 ai_blueprint = Blueprint('ai', __name__)
@@ -73,14 +73,14 @@ savora_chat_session = savora_llm.start_chat(history=[])
 @ai_blueprint.route('/lumi', methods=['POST'])
 def lumi(product_data: dict) -> Response:
     try:
-        # Get email value from the incoming JSON data
-        email = request.json.get('email')
+        # Get email value from the request headers
+        email = request.headers.get('Mivro-Email')
         if not email or not product_data:
             return jsonify({'error': 'Email and product data are required.'}), 400
 
-        health_profile = user_profile(email) # Retrieve the user's health profile from Firestore (if any)
+        health_data = health_profile(email) # Retrieve the user's health profile from Firestore (if any)
         # Send the user's health profile and product data to the Gemini model
-        user_message = f'Health Profile: {health_profile}\nProduct Data: {product_data}'
+        user_message = f'Health Profile: {health_data}\nProduct Data: {product_data}'
         bot_response = lumi_chat_session.send_message(user_message)
 
         # Filter the response to remove code blocks and return the evaluated product data
@@ -116,21 +116,19 @@ def savora() -> Response:
     try:
         # Check if the request contains a file upload (multipart/form-data)
         if 'media' in request.files:
-            user_email = request.form.get('email')
-            message_index = request.form.get('index')
+            user_email = request.headers.get('Mivro-Email')
             message_type = request.form.get('type')
             user_message = request.form.get('message')
             media_file = request.files.get('media')
         else:
             # Otherwise, expect JSON input (application/json)
-            user_email = request.json.get('email')
-            message_index = request.json.get('index')
+            user_email = request.headers.get('Mivro-Email')
             message_type = request.json.get('type')
             user_message = request.json.get('message')
             media_file = None
 
-        if not user_email or not message_index or not message_type or not user_message:
-            return jsonify({'error': 'Email, index, type, and message are required.'}), 400
+        if not user_email or not message_type or not user_message:
+            return jsonify({'error': 'Email, message type, and message are required.'}), 400
 
         # Send the user's message to the Gemini model
         if message_type == 'text':
@@ -161,7 +159,7 @@ def savora() -> Response:
             return jsonify({'error': 'Invalid message type.'}), 400
 
         # Store the chat history for the user's email in Firestore
-        chat_entry = ChatHistory(message_index=message_index, user_message=user_message, bot_response=bot_response.text, message_type=message_type)
+        chat_entry = ChatHistory(user_message=user_message, bot_response=bot_response.text, message_type=message_type)
         chat_history(user_email, chat_entry)
 
         return jsonify({'response': bot_response.text})

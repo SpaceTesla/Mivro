@@ -9,7 +9,7 @@ from search import search_blueprint
 from gemini import ai_blueprint
 from user import user_blueprint
 from chat import chat_blueprint
-from middleware import authenticate
+from middleware import auth_handler, error_handler
 
 app = Flask(__name__) # Initialize Flask application instance
 app.secret_key = FLASK_SECRET_KEY # Set the Flask secret key for session management
@@ -21,8 +21,10 @@ app.register_blueprint(ai_blueprint, url_prefix='/api/v1/ai')
 app.register_blueprint(user_blueprint, url_prefix='/api/v1/user')
 app.register_blueprint(chat_blueprint, url_prefix='/api/v1/chat')
 
-# Apply the authenticate middleware to all incoming requests
-# app.before_request(authenticate) (COMMENTED OUT: Authentication through HTTP headers are exposed in the frontend)
+# Register middleware functions for authentication and error handling
+app.before_request(auth_handler)
+app.register_error_handler(Exception, error_handler)
+
 # Enable CORS for all routes under /api/*
 CORS(app, resources={
     r'/api/*': {

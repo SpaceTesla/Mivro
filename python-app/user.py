@@ -11,8 +11,8 @@ user_blueprint = Blueprint('user', __name__)
 
 @user_blueprint.route('/load-profile', methods=['POST'])
 def load_profile() -> Response:
-    # Get email value from the incoming JSON data
-    email = request.json.get('email')
+    # Get email value from the request headers
+    email = request.headers.get('Mivro-Email')
     if not email:
         return jsonify({'error': 'Email is required.'}), 400
 
@@ -25,8 +25,8 @@ def load_profile() -> Response:
 
 @user_blueprint.route('/update-profile', methods=['POST'])
 def update_profile() -> Response:
-    # Get email from the incoming JSON data
-    email = request.json.get('email')
+    # Get email value from the request headers
+    email = request.headers.get('Mivro-Email')
     if not email:
         return jsonify({'error': 'Email is required.'}), 400
 
@@ -70,8 +70,8 @@ def update_profile() -> Response:
 
 @user_blueprint.route('/health-profile', methods=['POST'])
 def health_profile() -> Response:
-    # Get email from the incoming JSON request
-    email = request.json.get('email')
+    # Get email value from the request headers
+    email = request.headers.get('Mivro-Email')
     if not email:
         return jsonify({'error': 'Email is required.'}), 400
 
@@ -103,7 +103,7 @@ def health_profile() -> Response:
 @user_blueprint.route('/favorite-product', methods=['POST'])
 def favorite_product() -> Response:
     # Get email, product name, brand, and image values from the incoming JSON data
-    email = request.json.get('email')
+    email = request.headers.get('Mivro-Email')
     product_name = request.json.get('product_name')
     product_brand = request.json.get('product_brand')
     product_image = request.json.get('product_image')
@@ -128,8 +128,8 @@ def favorite_product() -> Response:
 @user_blueprint.route('/clear-chat', methods=['POST'])
 @user_blueprint.route('/clear-favorite', methods=['POST'])
 def clear_history() -> Response:
-    # Get email value from the incoming JSON data
-    email = request.json.get('email')
+    # Get email value from the request headers
+    email = request.headers.get('Mivro-Email')
     if not email:
         return jsonify({'error': 'Email is required.'}), 400
 
