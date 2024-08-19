@@ -1,3 +1,4 @@
+import 'package:lottie/lottie.dart';
 import 'package:mivro/utils/hexcolor.dart';
 import 'package:mivro/widgets/barcode/scanner_button_widgets.dart';
 import 'package:mivro/widgets/barcode/scanner_error_widget.dart';
@@ -369,12 +370,13 @@ class _BarcodeScannerListViewState extends State<BarcodeScannerListView> {
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold)),
                           Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 4.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 4.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Image.asset(
-                                    'assets/new/4.png',
+                                    'assets/icons/nova-group-4.png',
                                     height: 30,
                                     width: 30,
                                   ),
@@ -395,13 +397,13 @@ class _BarcodeScannerListViewState extends State<BarcodeScannerListView> {
                             child: Row(
                               children: [
                                 Image.asset(
-                                  'assets/new/health-risk.png',
+                                  'assets/icons/health-risk.png',
                                   height: 30,
                                   width: 30,
                                 ),
                                 const SizedBox(width: 8),
                                 const Expanded(
-                                  child:  Text(
+                                  child: Text(
                                     "This product contains E472e (esters of acetic acid and mono- and diglycerides of fatty acids), "
                                     "which may be derived from palm oil and may be a concern for some individuals.",
                                   ),
@@ -542,11 +544,19 @@ class _BarcodeScannerListViewState extends State<BarcodeScannerListView> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
     return Stack(
       children: [
         MobileScanner(
           onDetect: (barcodeCapture) {},
           controller: controller,
+          scanWindow: Rect.fromLTWH(
+            (width - 400) / 2,
+            (height - 310) / 2,
+            400,
+            150,
+          ),
           errorBuilder: (context, error, child) {
             // controller!.stop();
             // controller!.start();
@@ -554,22 +564,54 @@ class _BarcodeScannerListViewState extends State<BarcodeScannerListView> {
           },
           fit: BoxFit.cover,
         ),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            return Stack(
+              children: [
+                ClipPath(
+                  clipper: _CutOutClipper(
+                    holeSize: const Size(400, 150),
+                    position: Offset(
+                      (constraints.maxWidth - 400) / 2,
+                      (constraints.maxHeight - 150) / 2,
+                    ),
+                  ),
+                  child: Container(
+                    color: Colors.black
+                        .withOpacity(0.5), // Semi-transparent overlay
+                  ),
+                ),
+                Center(
+                  child: Container(
+                    height: 150,
+                    width: 400,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: const Color.fromARGB(
+                            255, 172, 49, 40), // Red border
+                        width: 2,
+                      ),
+                      // borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Lottie.asset(
+                      'assets/animations/scanner.json',
+                      fit: BoxFit.fill,
+                    ),
+                    // child: const ScanningAnimation(
+                    //   width: 400,
+                    //   height: 150,
+                    // ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
         const Positioned(
           top: 10,
           left: 10,
           right: 10,
           child: SearchBarWIdget(),
-        ),
-        Center(
-          child: Container(
-            height: 150,
-            width: 400,
-            decoration: BoxDecoration(
-              border: Border.all(
-                  color: const Color.fromARGB(255, 172, 49, 40), width: 2),
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
         ),
         Positioned(
           top: 200,
@@ -604,4 +646,24 @@ class _BarcodeScannerListViewState extends State<BarcodeScannerListView> {
     super.dispose();
     controller!.dispose();
   }
+}
+
+class _CutOutClipper extends CustomClipper<Path> {
+  final Size holeSize;
+  final Offset position;
+
+  _CutOutClipper({required this.holeSize, required this.position});
+
+  @override
+  Path getClip(Size size) {
+    Path path = Path()
+      ..addRect(Rect.fromLTWH(0, 0, size.width, size.height))
+      ..addRect(Rect.fromLTWH(
+          position.dx, position.dy, holeSize.width, holeSize.height))
+      ..fillType = PathFillType.evenOdd;
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
