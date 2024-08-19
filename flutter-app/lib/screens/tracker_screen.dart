@@ -20,7 +20,7 @@ class _OverviewScreenState extends State<OverviewScreen> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/logo-transparent.png'),
+                image: AssetImage('assets/logo/mivro.png'),
                 fit: BoxFit.cover,
               ),
             ),

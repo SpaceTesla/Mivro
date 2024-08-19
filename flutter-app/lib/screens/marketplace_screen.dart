@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class MarketplaceScreen extends StatefulWidget {
-  const MarketplaceScreen({Key? key}) : super(key: key);
+  const MarketplaceScreen({super.key});
 
   @override
   State<StatefulWidget> createState() => _MarketplaceScreen();
@@ -18,7 +18,7 @@ class _MarketplaceScreen extends State<MarketplaceScreen> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/logo-transparent.png'),
+                image: AssetImage('assets/logos/mivro.png'),
                 fit: BoxFit.cover,
               ),
             ),

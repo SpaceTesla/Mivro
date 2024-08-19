@@ -51,6 +51,7 @@ dependencies:
   flutter_markdown: ^0.7.3
   http: ^1.2.2
   mockito: ^5.4.4
+  lottie: ^3.1.2
 
 flutter_native_splash:
   color: "#27374D" # Background color of the splash screen
@@ -93,11 +94,10 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
-    - assets/icons-old/
-    - assets/images/
-    - assets/navigation/
+    - assets/app-icons/
     - assets/icons/
-    - assets/new/
+    - assets/logos/
+    - assets/animations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
