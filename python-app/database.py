@@ -1,6 +1,7 @@
 # Core library imports: Firebase Admin SDK setup
 import firebase_admin
 from firebase_admin import credentials, firestore
+from fuzzywuzzy import fuzz
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
@@ -41,27 +42,34 @@ def database_search(email: str, product_keyword: str, search_keys: list) -> dict
         # Retrieve the scan history of all user documents in Firestore
         user_stream = user_reference.stream()
         scan_results = []
-        # found_keys = []
 
         # Search for the product keyword in the scan history of all user documents in Firestore
         for user_document in user_stream:
             user_data = user_document.to_dict()
             scan_history = user_data.get('scan_history', {})
 
-            # Check if the product keyword is in the user's scan history and add it to the search results
+            # Compare the product keyword with the search keys in the scan history
             for scan_data in scan_history:
-                if any(product_keyword.lower() in str(scan_history[scan_data].get(key, '')).lower() for key in search_keys):
-                    scan_results.append(scan_history[scan_data])
-                    # found_keys.append(key)
+                for key in search_keys:
+                    # Calculate the similarity score between the product keyword and the scan data by token set ratio
+                    field_value = str(scan_history[scan_data].get(key, '')).lower()
+                    similarity_score = fuzz.token_set_ratio(product_keyword.lower(), field_value)
+                    # Add the scan data to the results if the similarity score is above 70% (arbitrary threshold)
+                    if similarity_score > 70:
+                        scan_results.append({
+                            'data': scan_history[scan_data],
+                            'similarity': similarity_score
+                        })
 
-        # Store the search history for the product keyword in Firestore
-        search_history = SearchHistory(user_searches=product_keyword)
+        # Sort the results by similarity (higher similarity = higher relevance)
+        scan_results.sort(key=lambda x: x['similarity'], reverse=True)
+        search_history = SearchHistory(user_searches=product_keyword) # Store the search history for the product keyword in Firestore
         user_reference.document(email).set({
             'search_history': firestore.ArrayUnion([search_history.to_dict()])
         }, merge=True) # Merge the search history with the existing user document (if any)
 
-        print(f'[Database] Found {len(scan_results)} document(s) for "{product_keyword}".')
-        return scan_results[0] if scan_results else None # Return the first search result found (if any)
+        print(f'[Database] Found {len(scan_results)} result(s) for "{product_keyword}".')
+        return scan_results[0]['data'] if scan_results else None # Return the most relevant result (if any)
     except Exception as exc:
         return {'error': 'Database search error: ' + str(exc)}, 500
 

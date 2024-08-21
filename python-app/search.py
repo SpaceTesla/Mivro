@@ -50,7 +50,7 @@ def barcode() -> dict:
         response_time = (end_time - start_time).total_seconds()
         response_size = sys.getsizeof(filtered_product_data) / 1024
 
-        # Update the filtered product data with additional information
+        # Update the filtered product data with additional information for analytics
         filtered_product_data.update({
             'search_type': 'Open Food Facts API',
             'search_response': '200 OK',
@@ -109,28 +109,27 @@ def database() -> dict:
         if not email or not product_keyword:
             return jsonify({'error': 'Email and product keyword are required.'}), 400
 
-        search_keys = ['_keywords', 'brands', 'categories', 'product_name'] # Define the search keys for the database search
-        # Split the product keyword into individual words and search the database for each word
-        tokenized_keywords = product_keyword.split()
+        # Search the Firestore database for the product keyword using multiple search keys
+        search_keys = ['_keywords', 'brands', 'categories', 'product_name']
+        product_data = database_search(email, product_keyword, search_keys)
 
-        for keyword in tokenized_keywords:
-            product_data = database_search(email, keyword, search_keys)
-            # Check if the product data is found in the database and return the response
-            if product_data:
-                end_time = datetime.now()
-                response_time = (end_time - start_time).total_seconds()
-                response_size = sys.getsizeof(product_data) / 1024
+        if product_data:
+            # Calculate the response time and size for the product data from Firestore
+            end_time = datetime.now()
+            response_time = (end_time - start_time).total_seconds()
+            response_size = sys.getsizeof(product_data) / 1024
 
-                product_data.update({
-                    'search_type': 'Google Firestore Database',
-                    'search_response': '200 OK',
-                    'response_time': f'{response_time:.2f} seconds',
-                    'response_size': f'{response_size:.2f} KB',
-                    'search_date': datetime.now().strftime('%d-%B-%Y'),
-                    'search_time': datetime.now().strftime('%I:%M %p')
-                })
+            # Update the product data with additional information for analytics
+            product_data.update({
+                'search_type': 'Google Firestore Database',
+                'search_response': '200 OK',
+                'response_time': f'{response_time:.2f} seconds',
+                'response_size': f'{response_size:.2f} KB',
+                'search_date': datetime.now().strftime('%d-%B-%Y'),
+                'search_time': datetime.now().strftime('%I:%M %p')
+            })
 
-                return jsonify(product_data)
+            return jsonify(product_data)
 
         # Store "Product not found" event in Firestore for analytics
         database_not_found(product_keyword, 'database')
