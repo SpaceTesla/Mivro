@@ -1,4 +1,5 @@
 # Core library imports: Flask setup
+import requests
 from flask import Blueprint, Response, request, jsonify
 
 # Local project-specific imports: Database functions
@@ -37,19 +38,28 @@ def update_message() -> Response:
         user_document = user_reference.document(email)
         chat_history = user_document.get().to_dict().get('chat_history', [])
 
-        # Use list comprehension to update the message
+        # Delete the old message from the chat history
         new_chat_history = [
-            {**record, 'user_message': new_message} if record.get('user_message') == old_message else record
-            for record in chat_history
+            record for record in chat_history
+            if record.get('user_message') != old_message
         ]
 
-        # Check if the old message was found and updated
-        if new_chat_history == chat_history:
+        # Check if the old message was found and deleted
+        if len(new_chat_history) == len(chat_history):
             return jsonify({'error': 'Old message not found in chat history.'}), 404
 
-        # Update the chat history in the database
+        # Save the updated chat history to the database after deleting the old message
         user_document.update({'chat_history': new_chat_history})
-        return jsonify({'message': 'Message updated successfully.'})
+        # Send the new message to the Savora AI model for processing and return the response
+        savora_response = requests.post(
+            'http://localhost:5000/api/v1/ai/savora',
+            json={'message': new_message, 'type': 'text'}
+        )
+
+        if savora_response.status_code != 200:
+            return jsonify({'error': 'Savora AI failed to process the message.'}), savora_response.status_code
+
+        return savora_response.json()
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
 
@@ -67,7 +77,7 @@ def delete_message() -> Response:
         user_document = user_reference.document(email)
         chat_history = user_document.get().to_dict().get('chat_history', [])
 
-        # Use list comprehension to delete the message
+        # Delete the message from the chat history
         new_chat_history = [
             record for record in chat_history
             if record.get('user_message') != delete_message
@@ -77,7 +87,7 @@ def delete_message() -> Response:
         if len(new_chat_history) == len(chat_history):
             return jsonify({'error': 'Message not found in chat history.'}), 404
 
-        # Update the chat history in the database
+        # Save the updated chat history to the database after deleting the message
         user_document.update({'chat_history': new_chat_history})
         return jsonify({'message': 'Message deleted successfully.'})
     except Exception as exc:
