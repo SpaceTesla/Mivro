@@ -32,10 +32,10 @@ def auth_handler():
         result = validate_user_profile(email, password)
         if 'error' in result:
             # Set the status code based on the error message
-            status_code = 401 if 'Incorrect password' in result['error'] else 404
+            status_code = 401 if 'Incorrect password.' in result['error'] else 404
             return jsonify(result), status_code
     except Exception as exc:
         return jsonify({'error': str(exc)}), 500
 
-def error_handler(e):
+def error_handler(exception):
     return jsonify({'message': 'Error with request path. Check and try again.'}), 500
