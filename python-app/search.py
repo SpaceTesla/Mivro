@@ -109,7 +109,7 @@ def database() -> dict:
         if not email or not product_keyword:
             return jsonify({'error': 'Email and product keyword are required.'}), 400
 
-        # Search the Firestore database for the product keyword using multiple search keys
+        # Define the search keys and fetch the product data from Firestore using the keyword
         search_keys = ['_keywords', 'brands', 'categories', 'product_name']
         product_data = database_search(email, product_keyword, search_keys)
 
