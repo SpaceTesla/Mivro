@@ -13,9 +13,10 @@ credential = credentials.Certificate('firebase-adminsdk.json')
 firebase_admin.initialize_app(credential)
 database = firestore.client() # Initialize the Firestore database client
 
-# Create a reference to the 'users' collection in Firestore
+# Create Firestore document references for the collections
 user_reference = database.collection('users')
 not_found_reference = database.collection('not_found')
+error_reference = database.collection('errors')
 
 def database_history(email: str, product_barcode: str, product_data: dict) -> None:
     try:
@@ -35,6 +36,7 @@ def database_history(email: str, product_barcode: str, product_data: dict) -> No
 
         print(f'[Database] Scan history for "{product_barcode}" stored.')
     except Exception as exc:
+        runtime_error('database_history', str(exc), email=email, product_barcode=product_barcode)
         return {'error': 'Firestore storage error: ' + str(exc)}, 500
 
 def database_search(email: str, product_keyword: str, search_keys: list) -> dict:
@@ -71,9 +73,10 @@ def database_search(email: str, product_keyword: str, search_keys: list) -> dict
         print(f'[Database] Found {len(scan_results)} result(s) for "{product_keyword}".')
         return scan_results[0]['data'] if scan_results else None # Return the most relevant result (if any)
     except Exception as exc:
+        runtime_error('database_search', str(exc), email=email, product_keyword=product_keyword)
         return {'error': 'Database search error: ' + str(exc)}, 500
 
-def database_not_found(search_value: str, search_type: str) -> None:
+def product_not_found(search_value: str, search_type: str) -> None:
     try:
         # Select the document name based on the search type
         document_name = 'barcodes' if search_type == 'barcode' else 'keywords'
@@ -86,6 +89,30 @@ def database_not_found(search_value: str, search_type: str) -> None:
 
         print(f'[Database] "{search_value}" added to the "{document_name}" not found list.')
     except Exception as exc:
+        runtime_error('product_not_found', str(exc), search_value=search_value, search_type=search_type)
+        return {'error': 'Firestore storage error: ' + str(exc)}, 500
+
+def runtime_error(function_name: str, error_message: str, **kwargs) -> None:
+    try:
+        # Select the document name based on the function name
+        error_document = error_reference.document(function_name)
+        # Store the error message and timestamp in Firestore for the function
+        error_data = {
+            'error_message': error_message,
+            'timestamp': datetime.now().strftime('%d-%B-%Y %H:%M:%S')
+        }
+        # Check if additional keyword arguments are provided and add them to the error data
+        if kwargs:
+            error_data.update(kwargs)
+
+        # Add the error data to the error reports in Firestore for the function
+        error_document.set({
+            'error_reports': firestore.ArrayUnion([error_data])
+        }, merge=True) # Merge the error data with the existing error document (if any)
+
+        print(f'[Database] Error logged for "{function_name}": {error_message}')
+    except Exception as exc:
+        # runtime_error('runtime_error', str(exc), function_name=function_name, error_message=error_message, **kwargs)
         return {'error': 'Firestore storage error: ' + str(exc)}, 500
 
 def register_user_profile(email: str, password: str) -> None:
@@ -108,6 +135,7 @@ def register_user_profile(email: str, password: str) -> None:
 
         # return {'message': 'Account created successfully.'}
     except Exception as exc:
+        runtime_error('register_user_profile', str(exc), email=email)
         return {'error': 'Firestore registration error: ' + str(exc)}, 500
 
 # This function does not have status codes because middleware.py handles the status codes
@@ -125,6 +153,7 @@ def validate_user_profile(email: str, password: str) -> dict:
 
         return {'message': 'Login successful.'}
     except Exception as exc:
+        runtime_error('validate_user_profile', str(exc), email=email)
         return {'error': 'Firestore validation error: ' + str(exc)}
 
 def remove_user_profile(email: str) -> dict:
@@ -137,6 +166,7 @@ def remove_user_profile(email: str) -> dict:
         else:
             return {'error': 'User document does not exist.'}, 404
     except Exception as exc:
+        runtime_error('remove_user_profile', str(exc), email=email)
         return {'error': 'Firestore deletion error: ' + str(exc)}, 500
 
 def save_health_profile(email: str, health_data: dict) -> dict:
@@ -149,4 +179,5 @@ def save_health_profile(email: str, health_data: dict) -> dict:
 
         return {'message': 'Health profile saved successfully.'}
     except Exception as exc:
+        runtime_error('save_health_profile', str(exc), email=email)
         return {'error': 'Firestore storage error: ' + str(exc)}, 500

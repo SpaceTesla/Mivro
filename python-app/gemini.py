@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 # Local project-specific imports: Configuration, models, and utilities
 from config import GEMINI_API_KEY
 from models import ChatHistory
+from database import runtime_error
 from utils import health_profile, chat_history
 
 # Blueprint for the ai routes
@@ -87,6 +88,7 @@ def lumi(product_data: dict) -> Response:
         filtered_response = bot_response.text.replace('```python', '').replace('```', '')
         return eval(filtered_response) # If eval() throws an error, use ast.literal_eval() or json.loads() instead
     except Exception as exc:
+        runtime_error('lumi', str(exc), email=email)
         return jsonify({'error': str(exc)}), 500
 
 @ai_blueprint.route('/swapr', methods=['POST'])
@@ -104,11 +106,13 @@ def swapr(email: str, product_data: dict) -> Response:
         )
 
         if database_response.status_code != 200:
+            runtime_error('swapr', 'Database search failed.', middleware=database_response.json(), email=email)
             # return jsonify({'error': 'Database search failed.'}), database_response.status_code
-            return {'product_name': filtered_response}
+            return {'product_name': filtered_response.strip()}
 
         return database_response.json()
     except Exception as exc:
+        runtime_error('swapr', str(exc), email=email)
         return jsonify({'error': str(exc)}), 500
 
 @ai_blueprint.route('/savora', methods=['POST'])
@@ -164,4 +168,5 @@ def savora() -> Response:
 
         return jsonify({'response': bot_response.text})
     except Exception as exc:
+        runtime_error('savora', str(exc), email=user_email)
         return jsonify({'error': str(exc)}), 500

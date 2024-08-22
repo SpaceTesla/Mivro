@@ -8,7 +8,7 @@ from datetime import datetime
 # Local project-specific imports: Utilities, mapping, database, and gemini functions
 from utils import filter_additive, filter_ingredient, filter_nutriment, filter_data, filter_image
 from mapping import additive_name, nova_name, grade_color, score_assessment
-from database import database_history, database_search, database_not_found
+from database import database_history, database_search, product_not_found, runtime_error
 from gemini import lumi, swapr
 
 # Blueprint for the search routes
@@ -32,7 +32,7 @@ def barcode() -> dict:
         product_data = api.product.get(product_barcode, fields=required_data)
         if not product_data:
             # Store "Product not found" event in Firestore for analytics
-            database_not_found(product_barcode, 'barcode')
+            product_not_found(product_barcode, 'barcode')
             return jsonify({'error': 'Product not found.'}), 404
 
         # Check for missing fields in the product data
@@ -78,6 +78,7 @@ def barcode() -> dict:
         database_history(email, product_barcode, filtered_product_data)
         return jsonify(filtered_product_data)
     except Exception as exc:
+        runtime_error('barcode', str(exc), product_barcode=product_barcode)
         return jsonify({'error': str(exc)}), 500
 
 # DEPRECATED: text_search function fails to return the expected results from the Open Food Facts API
@@ -132,7 +133,8 @@ def database() -> dict:
             return jsonify(product_data)
 
         # Store "Product not found" event in Firestore for analytics
-        database_not_found(product_keyword, 'database')
+        product_not_found(product_keyword, 'database')
         return jsonify({'error': 'Product not found.'}), 404
     except Exception as exc:
+        runtime_error('database', str(exc), product_keyword=product_keyword)
         return jsonify({'error': str(exc)}), 500
