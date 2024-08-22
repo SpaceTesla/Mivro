@@ -3,7 +3,7 @@ from firebase_admin import auth, firestore
 from flask import Blueprint, Response, request, jsonify
 
 # Local project-specific imports: Database functions and models
-from database import user_reference, save_health_profile
+from database import user_reference, save_health_profile, runtime_error
 from models import HealthProfile, FavoriteProduct
 
 # Blueprint for the user routes
@@ -21,6 +21,7 @@ def load_profile() -> Response:
         user_document = user_reference.document(email)
         return jsonify(user_document.get().to_dict())
     except Exception as exc:
+        runtime_error('load_profile', str(exc), email=email)
         return jsonify({'error': str(exc)}), 500
 
 @user_blueprint.route('/update-profile', methods=['POST'])
@@ -66,6 +67,7 @@ def update_profile() -> Response:
         else:
             return jsonify({'message': 'No changes detected.'})
     except Exception as exc:
+        runtime_error('update_profile', str(exc), email=email)
         return jsonify({'error': str(exc)}), 500
 
 @user_blueprint.route('/health-profile', methods=['POST'])
@@ -98,6 +100,7 @@ def health_profile() -> Response:
 
         return jsonify(result)
     except Exception as exc:
+        runtime_error('health_profile', str(exc), email=email)
         return jsonify({'error': str(exc)}), 500
 
 @user_blueprint.route('/favorite-product', methods=['POST'])
@@ -121,6 +124,7 @@ def favorite_product() -> Response:
 
         return jsonify({'message': 'Favorite product added successfully.'})
     except Exception as exc:
+        runtime_error('favorite_product', str(exc), email=email)
         return jsonify({'error': str(exc)}), 500
 
 @user_blueprint.route('/clear-scan', methods=['POST'])
@@ -149,4 +153,5 @@ def clear_history() -> Response:
         formatted_message = f'{path_map.get(request.path).replace("_", " ").capitalize()}'
         return jsonify({'message': f'{formatted_message} cleared successfully.'})
     except Exception as exc:
+        runtime_error('clear_history', str(exc), email=email)
         return jsonify({'error': str(exc)}), 500

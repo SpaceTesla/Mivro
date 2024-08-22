@@ -3,7 +3,7 @@ import requests
 from flask import Blueprint, Response, request, jsonify
 
 # Local project-specific imports: Database functions
-from database import user_reference
+from database import user_reference, runtime_error
 
 # Blueprint for the chat routes
 chat_blueprint = Blueprint('chat', __name__)
@@ -21,6 +21,7 @@ def load_message() -> Response:
         user_data = user_document.get().to_dict()
         return jsonify(user_data.get('chat_history', []))
     except Exception as exc:
+        runtime_error('load_message', str(exc), email=email)
         return jsonify({'error': str(exc)}), 500
 
 @chat_blueprint.route('/update-message', methods=['POST'])
@@ -57,10 +58,12 @@ def update_message() -> Response:
         )
 
         if savora_response.status_code != 200:
+            runtime_error('update_message', 'Savora AI failed to process the message.', middleware=savora_response.json(), email=email)
             return jsonify({'error': 'Savora AI failed to process the message.'}), savora_response.status_code
 
         return savora_response.json()
     except Exception as exc:
+        runtime_error('update_message', str(exc), email=email)
         return jsonify({'error': str(exc)}), 500
 
 @chat_blueprint.route('/delete-message', methods=['POST'])
@@ -91,4 +94,5 @@ def delete_message() -> Response:
         user_document.update({'chat_history': new_chat_history})
         return jsonify({'message': 'Message deleted successfully.'})
     except Exception as exc:
+        runtime_error('delete_message', str(exc), email=email)
         return jsonify({'error': str(exc)}), 500

@@ -2,7 +2,7 @@
 from flask import request, jsonify
 
 # Local project-specific imports: Database functions
-from database import validate_user_profile
+from database import validate_user_profile, runtime_error
 
 def auth_handler():
     # Allow OPTIONS requests to pass through
@@ -35,6 +35,7 @@ def auth_handler():
             status_code = 401 if 'Incorrect password.' in result['error'] else 404
             return jsonify(result), status_code
     except Exception as exc:
+        runtime_error('auth_handler', str(exc), email=email)
         return jsonify({'error': str(exc)}), 500
 
 def error_handler(exception):

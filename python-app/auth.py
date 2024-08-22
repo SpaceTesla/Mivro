@@ -3,7 +3,7 @@ from firebase_admin import auth
 from flask import Blueprint, Response, request, jsonify, redirect, url_for, session
 
 # Local project-specific imports: Database functions
-from database import register_user_profile, validate_user_profile, remove_user_profile, user_reference
+from database import register_user_profile, validate_user_profile, remove_user_profile, user_reference, runtime_error
 
 # Blueprint for the authentication routes
 auth_blueprint = Blueprint('auth', __name__)
@@ -27,6 +27,7 @@ def signup() -> Response:
         register_user_profile(email, password)
         return redirect(url_for('auth.verify_email', email=email)) # Redirect to the email verification route
     except Exception as exc:
+        runtime_error('signup', str(exc), email=email)
         return jsonify({'error': str(exc)}), 500
 
 @auth_blueprint.route('/verify-email', methods=['GET'])
@@ -42,6 +43,7 @@ def verify_email() -> Response:
         auth.generate_email_verification_link(user.email)
         return jsonify({'message': 'Registration successful! Verify your email to activate your account.'})
     except Exception as exc:
+        runtime_error('verify_email', str(exc), email=email)
         return jsonify({'error': str(exc)}), 500
 
 @auth_blueprint.route('/signin', methods=['POST'])
@@ -61,6 +63,7 @@ def signin() -> Response:
 
         return jsonify(result)
     except Exception as exc:
+        runtime_error('signin', str(exc), email=email)
         return jsonify({'error': str(exc)}), 500
 
 @auth_blueprint.route('/reset-password', methods=['POST'])
@@ -75,6 +78,7 @@ def reset_password() -> Response:
         auth.generate_password_reset_link(email)
         return jsonify({'message': 'Password reset link sent successfully.'})
     except Exception as exc:
+        runtime_error('reset_password', str(exc), email=email)
         return jsonify({'error': str(exc)}), 500
 
 @auth_blueprint.route('/update-email', methods=['POST'])
@@ -106,6 +110,7 @@ def update_email() -> Response:
 
         return jsonify({'message': 'Email updated successfully.'})
     except Exception as exc:
+        runtime_error('update_email', str(exc), email=current_email)
         return jsonify({'error': str(exc)}), 500
 
 @auth_blueprint.route('/logout', methods=['POST'])
@@ -137,4 +142,5 @@ def delete_account() -> Response:
 
         return jsonify(result)
     except Exception as exc:
+        runtime_error('delete_account', str(exc), email=email)
         return jsonify({'error': str(exc)}), 500
