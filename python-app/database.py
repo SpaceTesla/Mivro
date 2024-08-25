@@ -1,8 +1,8 @@
 # Core library imports: Firebase Admin SDK setup
 import firebase_admin
 from firebase_admin import credentials, firestore
-from fuzzywuzzy import fuzz
 from werkzeug.security import generate_password_hash, check_password_hash
+from fuzzywuzzy import fuzz
 from datetime import datetime
 
 # Local project-specific imports: Models for Firestore documents
@@ -45,7 +45,7 @@ def database_search(email: str, product_keyword: str, search_keys: list) -> dict
         user_stream = user_reference.stream()
         scan_results = []
 
-        # Search for the product keyword in the scan history of all user documents in Firestore
+        # Compare the product keyword with the search keys in the scan history for each user
         for user_document in user_stream:
             user_data = user_document.to_dict()
             scan_history = user_data.get('scan_history', {})
@@ -53,7 +53,7 @@ def database_search(email: str, product_keyword: str, search_keys: list) -> dict
             # Compare the product keyword with the search keys in the scan history
             for scan_data in scan_history:
                 for key in search_keys:
-                    # Calculate the similarity score between the product keyword and the scan data by token set ratio
+                    # Calculate the similarity score between the product keyword and the scan data by token set ratio method
                     field_value = str(scan_history[scan_data].get(key, '')).lower()
                     similarity_score = fuzz.token_set_ratio(product_keyword.lower(), field_value)
                     # Add the scan data to the results if the similarity score is above 70% (arbitrary threshold)
@@ -76,7 +76,7 @@ def database_search(email: str, product_keyword: str, search_keys: list) -> dict
         runtime_error('database_search', str(exc), email=email, product_keyword=product_keyword)
         return {'error': 'Database search error: ' + str(exc)}, 500
 
-def product_not_found(search_value: str, search_type: str) -> None:
+def product_not_found(search_type: str, search_value: str) -> None:
     try:
         # Select the document name based on the search type
         document_name = 'barcodes' if search_type == 'barcode' else 'keywords'
@@ -89,7 +89,7 @@ def product_not_found(search_value: str, search_type: str) -> None:
 
         print(f'[Database] "{search_value}" added to the "{document_name}" not found list.')
     except Exception as exc:
-        runtime_error('product_not_found', str(exc), search_value=search_value, search_type=search_type)
+        runtime_error('product_not_found', str(exc), search_type=search_type, search_value=search_value)
         return {'error': 'Firestore storage error: ' + str(exc)}, 500
 
 def runtime_error(function_name: str, error_message: str, **kwargs) -> None:
@@ -112,7 +112,7 @@ def runtime_error(function_name: str, error_message: str, **kwargs) -> None:
 
         print(f'[Database] Error logged for "{function_name}": {error_message}')
     except Exception as exc:
-        # runtime_error('runtime_error', str(exc), function_name=function_name, error_message=error_message, **kwargs)
+        runtime_error('runtime_error', str(exc), function_name=function_name, error_message=error_message, **kwargs)
         return {'error': 'Firestore storage error: ' + str(exc)}, 500
 
 def register_user_profile(email: str, password: str) -> None:

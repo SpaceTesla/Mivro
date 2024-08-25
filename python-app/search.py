@@ -2,7 +2,7 @@
 import openfoodfacts
 import json
 import sys
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, Response, request, jsonify
 from datetime import datetime
 
 # Local project-specific imports: Utilities, mapping, database, and gemini functions
@@ -16,7 +16,7 @@ search_blueprint = Blueprint('search', __name__)
 api = openfoodfacts.API(user_agent='Mivro/1.5') # Initialize the Open Food Facts API client
 
 @search_blueprint.route('/barcode', methods=['POST'])
-def barcode() -> dict:
+def barcode() -> Response:
     try:
         # Start the timer for measuring the response time
         start_time = datetime.now()
@@ -32,7 +32,7 @@ def barcode() -> dict:
         product_data = api.product.get(product_barcode, fields=required_data)
         if not product_data:
             # Store "Product not found" event in Firestore for analytics
-            product_not_found(product_barcode, 'barcode')
+            product_not_found('barcode', product_barcode)
             return jsonify({'error': 'Product not found.'}), 404
 
         # Check for missing fields in the product data
@@ -83,7 +83,7 @@ def barcode() -> dict:
 
 # DEPRECATED: text_search function fails to return the expected results from the Open Food Facts API
 # @search_blueprint.route('/text', methods=['POST'])
-# def text() -> dict:
+# def text() -> Response:
 #     try:
 #         email = request.form.get('email')
 #         product_name = request.form.get('product_name')
@@ -99,7 +99,7 @@ def barcode() -> dict:
 #         return jsonify({'error': str(exc)}), 500
 
 @search_blueprint.route('/database', methods=['POST'])
-def database() -> dict:
+def database() -> Response:
     try:
         # Start the timer for measuring the response time
         start_time = datetime.now()
@@ -110,7 +110,7 @@ def database() -> dict:
         if not email or not product_keyword:
             return jsonify({'error': 'Email and product keyword are required.'}), 400
 
-        # Define the search keys and fetch the product data from Firestore using the keyword
+        # Define the search keys and fetch the product data from Firestore using the keyword (fuzzy matching)
         search_keys = ['_keywords', 'brands', 'categories', 'product_name']
         product_data = database_search(email, product_keyword, search_keys)
 
@@ -133,7 +133,7 @@ def database() -> dict:
             return jsonify(product_data)
 
         # Store "Product not found" event in Firestore for analytics
-        product_not_found(product_keyword, 'database')
+        product_not_found('database', product_keyword)
         return jsonify({'error': 'Product not found.'}), 404
     except Exception as exc:
         runtime_error('database', str(exc), product_keyword=product_keyword)

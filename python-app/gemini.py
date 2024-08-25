@@ -102,7 +102,8 @@ def swapr(email: str, product_data: dict) -> Response:
         filtered_response = bot_response.text.replace('**', '')
         database_response = requests.post(
             'http://localhost:5000/api/v1/search/database',
-            json={'email': email, 'product_keyword': filtered_response}
+            headers={'Mivro-Email': email, 'Mivro-Password': request.headers.get('Mivro-Password')},
+            json={'product_keyword': filtered_response.strip()}
         )
 
         if database_response.status_code != 200:
