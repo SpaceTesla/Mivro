@@ -54,6 +54,7 @@ def update_message() -> Response:
         # Send the new message to the Savora AI model for processing and return the response
         savora_response = requests.post(
             'http://localhost:5000/api/v1/ai/savora',
+            headers={'Mivro-Email': email, 'Mivro-Password': request.headers.get('Mivro-Password')},
             json={'type': 'text', 'message': new_message}
         )
 
