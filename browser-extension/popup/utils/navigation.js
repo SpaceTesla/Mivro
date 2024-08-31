@@ -1,5 +1,4 @@
 // navigation.js
-
 export function initializeNavigation() {
   const list = document.querySelectorAll(".nav-list li");
   const containers = document.querySelectorAll(".container");
