@@ -5,7 +5,6 @@ from flask import Response, request, jsonify
 from database import validate_user_profile, runtime_error
 
 def auth_handler() -> Response:
-    # Allow OPTIONS requests to pass through
     if request.method == 'OPTIONS':
         return None # Skip authentication for OPTIONS requests
 
