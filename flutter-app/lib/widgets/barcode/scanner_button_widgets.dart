@@ -12,7 +12,7 @@ class AnalyzeImageFromGalleryButton extends StatelessWidget {
     return IconButton(
       color: Colors.white,
       icon: const Image(
-        image: AssetImage('assets/navigation/gallery.png'),
+        image: AssetImage('assets/app-icons/gallery.png'),
         height: 40,
       ),
       iconSize: 32.0,
@@ -71,7 +71,7 @@ class ToggleFlashlightButton extends StatelessWidget {
               color: Colors.grey,
               iconSize: 32.0,
               icon: const Image(
-                image: AssetImage('assets/navigation/flash-off.png'),
+                image: AssetImage('assets/app-icons/flash-off.png'),
                 height: 45,
               ),
               onPressed: () async {
@@ -85,7 +85,7 @@ class ToggleFlashlightButton extends StatelessWidget {
               color: Colors.white,
               iconSize: 32.0,
               icon: const Image(
-                image: AssetImage('assets/navigation/flash-on.png'),
+                image: AssetImage('assets/app-icons/flash-on.png'),
                 height: 45,
               ),
               onPressed: () async {

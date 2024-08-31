@@ -26,6 +26,11 @@ class _HomePageState extends State<HomePage> {
   ];
 
   @override
+  initState() {
+    super.initState();
+  }  
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -51,7 +56,7 @@ class _HomePageState extends State<HomePage> {
             items: [
               BottomNavigationBarItem(
                 icon: const Image(
-                  image: AssetImage('assets/navigation/chat.png'),
+                  image: AssetImage('assets/app-icons/chat.png'),
                   height: 35,
                 ),
                 label: 'Chat',
@@ -59,7 +64,7 @@ class _HomePageState extends State<HomePage> {
               ),
               BottomNavigationBarItem(
                 icon: const Image(
-                  image: AssetImage('assets/navigation/marketplace.png'),
+                  image: AssetImage('assets/app-icons/marketplace.png'),
                   height: 35,
                 ),
                 label: 'Marketplace',
@@ -67,7 +72,7 @@ class _HomePageState extends State<HomePage> {
               ),
               BottomNavigationBarItem(
                 icon: const Image(
-                  image: AssetImage('assets/navigation/scanner.png'),
+                  image: AssetImage('assets/app-icons/scanner.png'),
                   height: 35,
                 ),
                 label: 'Scanner',
@@ -75,7 +80,7 @@ class _HomePageState extends State<HomePage> {
               ),
               BottomNavigationBarItem(
                 icon: const Image(
-                  image: AssetImage('assets/navigation/tracker.png'),
+                  image: AssetImage('assets/app-icons/tracker.png'),
                   height: 35,
                 ),
                 label: 'Tracker',
@@ -83,7 +88,7 @@ class _HomePageState extends State<HomePage> {
               ),
               BottomNavigationBarItem(
                 icon: const Image(
-                  image: AssetImage('assets/navigation/profile.png'),
+                  image: AssetImage('assets/app-icons/profile.png'),
                   height: 35,
                 ),
                 label: 'Profile',

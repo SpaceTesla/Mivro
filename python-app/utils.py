@@ -1,8 +1,13 @@
-import re
+# Core library imports: Regular expressions and JSON parsing
 import json
+import re
 
-from database import user_reference
+# Local project-specific imports: Mapping and database functions
 from mapping import food_icon
+from database import user_reference
+
+# with open('metadata/nutrient_limits.json') as file:
+#     nutrient_limits = json.load(file)
 
 with open('metadata/food_categories.json') as file:
     food_categories = json.load(file)
@@ -43,9 +48,10 @@ def analyse_nutrient(nutrient_data: dict, nutrient_limits: dict) -> dict:
     positive_nutrients = {}
     negative_nutrients = {}
 
-    nutrient_items = {
+    nutrient_map = {
         nutrient: {
             'name': nutrient.title(),
+            'icon': food_icon(nutrient.title(), food_categories),
             'quantity': f"{abs(float(nutrient_data.get(f'{nutrient}_100g', 0))):.2f} {value['unit']}"
         }
         for nutrient, value in nutrient_limits.items()
@@ -53,7 +59,7 @@ def analyse_nutrient(nutrient_data: dict, nutrient_limits: dict) -> dict:
     }
 
     # Check if the nutrient quantity is within the recommended limits
-    for nutrient, value in nutrient_items.items():
+    for nutrient, value in nutrient_map.items():
         lower_limit = nutrient_limits[nutrient]['lower_limit']
         upper_limit = nutrient_limits[nutrient]['upper_limit']
 
@@ -68,15 +74,6 @@ def analyse_nutrient(nutrient_data: dict, nutrient_limits: dict) -> dict:
     }
     return nutriment_info
 
-# Function for filtering the image data and extracting the image link (Used in search.py)
-def filter_image(image_data: dict) -> str:
-    image_link = next(
-        iter(
-            list(image_data.values())[0].values() # Return the first image link from the data
-        ), None
-    )
-    return image_link
-
 # Function for filtering the product data and removing the 'en:' prefix (Used in search.py)
 def filter_data(product_data: dict) -> dict:
     product_info = {
@@ -90,8 +87,17 @@ def filter_data(product_data: dict) -> dict:
     }
     return product_info
 
+# Function for filtering the image data and extracting the image link (Used in search.py)
+def filter_image(image_data: dict) -> str:
+    image_link = next(
+        iter(
+            list(image_data.values())[0].values() # Return the first image link from the data
+        ), None
+    )
+    return image_link
+
 # Function for retrieving the user's health profile from Firestore (Used in gemini.py)
-def user_profile(email: str) -> dict:
+def health_profile(email: str) -> dict:
     user_document = user_reference.document(email)
     health_profile = user_document.get().to_dict().get('health_profile', {})
     return health_profile
@@ -99,8 +105,10 @@ def user_profile(email: str) -> dict:
 # Function for storing the chat history in Firestore (Used in gemini.py)
 def chat_history(email: str, chat_entry: dict) -> None:
     user_document = user_reference.document(email)
-    chat_history = user_document.get().to_dict().get('chat_history', [])
+    if not user_document.get().exists:
+        user_document.set({ 'chat_history': [] })
 
+    chat_history = user_document.get().to_dict().get('chat_history', [])
     chat_history.append(chat_entry.to_dict())
     user_document.set({
         'chat_history': chat_history
@@ -108,4 +116,7 @@ def chat_history(email: str, chat_entry: dict) -> None:
 
 # Function for calculating the BMI based on the weight and height (Used in models.py)
 def calculate_bmi(weight_kg: float, height_m: float) -> float:
+    if not weight_kg or not height_m:
+        return None
+
     return round(weight_kg / (height_m ** 2), 2)

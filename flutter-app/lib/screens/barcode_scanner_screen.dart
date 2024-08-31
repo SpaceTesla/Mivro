@@ -1,4 +1,4 @@
-import 'package:mivro/widgets/barcode/barcode_scanner.dart';
+import 'package:mivro/widgets/barcode/barcode_scanner_list_view.dart';
 import 'package:flutter/material.dart';
 
 class BarcodeScannerScreen extends StatefulWidget {
