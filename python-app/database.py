@@ -17,6 +17,7 @@ database = firestore.client() # Initialize the Firestore database client
 user_reference = database.collection('users')
 not_found_reference = database.collection('not_found')
 error_reference = database.collection('errors')
+flagged_reference = database.collection('flagged')
 
 def database_history(email: str, product_barcode: str, product_data: dict) -> None:
     try:

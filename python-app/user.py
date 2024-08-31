@@ -3,7 +3,7 @@ from firebase_admin import auth, firestore
 from flask import Blueprint, Response, request, jsonify
 
 # Local project-specific imports: Database functions and models
-from database import user_reference, save_health_profile, runtime_error
+from database import user_reference, flagged_reference, save_health_profile, runtime_error
 from models import HealthProfile, FavoriteProduct
 
 # Blueprint for the user routes
@@ -119,12 +119,39 @@ def favorite_product() -> Response:
         user_document = user_reference.document(email)
         favorite_product = FavoriteProduct(product_name=product_name, product_brand=product_brand, product_image=product_image)
         user_document.set({
-            'favorite_product': firestore.ArrayUnion([favorite_product.to_dict()])
+            'favorite_products': firestore.ArrayUnion([favorite_product.to_dict()])
         }, merge=True) # Merge the favorite product with the existing user document (if any)
 
         return jsonify({'message': 'Favorite product added successfully.'})
     except Exception as exc:
         runtime_error('favorite_product', str(exc), email=email)
+        return jsonify({'error': str(exc)}), 500
+
+@user_blueprint.route('/flag-product', methods=['POST'])
+def flag_product() -> Response:
+    # Get email, product name, brand, and description values from the incoming JSON data
+    email = request.headers.get('Mivro-Email')
+    product_name = request.json.get('product_name')
+    product_brand = request.json.get('product_brand')
+    flag_reason = request.json.get('description')
+
+    if not email or not product_name or not product_brand or not flag_reason:
+        return jsonify({'error': 'Email, product name, brand, and description are required.'}), 400
+
+    try:
+        # Reference the user document by email and add the flagged product information
+        user_document = flagged_reference.document(email)
+        user_document.set({
+            'flagged_products': firestore.ArrayUnion([{
+                'product_name': product_name,
+                'product_brand': product_brand,
+                'description': flag_reason
+            }])
+        }, merge=True) # Merge the flagged product with the existing user document (if any)
+
+        return jsonify({'message': 'Product flagged successfully.'})
+    except Exception as exc:
+        runtime_error('flag_product', str(exc), email=email)
         return jsonify({'error': str(exc)}), 500
 
 @user_blueprint.route('/clear-scan', methods=['POST'])
