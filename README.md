@@ -2,6 +2,11 @@
   <img src="browser-extension/assets/oth-icons/logo-transparent.png" alt="Project Logo">
 </p>
 
+## Project Archived
+This repository has been archived and is no longer actively maintained here. The project has been split and is now maintained under the [1Mind Labs](https://github.com/1MindLabs) organization.
+
+For the latest updates and continued development, please visit the respective repositories within the 1Mind Labs organization.
+
 ## Project Description
 
 The app supports barcode scanning for foods, drinks, cosmetics, medicines, and pet foods. It provides detailed ingredient information, categorizes nutrients into positive and negative (either generally or based on user-specific health data), identifies associated health risks, and suggests alternatives using an AI recommendation engine.
